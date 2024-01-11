@@ -1,8 +1,8 @@
 import Slot from "../component/Slot"
 import Text from "../component/Text"
-import { CUProps } from "../model"
+import { CommonProps, Term } from "../model"
 
-export default function Selector(props: CUProps) {
+export default function AnyView(props: CommonProps<Term>) {
   return <Slot>
     <Text text="Selector" />
   </Slot>

@@ -1,10 +1,11 @@
-export default function Text(props: {
+export default function Button(props: {
   text: string,
+  onClick: () => void
 }) {
   return <div style={{
     fontSize: "24px",
     fontWeight: "normal",
     color: "#444",
     marginRight: "16px",
-  }}> {props.text} </div>
+  }} onClick={props.onClick}> {props.text} </div>
 }
