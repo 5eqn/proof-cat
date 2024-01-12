@@ -2,9 +2,9 @@ import { render } from '@testing-library/react';
 import Slot from './Slot';
 
 describe('Slot component', () => {
-  test('non-primary slot does not lose children', () => {
+  test('slot does not lose children', () => {
     const { container } = render(
-      <Slot>
+      <Slot level={0}>
         <div className='114'>Child 1</div>
         <div className='514'>Child 2</div>
       </Slot>
@@ -13,9 +13,9 @@ describe('Slot component', () => {
     expect(container.getElementsByClassName('514')).toHaveLength(1)
   });
 
-  test('primary slot does not lose children', () => {
+  test('tagged slot does not lose children', () => {
     const { container } = render(
-      <Slot primary>
+      <Slot level={8} tagged>
         <div className='114'>Child 1</div>
         <div className='514'>Child 2</div>
       </Slot>

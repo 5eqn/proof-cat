@@ -11,7 +11,7 @@ function App() {
   }}>
     <div style={{
       marginTop: "32px",
-      width: "70%",
+      width: "80%",
     }}>
       <Center>
         <Text text={`Term : ${pretty(state)}`} />
@@ -22,6 +22,7 @@ function App() {
       flexGrow: 1,
     }}>
       <TermView
+        level={0}
         value={state}
         onChange={(updater) => setState(draft =>
           updater(draft)

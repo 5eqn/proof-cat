@@ -4,7 +4,7 @@ import Text from "../component/Text"
 import { CommonProps, TVar } from "../model"
 
 export default function VarView(props: CommonProps<TVar>) {
-  return <Slot>
+  return <Slot level={props.level}>
     <Text text="Reference: " />
     <Input
       value={props.value.id}

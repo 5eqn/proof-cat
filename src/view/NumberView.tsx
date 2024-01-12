@@ -4,7 +4,7 @@ import Text from "../component/Text"
 import { TNum, CommonProps } from "../model"
 
 export default function NumberView(props: CommonProps<TNum>) {
-  return <Slot>
+  return <Slot level={props.level}>
     <Text text="Number: " />
     <Input
       value={props.value.num.toString()}

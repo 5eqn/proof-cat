@@ -13,10 +13,14 @@ export type LabelProps = {
 export default function LabelView(props: CommonProps<Term> & LabelProps) {
   const [expanded, setExpanded] = useState(false)
   const content = expanded ?
-    <TermView value={props.value} onChange={props.onChange} /> :
+    <TermView
+      level={props.level + 1}
+      value={props.value}
+      onChange={props.onChange}
+    /> :
     <div />
   return <div>
-    <Slot>
+    <Slot level={props.level}>
       <Text text={props.label} />
       <Spacer />
       <Button text="v" onClick={() => setExpanded(!expanded)} />
