@@ -27,9 +27,9 @@ describe('App component', () => {
     render(<App />)
     const input = screen.getByTestId('input-114')
     fireEvent.change(input, {
-      target: { value: '800' }
+      target: { value: '514' }
     })
     mockSetState.mock.lastCall[0](mockState)
-    expect(mockState.num).toEqual(800)
+    expect(mockState.num).toBe(514)
   })
 })

@@ -1,5 +1,4 @@
 import { DraftFunction } from "use-immer"
-import { listRecord, mapRecord } from "../util"
 
 // Atom type variable, `number`
 export type TType = {
