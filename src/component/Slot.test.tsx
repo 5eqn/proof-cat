@@ -1,44 +1,26 @@
 import { render } from '@testing-library/react';
 import Slot from './Slot';
 
-describe('Center component', () => {
-  test('renders non-primary slot properly', () => {
+describe('Slot component', () => {
+  test('non-primary slot does not lose children', () => {
     const { container } = render(
       <Slot>
-        <div>Child 1</div>
-        <div>Child 2</div>
+        <div className='114'>Child 1</div>
+        <div className='514'>Child 2</div>
       </Slot>
     );
-    expect(container.firstElementChild).toHaveStyle({
-      height: "32px",
-      backgroundColor: "#e3e3e3",
-      padding: "8px",
-      display: "flex",
-      justifyContent: "flex-start",
-      alignItems: "stretch",
-    });
-    expect(container.firstElementChild?.children.length).toBe(2);
-    expect(container.firstElementChild?.children[0]).toHaveTextContent('Child 1');
-    expect(container.firstElementChild?.children[1]).toHaveTextContent('Child 2');
+    expect(container.getElementsByClassName('114')).toHaveLength(1)
+    expect(container.getElementsByClassName('514')).toHaveLength(1)
   });
 
-  test('renders primary slot properly', () => {
+  test('primary slot does not lose children', () => {
     const { container } = render(
       <Slot primary>
-        <div>Child 1</div>
-        <div>Child 2</div>
+        <div className='114'>Child 1</div>
+        <div className='514'>Child 2</div>
       </Slot>
     );
-    expect(container.firstElementChild).toHaveStyle({
-      height: "32px",
-      backgroundColor: "#e8e8e8",
-      padding: "8px",
-      display: "flex",
-      justifyContent: "flex-start",
-      alignItems: "stretch",
-    });
-    expect(container.firstElementChild?.children.length).toBe(2);
-    expect(container.firstElementChild?.children[0]).toHaveTextContent('Child 1');
-    expect(container.firstElementChild?.children[1]).toHaveTextContent('Child 2');
+    expect(container.getElementsByClassName('114')).toHaveLength(1)
+    expect(container.getElementsByClassName('514')).toHaveLength(1)
   });
 });

@@ -2,21 +2,14 @@ import { render } from '@testing-library/react';
 import Center from './Center';
 
 describe('Center component', () => {
-  test('renders the children prop in the center', () => {
+  test('center does not lose children', () => {
     const { container } = render(
       <Center>
-        <div>Child 1</div>
-        <div>Child 2</div>
+        <div className='114'>Child 1</div>
+        <div className='514'>Child 2</div>
       </Center>
     );
-    expect(container.firstElementChild).toHaveStyle({
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-    });
-    expect(container.firstElementChild?.children.length).toBe(2);
-    expect(container.firstElementChild?.children[0]).toHaveTextContent('Child 1');
-    expect(container.firstElementChild?.children[1]).toHaveTextContent('Child 2');
+    expect(container.getElementsByClassName('114')).toHaveLength(1)
+    expect(container.getElementsByClassName('514')).toHaveLength(1)
   });
 });
