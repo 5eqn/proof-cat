@@ -3,24 +3,22 @@ import Slot from "../component/Slot"
 import Spacer from "../component/Spacer"
 import Text from "../component/Text"
 import { CommonProps, TApp } from "../model"
-import { listRecord } from "../util"
 import LabelView from "./LabelView"
 import NamedView from "./NamedView"
 
 export default function AppView(props: CommonProps<TApp>) {
-  const records = listRecord(props.value.arg, (id, t) =>
+  const records = props.value.arg.map((t, i) =>
     <NamedView
-      name={id}
+      name={props.value.argID[i]}
       onNameChange={(name) => props.onChange(draft => {
-        delete draft.arg[id]
-        draft.arg[name] = t
+        draft.argID[i] = name
       })}
       value={t}
       onChange={(updater) => props.onChange(draft => {
-        updater(draft.arg[id])
+        updater(draft.arg[i])
       })}
       onDelete={() => props.onChange(draft => {
-        delete draft.arg[id]
+        delete draft.arg[i]
       })}
     />
   )
@@ -31,7 +29,8 @@ export default function AppView(props: CommonProps<TApp>) {
       <Button
         text="+"
         onClick={() => props.onChange(draft => {
-          draft.arg['test'] = { 'term': 'any' }
+          draft.arg.push({ 'term': 'any' })
+          draft.argID.push('test')
         })}
       />
     </Slot>

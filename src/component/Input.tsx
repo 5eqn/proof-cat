@@ -7,5 +7,5 @@ export default function Input(props: {
     fontWeight: "normal",
     color: "#444",
     border: "none",
-  }} value={props.value} />
+  }} value={props.value} data-testid={`input-${props.value}`} />
 }

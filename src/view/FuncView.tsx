@@ -3,24 +3,22 @@ import Slot from "../component/Slot"
 import Spacer from "../component/Spacer"
 import Text from "../component/Text"
 import { TFunc, CommonProps } from "../model"
-import { listRecord } from "../util"
 import LabelView from "./LabelView"
 import NamedView from "./NamedView"
 
 export default function FuncView(props: CommonProps<TFunc>) {
-  const records = listRecord(props.value.param, (id, t) =>
+  const records = props.value.param.map((t, i) =>
     <NamedView
-      name={id}
+      name={props.value.paramID[i]}
       onNameChange={(name) => props.onChange(draft => {
-        delete draft.param[id]
-        draft.param[name] = t
+        draft.paramID[i] = name
       })}
       value={t}
       onChange={(updater) => props.onChange(draft => {
-        updater(draft.param[id])
+        updater(draft.param[i])
       })}
       onDelete={() => props.onChange(draft => {
-        delete draft.param[id]
+        delete draft.param[i]
       })}
     />
   )
@@ -31,7 +29,8 @@ export default function FuncView(props: CommonProps<TFunc>) {
       <Button
         text="+"
         onClick={() => props.onChange(draft => {
-          draft.param['test'] = { 'term': 'any' }
+          draft.param.push({ 'term': 'any' })
+          draft.paramID.push('test')
         })}
       />
     </Slot>
