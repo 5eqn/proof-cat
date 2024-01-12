@@ -2,7 +2,8 @@ export default function Text(props: {
   text: string,
 }) {
   return <div style={{
-    fontSize: "24px",
+    fontSize: "18px",
+    fontFamily: 'monospace',
     fontWeight: "normal",
     color: "#444",
     marginRight: "16px",

@@ -9,6 +9,8 @@ import NamedView from "./NamedView"
 export default function AppView(props: CommonProps<TApp>) {
   const records = props.value.arg.map((t, i) =>
     <NamedView
+      key={i}
+      level={props.level + 1}
       name={props.value.argID[i]}
       onNameChange={(name) => props.onChange(draft => {
         draft.argID[i] = name
@@ -17,13 +19,10 @@ export default function AppView(props: CommonProps<TApp>) {
       onChange={(updater) => props.onChange(draft => {
         updater(draft.arg[i])
       })}
-      onDelete={() => props.onChange(draft => {
-        delete draft.arg[i]
-      })}
     />
   )
   return <div>
-    <Slot>
+    <Slot level={props.level}>
       <Text text="Apply" />
       <Spacer />
       <Button
@@ -36,6 +35,7 @@ export default function AppView(props: CommonProps<TApp>) {
     </Slot>
     <div>{records}</div>
     <LabelView
+      level={props.level}
       label="Target"
       value={props.value.func}
       onChange={(updater) => props.onChange(draft =>

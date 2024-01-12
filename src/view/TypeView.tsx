@@ -4,7 +4,7 @@ import Text from "../component/Text"
 import { CommonProps, TType } from "../model"
 
 export default function TypeView(props: CommonProps<TType>) {
-  return <Slot>
+  return <Slot level={props.level}>
     <Text text="Type: " />
     <Input
       value={props.value.type}

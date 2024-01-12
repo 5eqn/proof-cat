@@ -23,6 +23,7 @@ function getView<T extends Term>(term: T): (props: CommonProps<T>) => JSX.Elemen
 export default function TermView(props: CommonProps<Term>) {
   const View = getView(props.value)
   return <View
+    level={props.level}
     value={props.value}
     onChange={props.onChange}
   />

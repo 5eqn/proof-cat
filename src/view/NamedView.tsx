@@ -9,19 +9,21 @@ import Spacer from "../component/Spacer"
 export type NamedProps = {
   name: string,
   onNameChange: (name: string) => void
-  onDelete: () => void
 }
 
 export default function NamedView(props: CommonProps<Term> & NamedProps) {
   const [expanded, setExpanded] = useState(false)
   const content = expanded ?
-    <TermView value={props.value} onChange={props.onChange} /> :
+    <TermView
+      level={props.level + 1}
+      value={props.value}
+      onChange={props.onChange}
+    /> :
     <div />
   return <div>
-    <Slot>
+    <Slot level={props.level} tagged>
       <Input value={props.name} onChange={props.onNameChange} />
       <Spacer />
-      <Button text="-" onClick={props.onDelete} />
       <Button text="v" onClick={() => setExpanded(!expanded)} />
     </Slot>
     {content}
