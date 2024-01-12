@@ -33,5 +33,3 @@ describe('App component', () => {
     expect(mockState.num).toEqual(800)
   })
 })
-
-

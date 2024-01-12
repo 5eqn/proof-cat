@@ -14,8 +14,8 @@ function App() {
       width: "70%",
     }}>
       <Center>
-        <Text text={`Term  : ${pretty(state)}`} />
-        <Text text={`Value : ${pretty(quote(evaluate({}, state)))}`} />
+        <Text text={`Term : ${pretty(state)}`} />
+        <Text text={`Value : ${pretty(quote(0, evaluate([], state)))}`} />
       </Center>
     </div>
     <div style={{
