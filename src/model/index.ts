@@ -229,6 +229,16 @@ export function pretty(term: Term): string {
   }
 }
 
+// Catch error in evaluation process
+export function wrap(proc: () => string): string {
+  try {
+    const result = proc()
+    return result
+  } catch (e) {
+    return `Error: ${e}`
+  }
+}
+
 // Sample composition
 export const sample: Term = {
   term: 'app',

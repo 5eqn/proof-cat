@@ -1,11 +1,12 @@
 import { useImmer } from "use-immer";
 import Center from "./component/Center";
 import Text from "./component/Text";
-import { evaluate, pretty, quote, sample, Term } from "./model";
+import { evaluate, pretty, quote, sample, Term, wrap } from "./model";
 import TermView from "./view/TermView";
 
 function App() {
   const [state, setState] = useImmer<Term>(sample)
+  const value = wrap(() => pretty(quote(0, evaluate([], state))))
   return <div style={{
     display: "flex",
   }}>
@@ -15,7 +16,7 @@ function App() {
     }}>
       <Center>
         <Text text={`Term : ${pretty(state)}`} />
-        <Text text={`Value : ${pretty(quote(0, evaluate([], state)))}`} />
+        <Text text={`Value : ${value}`} />
       </Center>
     </div>
     <div style={{
