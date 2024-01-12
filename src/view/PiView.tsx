@@ -3,24 +3,22 @@ import Slot from "../component/Slot"
 import Spacer from "../component/Spacer"
 import Text from "../component/Text"
 import { CommonProps, TPi } from "../model"
-import { listRecord } from "../util"
 import NamedView from "./NamedView"
 import TermView from "./TermView"
 
 export default function PiView(props: CommonProps<TPi>) {
-  const records = listRecord(props.value.from, (id, t) =>
+  const records = props.value.from.map((t, i) =>
     <NamedView
-      name={id}
+      name={props.value.fromID[i]}
       onNameChange={(name) => props.onChange(draft => {
-        delete draft.from[id]
-        draft.from[name] = t
+        draft.fromID[i] = name
       })}
       value={t}
       onChange={(updater) => props.onChange(draft => {
-        updater(draft.from[id])
+        updater(draft.from[i])
       })}
       onDelete={() => props.onChange(draft => {
-        delete draft.from[id]
+        delete draft.from[i]
       })}
     />
   )
@@ -31,7 +29,8 @@ export default function PiView(props: CommonProps<TPi>) {
       <Button
         text="+"
         onClick={() => props.onChange(draft => {
-          draft.from['test'] = { 'term': 'any' }
+          draft.from.push({ 'term': 'any' })
+          draft.fromID.push('test')
         })}
       />
     </Slot>
