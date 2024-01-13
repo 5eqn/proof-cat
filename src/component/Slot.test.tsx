@@ -4,7 +4,7 @@ import Slot from './Slot';
 describe('Slot component', () => {
   test('slot does not lose children', () => {
     const { container } = render(
-      <Slot level={0}>
+      <Slot depth={0}>
         <div className='114'>Child 1</div>
         <div className='514'>Child 2</div>
       </Slot>
@@ -15,7 +15,7 @@ describe('Slot component', () => {
 
   test('tagged slot does not lose children', () => {
     const { container } = render(
-      <Slot level={8} tagged>
+      <Slot depth={8} tagged>
         <div className='114'>Child 1</div>
         <div className='514'>Child 2</div>
       </Slot>

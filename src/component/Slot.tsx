@@ -18,16 +18,16 @@ function getTagColor(level: number, period: number, offset: number) {
 
 export default function Slot(props: {
   children: JSX.Element[] | JSX.Element,
-  level: number,
+  depth: number,
   tagged?: boolean,
 }) {
   const tag = props.tagged ? <div style={{
     width: "4px",
-    backgroundColor: getTagColor(props.level, 5, 1),
+    backgroundColor: getTagColor(props.depth, 5, 1),
   }} /> : <div />
   return <div style={{
     height: "24px",
-    backgroundColor: getBackgroundColor(props.level, 40),
+    backgroundColor: getBackgroundColor(props.depth, 40),
     paddingTop: '8px',
     paddingBottom: '8px',
     paddingRight: '8px',
