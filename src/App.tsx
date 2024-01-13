@@ -1,26 +1,34 @@
-import { message } from "antd";
-import { useState } from "react";
-import InputButton from "./component/InputButton";
-import Select from "./component/Select";
+import { useImmer } from "use-immer";
+import { Term } from "./model";
+import { infer } from "./view";
 
 function App() {
-  const data = [
-    '114',
-    '514',
-    'eggy_party',
-    'foo',
-    'yuanmeng_zhixing',
-  ]
-  const [index, setIndex] = useState(0)
-  return <div style={{ padding: '32px' }}>
-    <InputButton onConfirm={(name) => {
-      message.success(`Name = ${name}!`)
-    }}> + </InputButton>
-    <div style={{ height: '16px' }} />
-    <Select onChange={(id) => {
-      message.success(`Data = ${data[id]}!`)
-      setIndex(id)
-    }} data={data} index={index} />
+  const [state, setState] = useImmer<Term>({
+    term: 'any'
+  })
+  const { element } = infer({
+    env: [],
+    ctx: [],
+    ns: [],
+    depth: 0,
+    term: state,
+    onChange: (updater) => {
+      setState(updater)
+    },
+  })
+  return <div style={{
+    display: "flex",
+  }}>
+    <div style={{
+      marginTop: "32px",
+      width: "80%",
+    }}>
+    </div>
+    <div style={{
+      flexGrow: 1,
+    }}>
+      {element}
+    </div>
   </div>
 }
 
