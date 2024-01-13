@@ -1,4 +1,6 @@
-import { DraftFunction } from "use-immer"
+/*******
+  MODEL
+ *******/
 
 // Atom type variable, `number`
 export type TType = {
@@ -139,6 +141,10 @@ export type Closure = {
 export function apply(closure: Closure, arg: Val[]) {
   return evaluate([...arg, ...closure.env], closure.body)
 }
+
+/************
+  EVALUATION 
+ ************/
 
 // Evaluate a term to a value
 export function evaluate(env: Env, term: Term): Val {
@@ -282,6 +288,10 @@ export function quote(len: number, val: Val): Term {
   }
 }
 
+/**************
+  PRETTY-PRINT
+ **************/
+
 // Pretty-print a term
 export function pretty(term: Term): string {
   switch (term.term) {
@@ -297,15 +307,9 @@ export function pretty(term: Term): string {
   }
 }
 
-// Catch error in evaluation process
-export function wrap(proc: () => string): string {
-  try {
-    const result = proc()
-    return result
-  } catch (e) {
-    return `Error: ${e}`
-  }
-}
+/********
+  SAMPLE
+ ********/
 
 // Sample composition
 export const sample: Term = {
@@ -364,11 +368,4 @@ export const sample: Term = {
       ]
     },
   },
-}
-
-// Props of a rendered component
-export type CommonProps<T> = {
-  value: T,
-  level: number,
-  onChange: (updater: DraftFunction<T>) => void,
 }
