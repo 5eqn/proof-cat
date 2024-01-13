@@ -3,6 +3,7 @@
  *******/
 
 import { Draft } from "immer"
+import { i18n } from "../i18n"
 
 // Atom type variable, `number`
 export type TType = {
@@ -17,7 +18,7 @@ export type TVar = {
   ix: number, // de-Bruijn index, 0 is the most recent variable
 }
 
-// Placeholder variable, `_`
+// Arbitrary value or type, `any`
 export type TAny = {
   term: 'any',
 }
@@ -104,7 +105,7 @@ export type VNum = {
   num: number,
 }
 
-// Placeholder variable
+// Arbitrary type or value
 export type VAny = {
   val: 'any',
 }
@@ -145,6 +146,88 @@ export type Closure = {
 // Apply a closure
 export function apply(closure: Closure, arg: Val[]) {
   return evaluate([...arg, ...closure.env], closure.body)
+}
+
+/*************
+  UNIFICATION
+ *************/
+
+// Attempt to unify x and y, return error if not successful
+export function unify(len: number, x: Val, y: Val): string | null {
+  if (x.val === y.val) {
+    switch (x.val) {
+      case 'pi':
+        const piY = y as VPi
+        const piLen = x.from.length
+        if (piLen !== piY.from.length)
+          return i18n.err.fromLenMismatch(piLen, piY.from.length)
+        for (let i = 0; i < piLen; i++) {
+          const res = unify(len, x.from[i], piY.from[i])
+          if (res !== null) return res
+        }
+        const piArgs = x.fromID.map<VVar>((id, i) => ({
+          val: 'var',
+          id: id,
+          lvl: len + piLen - i - 1
+        }))
+        const piToRes = unify(
+          len + piLen,
+          apply(x.to, piArgs),
+          apply(piY.to, piArgs),
+        )
+        return piToRes
+      case 'var':
+        return x.lvl === (y as VVar).lvl ? null : i18n.err.variableMismatch(
+          x.id, (y as VVar).id,
+          x.lvl, (y as VVar).lvl
+        )
+      case 'app':
+        const appY = y as VApp
+        const appLen = x.arg.length
+        if (appLen !== appY.arg.length)
+          return i18n.err.argLenMismatch(appLen, appY.arg.length)
+        for (let i = 0; i < appLen; i++) {
+          const res = unify(len, x.arg[i], appY.arg[i])
+          if (res !== null) return res
+        }
+        return unify(len, x.func, appY.func)
+      case 'num':
+        return x.num === (y as VNum).num ? null
+          : i18n.err.numMismatch(x.num, (y as VNum).num)
+      case 'func':
+        const funcY = y as VFunc
+        const funcLen = x.param.length
+        if (funcLen !== funcY.param.length)
+          return i18n.err.fromLenMismatch(funcLen, funcY.param.length)
+        for (let i = 0; i < funcLen; i++) {
+          const res = unify(len, x.param[i], funcY.param[i])
+          if (res !== null) return res
+        }
+        const funcArgs = x.paramID.map<VVar>((id, i) => ({
+          val: 'var',
+          id: id,
+          lvl: len + funcLen - i - 1
+        }))
+        const funcRes = unify(
+          len + funcLen,
+          apply(x.func, funcArgs),
+          apply(funcY.func, funcArgs),
+        )
+        return funcRes
+      case 'any': return null
+      case 'uni': return null
+      case 'rec': return null // TODO judge equality for resursive value
+      case 'type':
+        return x.type === (y as VType).type ? null
+          : i18n.err.typeMismatch(x.type, (y as VType).type)
+    }
+  } else {
+    if (x.val === 'any' || y.val === 'any') {
+      return null
+    } else {
+      return i18n.err.astMismatch(x.val, y.val)
+    }
+  }
 }
 
 /************

@@ -107,7 +107,6 @@ describe('Evaluation framework', () => {
     }
     const output = quote(0, evaluate([], inputState))
     const expected = "(f: (u: number) -> number) => (Var(f))(u = *)"
-    // TODO write term
     // expect(output).toBe(expected)
   })
 })
