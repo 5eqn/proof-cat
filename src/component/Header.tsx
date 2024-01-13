@@ -8,7 +8,7 @@ export default function Header(props: {
   depth: number,
   label: string,
   onDelete: () => void
-  onAdd: (name: string) => void
+  onAdd: (name: string) => string | null
 }) {
 
   return <div>
