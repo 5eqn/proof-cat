@@ -14,12 +14,8 @@ function App() {
   const [index, setIndex] = useState(0)
   return <div style={{ padding: '32px' }}>
     <InputButton onConfirm={(name) => {
-      if (name === 'eggy') {
-        return 'Player of Eggy Party is not allowed to use this app now!'
-      }
       message.success(`Name = ${name}!`)
-      return null
-    }} />
+    }}> + </InputButton>
     <div style={{ height: '16px' }} />
     <Select onChange={(id) => {
       message.success(`Data = ${data[id]}!`)

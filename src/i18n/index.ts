@@ -4,6 +4,8 @@ const source = {
     term: {
       pi: 'Pi',
       to: 'To',
+      func: 'Func',
+      body: 'Body',
     },
     err: {
       referred: 'This variable is referred to, so you cannot edit it!',

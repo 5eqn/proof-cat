@@ -106,19 +106,24 @@ export function infer({
       })
     }
   }
+  // Make sure variable name don't duplicate in actions
+  const validate = (name: string) => {
+    const containName = ns.map((n) => name === n).reduce((x, y) => x || y)
+    return containName ? i18n.err.nameDup : null
+  }
   switch (term.term) {
     case 'pi':
       // Construct element for to type
-      const pl = term.fromID.length + env.length
-      const vars = term.fromID.map<Val>((id) => ({
+      const piLen = term.fromID.length + env.length
+      const piVars = term.fromID.map<Val>((id) => ({
         val: 'var',
         id,
         lvl: env.length,
       }))
-      const types = term.from.map((t) => evaluate(env, t))
+      const piTypes = term.from.map((t) => evaluate(env, t))
       const { element: toElement } = infer({
-        env: [...vars, ...env],
-        ctx: [...types, ...ctx],
+        env: [...piVars, ...env],
+        ctx: [...piTypes, ...ctx],
         ns: [...term.fromID, ...ns],
         depth: depth + 1,
         term: term.to,
@@ -127,27 +132,20 @@ export function infer({
         },
       })
       // Code action: add param
-      const onAdd = (name: string) => {
-        // Make sure variable name don't duplicate
-        const containName = ns.map((n) => name === n).reduce((x, y) => x || y)
-        if (containName) {
-          return i18n.err.nameDup
-        }
-        // Add a placeholder param
+      const onPiAdd = (name: string) => {
         onChange(draft => {
           const tm = draft as TPi
           tm.from.push({ term: 'any' })
           tm.fromID.push(name)
         })
-        return null
       }
       // Code action: delete param
-      const onDelete = (ix: number) => {
+      const onPiDelete = (ix: number) => {
         onChange(draft => {
           const tm = draft as TPi
           tm.from.splice(ix, 1)
           tm.fromID.splice(ix, 1)
-          deleteVar(pl, ix, tm.to)
+          deleteVar(piLen, ix, tm.to)
         })
       }
       // Construct element for from types
@@ -156,7 +154,7 @@ export function infer({
         depth: depth + 2,
         term: t,
         onChange: (updater) => {
-          if (hasOccurrence(pl, i, term.to)) message.error(i18n.err.referred)
+          if (hasOccurrence(piLen, i, term.to)) message.error(i18n.err.referred)
           else onChange(draft => { updater((draft as TPi).from[i]) })
         },
       }))
@@ -165,25 +163,119 @@ export function infer({
           name={term.fromID[i]}
           depth={depth + 1}
           children={element}
-          onDelete={() => onDelete(i)}
+          onDelete={() => onPiDelete(i)}
         />)
+      // Construct type for pi, which is always U
+      const piVal: Val = {
+        val: 'uni',
+      }
       // Concatenate
       return {
-        val: {
-          'val': 'uni',
-        },
+        val: piVal,
         element: <div>
           <Header
             depth={depth}
             label={i18n.term.pi}
-            onAdd={onAdd}
+            validate={validate}
+            onAdd={onPiAdd}
             onDelete={onAnify}
+            onWrapLet={onWrapLet}
+            onWrapPi={onWrapPi}
+            onWrapApp={onWrapApp(piVal)}
+            onWrapFunc={onWrapFunc}
           />
           {fromElements}
           <Labeled
             depth={depth}
             label={i18n.term.to}
             children={toElement}
+          />
+        </div>,
+      }
+    case 'func':
+      // Construct element for function body
+      const funcLen = term.paramID.length + env.length
+      const funcVars = term.paramID.map<Val>((id) => ({
+        val: 'var',
+        id,
+        lvl: env.length,
+      }))
+      const funcTypes = term.param.map((t) => evaluate(env, t))
+      const { element: bodyElement } = infer({
+        env: [...funcVars, ...env],
+        ctx: [...funcTypes, ...ctx],
+        ns: [...term.paramID, ...ns],
+        depth: depth + 1,
+        term: term.body,
+        onChange: (updater) => {
+          onChange(draft => { updater((draft as TFunc).body) })
+        },
+      })
+      // Code action: add param
+      const onFuncAdd = (name: string) => {
+        onChange(draft => {
+          const tm = draft as TFunc
+          tm.param.push({ term: 'any' })
+          tm.paramID.push(name)
+        })
+      }
+      // Code action: delete param
+      const onFuncDelete = (ix: number) => {
+        onChange(draft => {
+          const tm = draft as TFunc
+          tm.param.splice(ix, 1)
+          tm.paramID.splice(ix, 1)
+          deleteVar(funcLen, ix, tm.body)
+        })
+      }
+      // Construct element for params
+      const paramInfers = term.param.map((t, i) => infer({
+        env, ctx, ns,
+        depth: depth + 2,
+        term: t,
+        onChange: (updater) => {
+          if (hasOccurrence(funcLen, i, term.body)) message.error(i18n.err.referred)
+          else onChange(draft => { updater((draft as TFunc).param[i]) })
+        },
+      }))
+      const paramElements = paramInfers.map(({ element }, i) =>
+        <Named
+          name={term.paramID[i]}
+          depth={depth + 1}
+          children={element}
+          onDelete={() => onFuncDelete(i)}
+        />)
+      const paramVals = paramInfers.map(({ val }) => val)
+      // Construct type for func, which is Pi
+      const funcVal: Val = {
+        val: 'pi',
+        from: paramVals,
+        fromID: term.paramID,
+        to: {
+          env,
+          body: term.body,
+        }
+      }
+      // Concatenate
+      return {
+        val: funcVal,
+        element: <div>
+          <Header
+            depth={depth}
+            label={i18n.term.func}
+            validate={validate}
+            onAdd={onFuncAdd}
+            onDelete={onAnify}
+            onWrapLet={onWrapLet}
+            onWrapPi={onWrapPi}
+            onWrapApp={onWrapApp(funcVal)}
+            onWrapFunc={onWrapFunc}
+          />
+          {paramElements}
+          <Labeled
+            depth={depth}
+            label={i18n.term.body}
+            children={bodyElement}
           />
         </div>,
       }
