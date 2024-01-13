@@ -2,6 +2,8 @@
   MODEL
  *******/
 
+import { Draft } from "immer"
+
 // Atom type variable, `number`
 export type TType = {
   term: 'type',
@@ -32,7 +34,7 @@ export type TFunc = {
 export type TApp = {
   term: 'app'
   func: Term
-  arg: TVar[]
+  argIX: number[]
   argID: string[]
 }
 
@@ -131,6 +133,9 @@ export type Val = VType | VFunc | VApp | VNum | VAny | VPi | VVar | VRec | VUni
 // Mapping from id to value
 export type Env = Val[]
 
+// Mapping from id to type
+export type Ctx = Val[]
+
 // Closure to avoid HOAS
 export type Closure = {
   env: Env,
@@ -163,7 +168,11 @@ export function evaluate(env: Env, term: Term): Val {
       }, ...env], term.next)
     case 'app':
       const func = evaluate(env, term.func)
-      const arg = term.arg.map((v) => evaluate(env, v))
+      const arg = term.argIX.map((ix, i) => evaluate(env, {
+        term: 'var',
+        id: term.argID[i],
+        ix: ix
+      }))
       if (func.val === 'func') {
         return apply(func.func, arg)
       }
@@ -265,11 +274,7 @@ export function quote(len: number, val: Val): Term {
       var core: Term = {
         term: 'app',
         func: quote(len, val.func),
-        arg: val.arg.map((_, i) => ({
-          term: 'var',
-          id: val.argID[i],
-          ix: i,
-        })),
+        argIX: val.arg.map((_, i) => i),
         argID: val.argID,
       }
       // Innermost variable is arg[0], which will have de-Bruijn index 0
@@ -288,22 +293,68 @@ export function quote(len: number, val: Val): Term {
   }
 }
 
-/**************
-  PRETTY-PRINT
- **************/
+/*************
+  CODE-ACTION
+ *************/
 
-// Pretty-print a term
-export function pretty(term: Term): string {
+// Does Var(ix) occur in term? (can only be referred in Var or App)
+export function hasOccurrence(len: number, ix: number, term: Term): boolean {
   switch (term.term) {
-    case 'func': return `(${term.param.map((t, i) => `${term.paramID[i]}: ${pretty(t)}`).join(', ')}) => ${pretty(term.body)}`
-    case 'pi': return `(${term.from.map((t, i) => `${term.fromID[i]}: ${pretty(t)}`).join(', ')}) -> ${pretty(term.to)}`
-    case 'app': return `(${pretty(term.func)})(${term.arg.map((t, i) => `${term.argID[i]} = ${pretty(t)}`).join(', ')})`
-    case 'var': return `Var(${term.id})`
-    case 'num': return term.num.toString()
-    case 'type': return term.type
-    case 'any': return '*'
-    case 'uni': return 'U'
-    case 'let': return `${term.id} = ${pretty(term.body)}; ${pretty(term.next)}`
+    case 'pi':
+      const occurInFrom = term.from
+        .map((t) => hasOccurrence(len, ix, t))
+        .reduce((x, y) => x || y)
+      const l = term.from.length
+      const occurInTo = hasOccurrence(len + l, ix + l, term.to)
+      return occurInFrom || occurInTo
+    case 'let':
+      const occurInBody = hasOccurrence(len + 1, ix + 1, term.body)
+      const occurInNext = hasOccurrence(len + 1, ix + 1, term.next)
+      return occurInBody || occurInNext
+    case 'var': return term.ix === ix
+    case 'app':
+      const occurInFunc = hasOccurrence(len, ix, term.func)
+      const occurInArg = term.argIX
+        .map((x) => x === ix)
+        .reduce((x, y) => x || y)
+      return occurInFunc || occurInArg
+    case 'func':
+      const occurInParam = term.param
+        .map((t) => hasOccurrence(len, ix, t))
+        .reduce((x, y) => x || y)
+      const fl = term.param.length
+      const occurInFBody = hasOccurrence(len + fl, ix + fl, term.body)
+      return occurInParam || occurInFBody
+    case 'num': return false
+    case 'any': return false
+    case 'type': return false
+    case 'uni': return false
+  }
+}
+
+// Delete Var(ix) in term (should only be called when no occurence)
+export function deleteVar(len: number, ix: number, term: Draft<Term>) {
+  switch (term.term) {
+    case 'pi':
+      term.from.forEach((t) => deleteVar(len, ix, t))
+      deleteVar(len + term.from.length, ix + term.from.length, term.to)
+      return
+    case 'let':
+      deleteVar(len + 1, ix + 1, term.body)
+      deleteVar(len + 1, ix + 1, term.next)
+      return
+    case 'var': return
+    case 'app':
+      deleteVar(len, ix, term.func)
+      return
+    case 'func':
+      term.param.forEach((t) => deleteVar(len, ix, t))
+      deleteVar(len + term.param.length, ix + term.param.length, term.body)
+      return
+    case 'num': return
+    case 'any': return
+    case 'type': return
+    case 'uni': return
   }
 }
 
@@ -350,18 +401,7 @@ export const sample: Term = {
           ix: 0
         },
       },
-      arg: [
-        {
-          term: 'var',
-          id: 'yys',
-          ix: 1,
-        },
-        {
-          term: 'var',
-          id: 'wys',
-          ix: 0,
-        },
-      ],
+      argIX: [1, 0],
       argID: [
         'x',
         'y',
