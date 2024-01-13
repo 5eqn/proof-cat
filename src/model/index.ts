@@ -30,8 +30,16 @@ export type TFunc = {
 export type TApp = {
   term: 'app'
   func: Term
-  arg: Term[]
+  arg: TVar[]
   argID: string[]
+}
+
+// Let bind, `let id = body in next`
+export type TLet = {
+  term: 'let',
+  id: string,
+  body: Term,
+  next: Term,
 }
 
 // Dependent function type, `(x: X) -> Y`
@@ -42,6 +50,11 @@ export type TPi = {
   to: Term
 }
 
+// Universe type, `U`
+export type TUni = {
+  term: 'uni',
+}
+
 // Editable number
 export type TNum = {
   term: 'num',
@@ -49,7 +62,7 @@ export type TNum = {
 }
 
 // All possible terms
-export type Term = TVar | TFunc | TApp | TType | TNum | TAny | TPi
+export type Term = TVar | TFunc | TApp | TType | TNum | TAny | TPi | TLet | TUni
 
 // Atom type, `string`
 export type VType = {
@@ -99,8 +112,19 @@ export type VVar = {
   lvl: number, // de-Bruijn level, 0 is the outermost variable
 }
 
+// Thunk value to avoid self reference, `() => ...`, used in recursive eval
+export type VRec = {
+  val: 'rec',
+  thunk: Closure,
+}
+
+// Universe type, `U`
+export type VUni = {
+  val: 'uni'
+}
+
 // All possible values
-export type Val = VType | VFunc | VApp | VNum | VAny | VPi | VVar
+export type Val = VType | VFunc | VApp | VNum | VAny | VPi | VVar | VRec | VUni
 
 // Mapping from id to value
 export type Env = Val[]
@@ -119,9 +143,21 @@ export function apply(closure: Closure, arg: Val[]) {
 // Evaluate a term to a value
 export function evaluate(env: Env, term: Term): Val {
   switch (term.term) {
+    case 'uni': return {
+      val: 'uni',
+    }
+    case 'let':
+      // Store body = term.body in env, and evaluate term.next
+      return evaluate([{
+        val: 'rec',
+        thunk: {
+          env,
+          body: term.body,
+        }
+      }, ...env], term.next)
     case 'app':
       const func = evaluate(env, term.func)
-      const arg = term.arg.map((t) => evaluate(env, t))
+      const arg = term.arg.map((v) => evaluate(env, v))
       if (func.val === 'func') {
         return apply(func.func, arg)
       }
@@ -149,7 +185,18 @@ export function evaluate(env: Env, term: Term): Val {
         body: term.to
       }
     }
-    case 'var': return env[term.ix]
+    case 'var':
+      const res = env[term.ix]
+      if (res.val !== 'rec') {
+        return res
+      }
+      return evaluate([{
+        val: 'rec',
+        thunk: {
+          env: res.thunk.env,
+          body: res.thunk.body,
+        },
+      }, ...res.thunk.env], res.thunk.body)
     case 'num': return {
       val: 'num',
       num: term.num
@@ -167,6 +214,10 @@ export function evaluate(env: Env, term: Term): Val {
 // Quote a value to a term
 export function quote(len: number, val: Val): Term {
   switch (val.val) {
+    case 'uni': return {
+      term: 'uni',
+    }
+    case 'rec': return val.thunk.body
     case 'type': return {
       term: 'type',
       type: val.type,
@@ -204,12 +255,27 @@ export function quote(len: number, val: Val): Term {
         fromID: val.fromID,
         to: quote(len + val.fromID.length, apply(val.to, piArg))
       }
-    case 'app': return {
-      term: 'app',
-      func: quote(len, val.func),
-      arg: val.arg.map((v) => quote(len, v)),
-      argID: val.argID,
-    }
+    case 'app':
+      var core: Term = {
+        term: 'app',
+        func: quote(len, val.func),
+        arg: val.arg.map((_, i) => ({
+          term: 'var',
+          id: val.argID[i],
+          ix: i,
+        })),
+        argID: val.argID,
+      }
+      // Innermost variable is arg[0], which will have de-Bruijn index 0
+      val.arg.forEach((v, i) => {
+        core = {
+          term: 'let',
+          id: val.argID[i],
+          body: quote(len, v),
+          next: core
+        }
+      })
+      return core
     case 'any': return {
       term: 'any',
     }
@@ -226,6 +292,8 @@ export function pretty(term: Term): string {
     case 'num': return term.num.toString()
     case 'type': return term.type
     case 'any': return '*'
+    case 'uni': return 'U'
+    case 'let': return `${term.id} = ${pretty(term.body)}; ${pretty(term.next)}`
   }
 }
 
@@ -241,43 +309,61 @@ export function wrap(proc: () => string): string {
 
 // Sample composition
 export const sample: Term = {
-  term: 'app',
-  func: {
-    term: 'func',
-    param: [
-      {
-        term: 'type',
-        type: 'number',
-      },
-      {
-        term: 'type',
-        type: 'number',
-      },
-    ],
-    paramID: [
-      'x',
-      'y',
-    ],
-    body: {
-      term: 'var',
-      id: 'x',
-      ix: 0
-    },
+  term: 'let',
+  id: 'yys',
+  body: {
+    term: 'num',
+    num: 114,
   },
-  arg: [
-    {
-      term: 'num',
-      num: 114,
-    },
-    {
+  next: {
+    term: 'let',
+    id: 'wys',
+    body: {
       term: 'num',
       num: 514,
     },
-  ],
-  argID: [
-    'x',
-    'y',
-  ]
+    next: {
+      term: 'app',
+      func: {
+        term: 'func',
+        param: [
+          {
+            term: 'type',
+            type: 'number',
+          },
+          {
+            term: 'type',
+            type: 'number',
+          },
+        ],
+        paramID: [
+          'x',
+          'y',
+        ],
+        body: {
+          term: 'var',
+          id: 'x',
+          ix: 0
+        },
+      },
+      arg: [
+        {
+          term: 'var',
+          id: 'yys',
+          ix: 1,
+        },
+        {
+          term: 'var',
+          id: 'wys',
+          ix: 0,
+        },
+      ],
+      argID: [
+        'x',
+        'y',
+      ]
+    },
+  },
 }
 
 // Props of a rendered component
