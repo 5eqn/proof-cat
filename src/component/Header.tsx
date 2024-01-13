@@ -6,7 +6,7 @@ import Input from "./Input"
 import { useState } from "react"
 import { i18n } from "../i18n"
 
-export default function Adder(props: {
+export default function Header(props: {
   depth: number,
   label: string,
   onDelete: () => void

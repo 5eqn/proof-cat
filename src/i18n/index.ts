@@ -8,6 +8,7 @@ const source = {
     err: {
       referred: 'This variable is referred to, so you cannot edit it!',
       empty: 'This action is forbidden with an empty input!',
+      callNonFunc: 'This term is not a function, so you cannot call it!',
     }
   }
 }
