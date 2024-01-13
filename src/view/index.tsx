@@ -8,7 +8,7 @@ import Named from "../component/Named";
 import SelectBar from "../component/SelectBar";
 import InputBar from "../component/InputBar";
 import { i18n } from "../i18n";
-import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TNum, TPi, TType, TUni, TVar, Val, VPi, apply } from "../model";
+import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TNum, TPi, TType, TUni, TVar, Val, VPi, apply, unify } from "../model";
 
 /*******
   MODEL
@@ -100,8 +100,9 @@ export function infer({
     else {
       const argID = ty.fromID
       // Automatically find variable of same type in context
-      // TODO implement equal
-      const argIX = ty.from.map((v) => ctx.findIndex((t) => t === v))
+      const argIX = ty.from.map((v) => ctx.findIndex((t) =>
+        unify(env.length, t, v) === null
+      ))
       // Make sure variable of given type exists
       for (const ix of argIX) {
         if (ix === -1) {
@@ -121,8 +122,9 @@ export function infer({
     }
   }
   // Make sure variable name don't duplicate in actions
-  const validate = (name: string) => {
-    const containName = ns.map((n) => name === n).reduce((x, y) => x || y, false)
+  const validate = (name: string, addedNS: string[] = []) => {
+    const newNS = [...addedNS, ...ns]
+    const containName = newNS.map((n) => name === n).reduce((x, y) => x || y, false)
     return containName ? i18n.err.nameDup : null
   }
   switch (term.term) {
@@ -222,7 +224,6 @@ export function infer({
       const any: Val = {
         val: 'any',
       }
-      // TODO typecheck when recursive?
       const { val: letBodyVal, element: letBodyElement } = infer({
         env: [recVal, ...env],
         ctx: [any, ...ctx],
@@ -477,7 +478,7 @@ export function infer({
           <Header
             depth={depth}
             label={i18n.term.pi}
-            validate={validate}
+            validate={(name) => validate(name, term.fromID)}
             onAdd={onPiAdd}
             onDelete={onAnify}
             onWrapLet={onWrapLet}
@@ -514,7 +515,6 @@ export function infer({
       })
       // Code action: add param
       const onFuncAdd = (name: string) => {
-        // TODO validate overlap between added params
         onChange(draft => {
           const tm = draft as TFunc
           tm.param.push({ term: 'any' })
@@ -565,7 +565,7 @@ export function infer({
           <Header
             depth={depth}
             label={i18n.term.func}
-            validate={validate}
+            validate={(name) => validate(name, term.paramID)}
             onAdd={onFuncAdd}
             onDelete={onAnify}
             onWrapLet={onWrapLet}

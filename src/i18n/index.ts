@@ -21,6 +21,18 @@ const source = {
       nameDup: 'This name already exists in context, so you cannot redeclare it!',
       changeApply: 'This term is called as a function, so you cannot change it!',
       noVariable: 'There is no suitable variable in context!',
+      fromLenMismatch: (x: number, y: number) =>
+        `Source of Pi has different length: ${x} and ${y}`,
+      argLenMismatch: (x: number, y: number) =>
+        `Arguments has different length: ${x} and ${y}`,
+      variableMismatch: (xid: string, yid: string, xlvl: number, ylvl: number) =>
+        `Variable mismatch: ${xid}-${xlvl} and ${yid}-${ylvl}`,
+      numMismatch: (x: number, y: number) =>
+        `Number mismatch: ${x} != ${y}`,
+      typeMismatch: (x: string, y: string) =>
+        `Type mismatch: ${x} != ${y}`,
+      astMismatch: (x: string, y: string) =>
+        `AST mismatch: ${x} != ${y}`,
     },
     prompt: {
       addAnEntry: 'Add an entry',
