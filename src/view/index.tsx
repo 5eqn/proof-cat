@@ -1,9 +1,9 @@
 import { DraftFunction } from "use-immer";
-import Adder from "../component/Adder";
+import Header from "../component/Header";
 import Labeled from "../component/Labeled";
 import Named from "../component/Named";
 import { i18n } from "../i18n";
-import { Ctx, deleteVar, Env, evaluate, hasOccurrence, Term, TPi, Val } from "../model";
+import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TPi, Val } from "../model";
 
 /*******
   MODEL
@@ -45,11 +45,67 @@ export type InferResult = {
 export function infer({
   env, ctx, depth, term, onChange
 }: InferRequest): InferResult {
+  // Code action: anify
+  const onAnify = () => {
+    onChange(draft => {
+      draft.term = 'any'
+    })
+  }
+  // Code action: wrap with let
+  const onWrapLet = (name: string) => {
+    onChange(draft => {
+      const copy = { ...draft }
+      const tm = (draft as TLet)
+      tm.term = 'let'
+      tm.id = name
+      tm.body = {
+        term: 'any',
+      }
+      tm.next = copy
+    })
+  }
+  // Code action: wrap with func
+  const onWrapFunc = () => {
+    onChange(draft => {
+      const copy = { ...draft }
+      const tm = (draft as TFunc)
+      tm.term = 'func'
+      tm.param = []
+      tm.paramID = []
+      tm.body = copy
+    })
+  }
+  // Code action: wrap with pi
+  const onWrapPi = () => {
+    onChange(draft => {
+      const copy = { ...draft }
+      const tm = (draft as TPi)
+      tm.term = 'pi'
+      tm.from = []
+      tm.fromID = []
+      tm.to = copy
+    })
+  }
+  // Code action: wrap with app
+  const onWrapApp = (ty: Val) => () => {
+    if (ty.val !== 'pi') alert(i18n.err.callNonFunc)
+    else {
+      const argID = ty.fromID
+      onChange(draft => {
+        const copy = { ...draft }
+        const tm = (draft as TApp)
+        tm.term = 'app'
+        tm.func = copy
+        // TODO automatically find arguments of correct type outside
+        tm.argIX = [0]
+        tm.argID = argID
+      })
+    }
+  }
   switch (term.term) {
     case 'pi':
-      // Get new env length
-      const pl = term.fromID.length + env.length
       // Construct element for to type
+      const pl = term.fromID.length + env.length
       const vars = term.fromID.map<Val>((id) => ({
         val: 'var',
         id,
@@ -82,12 +138,6 @@ export function infer({
           deleteVar(pl, ix, tm.to)
         })
       }
-      // Code action: Anify
-      const onAnify = () => {
-        onChange(draft => {
-          draft.term = 'any'
-        })
-      }
       // Construct element for from types
       const fromInfers = term.from.map((t, i) => infer({
         env,
@@ -112,7 +162,7 @@ export function infer({
           'val': 'uni',
         },
         element: <div>
-          <Adder
+          <Header
             depth={depth}
             label={i18n.term.pi}
             onAdd={onAdd}
