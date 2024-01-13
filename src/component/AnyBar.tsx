@@ -39,7 +39,7 @@ export default function AnyBar(props: {
       > P </Button>
       <Button
         onClick={props.onBecomeU}
-      > A </Button>
+      > U </Button>
       <InputButton
         onConfirm={(str) => {
           props.onBecomeNum(+str)

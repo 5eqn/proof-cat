@@ -15,7 +15,7 @@ export default function Named(props: {
     props.children :
     <div />
   const deleteButton = props.onDelete !== null ?
-    <Button value="-" onClick={props.onDelete} /> :
+    <Button onClick={props.onDelete}> - </Button> :
     <div />
   return <div>
     <Slot depth={props.depth}>

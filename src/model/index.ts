@@ -303,7 +303,7 @@ export function hasOccurrence(len: number, ix: number, term: Term): boolean {
     case 'pi':
       const occurInFrom = term.from
         .map((t) => hasOccurrence(len, ix, t))
-        .reduce((x, y) => x || y)
+        .reduce((x, y) => x || y, false)
       const l = term.from.length
       const occurInTo = hasOccurrence(len + l, ix + l, term.to)
       return occurInFrom || occurInTo
@@ -316,12 +316,12 @@ export function hasOccurrence(len: number, ix: number, term: Term): boolean {
       const occurInFunc = hasOccurrence(len, ix, term.func)
       const occurInArg = term.argIX
         .map((x) => x === ix)
-        .reduce((x, y) => x || y)
+        .reduce((x, y) => x || y, false)
       return occurInFunc || occurInArg
     case 'func':
       const occurInParam = term.param
         .map((t) => hasOccurrence(len, ix, t))
-        .reduce((x, y) => x || y)
+        .reduce((x, y) => x || y, false)
       const fl = term.param.length
       const occurInFBody = hasOccurrence(len + fl, ix + fl, term.body)
       return occurInParam || occurInFBody
@@ -343,9 +343,15 @@ export function deleteVar(len: number, ix: number, term: Draft<Term>) {
       deleteVar(len + 1, ix + 1, term.body)
       deleteVar(len + 1, ix + 1, term.next)
       return
-    case 'var': return
+    case 'var':
+      // Subtract index if the index will fall after deletion
+      if (term.ix > ix) term.ix--
+      return
     case 'app':
       deleteVar(len, ix, term.func)
+      term.argIX.forEach((t, i) => {
+        if (t > ix) term.argIX[i]--
+      })
       return
     case 'func':
       term.param.forEach((t) => deleteVar(len, ix, t))
