@@ -1,10 +1,11 @@
 import { message } from "antd";
 import { DraftFunction } from "use-immer";
+import Entry from "../component/Entry";
 import Header from "../component/Header";
 import Labeled from "../component/Labeled";
 import Named from "../component/Named";
 import { i18n } from "../i18n";
-import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TPi, Val } from "../model";
+import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TPi, TType, Val } from "../model";
 
 /*******
   MODEL
@@ -112,6 +113,37 @@ export function infer({
     return containName ? i18n.err.nameDup : null
   }
   switch (term.term) {
+    case 'type':
+      // All types have type U
+      const typeVal: Val = {
+        val: 'uni',
+      }
+      // Concatenate
+      return {
+        val: typeVal,
+        element: <div>
+          <Header
+            depth={depth}
+            label={i18n.term.pi}
+            validate={validate}
+            onDelete={onAnify}
+            onWrapLet={onWrapLet}
+            onWrapPi={onWrapPi}
+            onWrapApp={onWrapApp(typeVal)}
+            onWrapFunc={onWrapFunc}
+          />
+          <Entry
+            depth={depth}
+            name={i18n.term.type}
+            value={term.type}
+            onChange={(value) => {
+              onChange(draft => {
+                (draft as TType).type = value
+              })
+            }}
+          />
+        </div>
+      }
     case 'pi':
       // Construct element for to type
       const piLen = term.fromID.length + env.length

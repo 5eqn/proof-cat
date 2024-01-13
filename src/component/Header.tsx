@@ -9,21 +9,21 @@ export default function Header(props: {
   label: string,
   validate: (name: string) => string | null
   onDelete: () => void
-  onAdd: (name: string) => void
+  onAdd?: (name: string) => void
   onWrapLet: (name: string) => void
   onWrapFunc: () => void
   onWrapPi: () => void
   onWrapApp: () => void
 }) {
-
+  const addButton = props.onAdd ? <InputButton
+    onConfirm={props.onAdd}
+    validate={props.validate}
+  > + </InputButton> : <div />
   return <div>
     <Slot depth={props.depth}>
       <Text text={props.label} />
       <Spacer />
-      <InputButton
-        onConfirm={props.onAdd}
-        validate={props.validate}
-      > + </InputButton>
+      {addButton}
       <Button
         danger
         onClick={props.onDelete}
