@@ -100,11 +100,13 @@ export function infer({
     else {
       const argID = ty.fromID
       // Automatically find variable of same type in context
+      // TODO implement equal
       const argIX = ty.from.map((v) => ctx.findIndex((t) => t === v))
       // Make sure variable of given type exists
       for (const ix of argIX) {
         if (ix === -1) {
           message.error(i18n.err.noVariable)
+          console.log(ty.from)
           return
         }
       }
@@ -120,7 +122,7 @@ export function infer({
   }
   // Make sure variable name don't duplicate in actions
   const validate = (name: string) => {
-    const containName = ns.map((n) => name === n).reduce((x, y) => x || y)
+    const containName = ns.map((n) => name === n).reduce((x, y) => x || y, false)
     return containName ? i18n.err.nameDup : null
   }
   switch (term.term) {
@@ -249,8 +251,7 @@ export function infer({
           onChange(draft => {
             const tm = draft as TLet
             deleteVar(env.length + 1, 0, tm.next)
-            // TODO this might be wrong
-            draft = tm.next
+            Object.assign(draft, tm.next)
           })
         }
       }
@@ -513,6 +514,7 @@ export function infer({
       })
       // Code action: add param
       const onFuncAdd = (name: string) => {
+        // TODO validate overlap between added params
         onChange(draft => {
           const tm = draft as TFunc
           tm.param.push({ term: 'any' })
