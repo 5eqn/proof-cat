@@ -17,7 +17,7 @@ export default function Labeled(props: {
     <Slot depth={props.depth}>
       <Text text={props.label} />
       <Spacer />
-      <Button value="v" onClick={() => setExpanded(!expanded)} />
+      <Button onClick={() => setExpanded(!expanded)}> v </Button>
     </Slot>
     {content}
   </div>
