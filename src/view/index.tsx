@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { DraftFunction } from "use-immer";
 import Header from "../component/Header";
 import Labeled from "../component/Labeled";
@@ -22,6 +23,8 @@ export type InferRequest = {
   env: Env,
   // Current mapping from de-Bruijn index to type value
   ctx: Ctx,
+  // Current names
+  ns: string[],
   // Depth of rendered component
   depth: number,
   // Term to be inferred
@@ -43,7 +46,7 @@ export type InferResult = {
  ********/
 
 export function infer({
-  env, ctx, depth, term, onChange
+  env, ctx, ns, depth, term, onChange
 }: InferRequest): InferResult {
   // Code action: anify
   const onAnify = () => {
@@ -88,7 +91,7 @@ export function infer({
   }
   // Code action: wrap with app
   const onWrapApp = (ty: Val) => () => {
-    if (ty.val !== 'pi') alert(i18n.err.callNonFunc)
+    if (ty.val !== 'pi') message.error(i18n.err.callNonFunc)
     else {
       const argID = ty.fromID
       // Automatically find variable of same type in context
@@ -116,6 +119,7 @@ export function infer({
       const { element: toElement } = infer({
         env: [...vars, ...env],
         ctx: [...types, ...ctx],
+        ns: [...term.fromID, ...ns],
         depth: depth + 1,
         term: term.to,
         onChange: (updater) => {
@@ -124,11 +128,18 @@ export function infer({
       })
       // Code action: add param
       const onAdd = (name: string) => {
+        // Make sure variable name don't duplicate
+        const containName = ns.map((n) => name === n).reduce((x, y) => x || y)
+        if (containName) {
+          return i18n.err.nameDup
+        }
+        // Add a placeholder param
         onChange(draft => {
           const tm = draft as TPi
           tm.from.push({ term: 'any' })
           tm.fromID.push(name)
         })
+        return null
       }
       // Code action: delete param
       const onDelete = (ix: number) => {
@@ -141,12 +152,11 @@ export function infer({
       }
       // Construct element for from types
       const fromInfers = term.from.map((t, i) => infer({
-        env,
-        ctx,
+        env, ctx, ns,
         depth: depth + 2,
         term: t,
         onChange: (updater) => {
-          if (hasOccurrence(pl, i, term.to)) alert(i18n.err.referred)
+          if (hasOccurrence(pl, i, term.to)) message.error(i18n.err.referred)
           else onChange(draft => { updater((draft as TPi).from[i]) })
         },
       }))
