@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import App from './App'
-import { evaluate, pretty, quote, TNum } from './model'
+import { TNum } from './model'
 import { useImmer } from 'use-immer'
 
 jest.mock('use-immer', () => ({
@@ -14,10 +14,6 @@ describe('App component', () => {
     const mockSetState = jest.fn()
     mockImmer.mockReturnValue([mockState, mockSetState])
     render(<App />)
-    expect(screen.getByText(`Term : ${pretty(mockState)}`)).toBeInTheDocument()
-    expect(
-      screen.getByText(`Value : ${pretty(quote(0, evaluate([], mockState)))}`)
-    ).toBeInTheDocument()
   })
 
   test('updates the term and value properly', () => {

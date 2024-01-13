@@ -18,8 +18,8 @@ export default function Named(props: {
     <Slot depth={props.depth}>
       <Text text={props.name} />
       <Spacer />
-      <Button text="-" onClick={props.onDelete} />
-      <Button text="v" onClick={() => setExpanded(!expanded)} />
+      <Button value="-" onClick={props.onDelete} />
+      <Button value="v" onClick={() => setExpanded(!expanded)} />
     </Slot>
     {content}
   </div>

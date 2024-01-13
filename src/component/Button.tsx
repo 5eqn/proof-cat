@@ -1,12 +1,10 @@
-export default function Button(props: {
-  text: string,
-  onClick: () => void
-}) {
-  return <div style={{
-    fontSize: "20px",
-    fontWeight: "normal",
-    color: "#444",
-    marginRight: "16px",
-    cursor: 'pointer',
-  }} onClick={props.onClick}> {props.text} </div>
+import { Button as AButton } from "antd"
+import { ButtonHTMLAttributes } from "react"
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLElement> { }
+
+export default function Button(props: ButtonProps) {
+  return <AButton onClick={props.onClick}>
+    {props.children}
+  </AButton>
 }
