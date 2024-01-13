@@ -91,13 +91,14 @@ export function infer({
     if (ty.val !== 'pi') alert(i18n.err.callNonFunc)
     else {
       const argID = ty.fromID
+      // Automatically find variable of same type in context
+      const argIX = ty.from.map((v) => ctx.findIndex((t) => t === v))
       onChange(draft => {
         const copy = { ...draft }
         const tm = (draft as TApp)
         tm.term = 'app'
         tm.func = copy
-        // TODO automatically find arguments of correct type outside
-        tm.argIX = [0]
+        tm.argIX = argIX
         tm.argID = argID
       })
     }
@@ -176,5 +177,12 @@ export function infer({
           />
         </div>,
       }
+  }
+  // TODO remove default case
+  return {
+    val: {
+      val: 'any'
+    },
+    element: <div />
   }
 }
