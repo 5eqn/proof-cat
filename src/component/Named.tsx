@@ -8,17 +8,20 @@ export default function Named(props: {
   children: JSX.Element[] | JSX.Element,
   depth: number,
   name: string,
-  onDelete: () => void
+  onDelete?: () => void
 }) {
   const [expanded, setExpanded] = useState(false)
   const content = expanded ?
     props.children :
     <div />
+  const deleteButton = props.onDelete !== null ?
+    <Button value="-" onClick={props.onDelete} /> :
+    <div />
   return <div>
     <Slot depth={props.depth}>
       <Text text={props.name} />
       <Spacer />
-      <Button value="-" onClick={props.onDelete} />
+      {deleteButton}
       <Button value="v" onClick={() => setExpanded(!expanded)} />
     </Slot>
     {content}

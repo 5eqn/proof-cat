@@ -8,11 +8,11 @@ export default function AnyBar(props: {
   depth: number,
   label: string,
   validate: (name: string) => string | null
-  onBecomeVar: (name: string) => void
-  onBecomeLet: (name: string) => void
+  onWrapLet: (name: string) => void
+  onWrapFunc: () => void
+  onWrapPi: () => void
+  onBecomeVar: () => void
   onBecomeType: (name: string) => void
-  onBecomeFunc: () => void
-  onBecomePi: () => void
   onBecomeU: () => void
   onBecomeNum: (num: number) => void
 }) {
@@ -20,12 +20,11 @@ export default function AnyBar(props: {
     <Slot depth={props.depth}>
       <Text text={props.label} />
       <Spacer />
+      <Button
+        onClick={props.onBecomeVar}
+      > V </Button>
       <InputButton
-        onConfirm={props.onBecomeVar}
-        validate={props.validate}
-      > V </InputButton>
-      <InputButton
-        onConfirm={props.onBecomeLet}
+        onConfirm={props.onWrapLet}
         validate={props.validate}
       > L </InputButton>
       <InputButton
@@ -33,10 +32,10 @@ export default function AnyBar(props: {
         validate={props.validate}
       > T </InputButton>
       <Button
-        onClick={props.onBecomeFunc}
+        onClick={props.onWrapFunc}
       > F </Button>
       <Button
-        onClick={props.onBecomePi}
+        onClick={props.onWrapPi}
       > P </Button>
       <Button
         onClick={props.onBecomeU}

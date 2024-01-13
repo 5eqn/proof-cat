@@ -1,11 +1,14 @@
 import { message } from "antd";
 import { DraftFunction } from "use-immer";
+import AnyBar from "../component/AnyBar";
 import Entry from "../component/Entry";
 import Header from "../component/Header";
 import Labeled from "../component/Labeled";
 import Named from "../component/Named";
+import SelectBar from "../component/SelectBar";
+import InputBar from "../component/InputBar";
 import { i18n } from "../i18n";
-import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TPi, TType, Val } from "../model";
+import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TNum, TPi, TType, TUni, TVar, Val, VPi, apply } from "../model";
 
 /*******
   MODEL
@@ -59,7 +62,7 @@ export function infer({
   const onWrapLet = (name: string) => {
     onChange(draft => {
       const copy = { ...draft }
-      const tm = (draft as TLet)
+      const tm = draft as TLet
       tm.term = 'let'
       tm.id = name
       tm.body = {
@@ -72,7 +75,7 @@ export function infer({
   const onWrapFunc = () => {
     onChange(draft => {
       const copy = { ...draft }
-      const tm = (draft as TFunc)
+      const tm = draft as TFunc
       tm.term = 'func'
       tm.param = []
       tm.paramID = []
@@ -92,14 +95,22 @@ export function infer({
   }
   // Code action: wrap with app
   const onWrapApp = (ty: Val) => () => {
+    // Make sure the applied term is a function
     if (ty.val !== 'pi') message.error(i18n.err.callNonFunc)
     else {
       const argID = ty.fromID
       // Automatically find variable of same type in context
       const argIX = ty.from.map((v) => ctx.findIndex((t) => t === v))
+      // Make sure variable of given type exists
+      for (const ix of argIX) {
+        if (ix === -1) {
+          message.error(i18n.err.noVariable)
+          return
+        }
+      }
       onChange(draft => {
         const copy = { ...draft }
-        const tm = (draft as TApp)
+        const tm = draft as TApp
         tm.term = 'app'
         tm.func = copy
         tm.argIX = argIX
@@ -113,6 +124,260 @@ export function infer({
     return containName ? i18n.err.nameDup : null
   }
   switch (term.term) {
+    case 'uni':
+      // U has type U
+      const uniVal: Val = {
+        val: 'uni',
+      }
+      // Concatenate
+      return {
+        val: uniVal,
+        element: <Header
+          depth={depth}
+          label={i18n.term.uni}
+          validate={validate}
+          onDelete={onAnify}
+          onWrapLet={onWrapLet}
+          onWrapPi={onWrapPi}
+          onWrapApp={onWrapApp(uniVal)}
+          onWrapFunc={onWrapFunc}
+        />
+      }
+    case 'var':
+      // Infer type for variable
+      const varType = ctx[term.ix]
+      // Concatenate
+      return {
+        val: varType,
+        element: <div>
+          <Header
+            depth={depth}
+            label={term.id}
+            validate={validate}
+            onDelete={onAnify}
+            onWrapLet={onWrapLet}
+            onWrapPi={onWrapPi}
+            onWrapApp={onWrapApp(varType)}
+            onWrapFunc={onWrapFunc}
+          />
+          <SelectBar
+            depth={depth + 1}
+            label={i18n.term.var}
+            data={ns}
+            index={term.ix}
+            onChange={(i2) => {
+              onChange(draft => {
+                // Incrementally update variable index and name
+                const tm = draft as TVar
+                tm.ix = i2
+                tm.id = ns[i2]
+              })
+            }}
+          />
+        </div>
+      }
+    case 'num':
+      // All numbers have type number
+      const numVal: Val = {
+        val: 'type',
+        type: 'number',
+      }
+      // Concatenate
+      return {
+        val: numVal,
+        element: <div>
+          <Header
+            depth={depth}
+            label={i18n.term.num}
+            validate={validate}
+            onDelete={onAnify}
+            onWrapLet={onWrapLet}
+            onWrapPi={onWrapPi}
+            onWrapApp={onWrapApp(numVal)}
+            onWrapFunc={onWrapFunc}
+          />
+          <InputBar
+            depth={depth}
+            label={i18n.term.num}
+            value={term.num.toString()}
+            onChange={(value) => {
+              onChange(draft => {
+                (draft as TNum).num = +value
+              })
+            }}
+          />
+        </div>
+      }
+    case 'let':
+      // Initialize recursive value and any value
+      const recVal: Val = {
+        val: 'rec',
+        thunk: {
+          env,
+          body: term.body,
+        }
+      }
+      const any: Val = {
+        val: 'any',
+      }
+      // TODO typecheck when recursive?
+      const { val: letBodyVal, element: letBodyElement } = infer({
+        env: [recVal, ...env],
+        ctx: [any, ...ctx],
+        ns: [term.id, ...ns],
+        depth: depth + 1,
+        term: term.body,
+        onChange: (updater) => {
+          onChange(draft => { updater((draft as TLet).body) })
+        }
+      })
+      const { val: letNextVal, element: letNextElement } = infer({
+        env: [recVal, ...env],
+        ctx: [letBodyVal, ...ctx],
+        ns: [term.id, ...ns],
+        depth,
+        term: term.next,
+        onChange: (updater) => {
+          onChange(draft => { updater((draft as TLet).next) })
+        }
+      })
+      // Code action: delete let if not referred
+      const onLetDelete = () => {
+        if (hasOccurrence(env.length + 1, 0, term.next))
+          message.error(i18n.err.referred)
+        else {
+          onChange(draft => {
+            const tm = draft as TLet
+            deleteVar(env.length + 1, 0, tm.next)
+            // TODO this might be wrong
+            draft = tm.next
+          })
+        }
+      }
+      // Concatenate
+      return {
+        val: letNextVal,
+        element: <div>
+          <Named
+            depth={depth}
+            name={term.id}
+            onDelete={onLetDelete}
+          >
+            {letBodyElement}
+          </Named>
+          {letNextElement}
+        </div>
+      }
+    case 'app':
+      // Get type from function's Pi type's destination type
+      const { val: appFuncVal, element: appFuncElement } = infer({
+        env, ctx, ns,
+        depth: depth + 1,
+        term: term.func,
+        onChange: (updater) => {
+          onChange(draft => { updater((draft as TApp).func) })
+        }
+      })
+      const argVals = term.argIX.map((ix, i) => evaluate(env, {
+        term: 'var',
+        id: term.argID[i],
+        ix: ix
+      }))
+      const appVal = apply((appFuncVal as VPi).to, argVals)
+      // Generate argument elements
+      const argElements = term.argIX.map((ix, i) => <Named
+        depth={depth + 1}
+        name={term.argID[i]}
+      >
+        <SelectBar
+          depth={depth + 2}
+          label={i18n.term.var}
+          data={ns}
+          index={ix}
+          onChange={(i2) => {
+            onChange(draft => {
+              // Incrementally update argument index and name
+              const tm = draft as TApp
+              tm.argIX[i] = i2
+              tm.argID[i] = ns[i2]
+            })
+          }}
+        />
+      </Named>)
+      // Concatenate
+      return {
+        val: appVal,
+        element: <div>
+          <Header
+            depth={depth}
+            label={i18n.term.pi}
+            validate={validate}
+            onDelete={onAnify}
+            onWrapLet={onWrapLet}
+            onWrapPi={onWrapPi}
+            onWrapApp={onWrapApp(appVal)}
+            onWrapFunc={onWrapFunc}
+          />
+          {argElements}
+          <Labeled
+            depth={depth}
+            label={i18n.term.target}
+            children={appFuncElement}
+          />
+        </div>,
+      }
+    case 'any':
+      // Any term has type any
+      const anyVal: Val = {
+        val: 'any',
+      }
+      const onBecomeU = () => {
+        onChange(draft => {
+          const tm = draft as TUni
+          tm.term = 'uni'
+        })
+      }
+      const onBecomeType = (type: string) => {
+        onChange(draft => {
+          const tm = draft as TType
+          tm.term = 'type'
+          tm.type = type
+        })
+      }
+      const onBecomeNum = (num: number) => {
+        onChange(draft => {
+          const tm = draft as TNum
+          tm.term = 'num'
+          tm.num = num
+        })
+      }
+      const onBecomeVar = () => {
+        onChange(draft => {
+          if (ns.length === 0) {
+            message.error(i18n.err.noVariable)
+            return
+          }
+          const tm = draft as TVar
+          tm.term = 'var'
+          tm.id = ns[0]
+          tm.ix = 0
+        })
+      }
+      return {
+        val: anyVal,
+        element: <AnyBar
+          depth={depth}
+          label={i18n.term.any}
+          validate={validate}
+          onWrapPi={onWrapPi}
+          onWrapLet={onWrapLet}
+          onWrapFunc={onWrapFunc}
+          onBecomeVar={onBecomeVar}
+          onBecomeU={onBecomeU}
+          onBecomeType={onBecomeType}
+          onBecomeNum={onBecomeNum}
+        />
+      }
     case 'type':
       // All types have type U
       const typeVal: Val = {
@@ -124,7 +389,7 @@ export function infer({
         element: <div>
           <Header
             depth={depth}
-            label={i18n.term.pi}
+            label={i18n.term.type}
             validate={validate}
             onDelete={onAnify}
             onWrapLet={onWrapLet}
@@ -195,7 +460,10 @@ export function infer({
           name={term.fromID[i]}
           depth={depth + 1}
           children={element}
-          onDelete={() => onPiDelete(i)}
+          onDelete={() => {
+            if (hasOccurrence(piLen, i, term.to)) message.error(i18n.err.referred)
+            else onPiDelete(i)
+          }}
         />)
       // Construct type for pi, which is always U
       const piVal: Val = {
@@ -311,12 +579,5 @@ export function infer({
           />
         </div>,
       }
-  }
-  // TODO remove default case
-  return {
-    val: {
-      val: 'any'
-    },
-    element: <div />
   }
 }
