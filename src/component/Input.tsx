@@ -7,6 +7,9 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export default function Input(props: InputProps) {
   return <AInput
+    style={{
+      width: '144px',
+    }}
     onChange={props.onChange}
     value={props.value}
     data-testid={`input-${props.value}`}

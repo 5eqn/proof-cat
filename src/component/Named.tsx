@@ -10,7 +10,7 @@ export default function Named(props: {
   name: string,
   onDelete?: () => void
 }) {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
   const content = expanded ?
     props.children :
     <div />
@@ -18,7 +18,7 @@ export default function Named(props: {
     <Button onClick={props.onDelete}> - </Button> :
     <div />
   return <div>
-    <Slot depth={props.depth}>
+    <Slot depth={props.depth} tagged>
       <Text text={props.name} />
       <Spacer />
       {deleteButton}
