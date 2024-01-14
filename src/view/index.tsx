@@ -7,7 +7,7 @@ import Named from "../component/Named";
 import SelectBar from "../component/SelectBar";
 import InputBar from "../component/InputBar";
 import { i18n } from "../i18n";
-import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TNum, TPi, TType, TUni, TVar, Val, VPi, apply, unify, quote } from "../model";
+import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TNum, TPi, TType, TUni, TVar, Val, VPi, apply, unify, quote, addVar } from "../model";
 
 /*******
   MODEL
@@ -74,6 +74,7 @@ export function infer({
         term: 'any',
       }
       tm.next = copy
+      addVar(0, tm.next)
     })
   }
   // Code action: wrap with func
@@ -245,7 +246,7 @@ export function infer({
         else {
           onChange(draft => {
             const tm = draft as TLet
-            deleteVar(env.length + 1, 0, tm.next)
+            deleteVar(0, tm.next)
             Object.assign(draft, tm.next)
           })
         }
@@ -424,10 +425,10 @@ export function infer({
     case 'pi':
       // Construct element for to type
       const piLen = term.fromID.length + env.length
-      const piVars = term.fromID.map<Val>((id) => ({
+      const piVars = term.fromID.map<Val>((id, ix) => ({
         val: 'var',
         id,
-        lvl: env.length,
+        lvl: piLen - ix - 1,
       }))
       const piTypes = term.from.map((t) => evaluate(env, t))
       const { element: toElement } = infer({
@@ -444,8 +445,9 @@ export function infer({
       const onPiAdd = (name: string) => {
         onChange(draft => {
           const tm = draft as TPi
-          tm.from.push({ term: 'any' })
-          tm.fromID.push(name)
+          tm.from = [{ term: 'any' }, ...tm.from]
+          tm.fromID = [name, ...tm.fromID]
+          addVar(0, tm.to)
         })
       }
       // Code action: delete param
@@ -454,7 +456,7 @@ export function infer({
           const tm = draft as TPi
           tm.from.splice(ix, 1)
           tm.fromID.splice(ix, 1)
-          deleteVar(piLen, ix, tm.to)
+          deleteVar(ix, tm.to)
         })
       }
       // Construct element for from types
@@ -508,10 +510,11 @@ export function infer({
     case 'func':
       // Construct element for function body
       const funcLen = term.paramID.length + env.length
-      const funcVars = term.paramID.map<Val>((id) => ({
+      const funcVars = term.paramID.map<Val>((id, ix) => ({
         val: 'var',
         id,
-        lvl: env.length,
+        // Params should take up upper region of level
+        lvl: funcLen - ix - 1,
       }))
       const funcTypes = term.param.map((t) => evaluate(env, t))
       const { val: bodyVal, element: bodyElement } = infer({
@@ -528,8 +531,9 @@ export function infer({
       const onFuncAdd = (name: string) => {
         onChange(draft => {
           const tm = draft as TFunc
-          tm.param.push({ term: 'any' })
-          tm.paramID.push(name)
+          tm.param = [{ term: 'any' }, ...tm.param]
+          tm.paramID = [name, ...tm.paramID]
+          addVar(0, tm.body)
         })
       }
       // Code action: delete param
@@ -538,7 +542,7 @@ export function infer({
           const tm = draft as TFunc
           tm.param.splice(ix, 1)
           tm.paramID.splice(ix, 1)
-          deleteVar(funcLen, ix, tm.body)
+          deleteVar(ix, tm.body)
         })
       }
       // Construct element for params
@@ -567,7 +571,7 @@ export function infer({
         fromID: term.paramID,
         to: {
           env,
-          body: quote(env.length + funcLen, bodyVal),
+          body: quote(funcLen, bodyVal),
         }
       }
       // Concatenate
