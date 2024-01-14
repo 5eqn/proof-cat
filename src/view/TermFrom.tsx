@@ -1,6 +1,7 @@
-import { InferRequest, onPiDelete } from ".";
 import Named from "../component/Named";
 import { Term, TPi } from "../model/term";
+import {InferRequest} from "../model/infer/model";
+import {onPiDelete} from "../model/action/onPiDelete";
 
 export interface TermFromProps {
   // Infer request of the function it belongs to

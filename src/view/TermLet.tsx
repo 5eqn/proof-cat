@@ -1,6 +1,7 @@
-import { onLetDelete, TermPropsBase } from ".";
 import Named from "../component/Named";
 import { TLet } from "../model/term";
+import {TermPropsBase} from "../model/props";
+import {onLetDelete} from "../model/action/onLetDelete";
 
 export interface TermLetProps extends TermPropsBase<TLet> {
   body: JSX.Element
