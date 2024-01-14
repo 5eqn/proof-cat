@@ -27,6 +27,8 @@ function App() {
       top: "32px",
     }}>
       <Center>
+        <Text text="Target: (forall x. A(x) -> B(x)) -> (forall x. A(x)) -> (forall x. B(x))" />
+        <div style={{ height: '16px' }} />
         <Text text="You have proven: " />
         <div style={{ height: '16px' }} />
         <Text text={pretty([], tytm)} />
