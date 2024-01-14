@@ -1,8 +1,8 @@
-import { TermPropsBase } from ".";
 import InputBar from "../component/InputBar";
 import { i18n } from "../i18n";
 import { TType } from "../model/term";
 import { TermHeader } from "./TermHeader";
+import {TermPropsBase} from "../model/props";
 
 export interface TermTypeProps extends TermPropsBase<TType> { }
 

@@ -1,8 +1,8 @@
-import { TermPropsBase } from ".";
 import Labeled from "../component/Labeled";
 import { i18n } from "../i18n";
 import { TFunc } from "../model/term";
 import { TermHeader } from "./TermHeader";
+import {TermPropsBase} from "../model/props";
 
 export interface TermFuncProps extends TermPropsBase<TFunc> {
   params: JSX.Element[]

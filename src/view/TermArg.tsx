@@ -1,9 +1,9 @@
-import { TermPropsBase } from ".";
 import Named from "../component/Named";
 import SelectBar from "../component/SelectBar";
 import { i18n } from "../i18n";
 import { TApp } from "../model/term";
 import { unify } from "../model/unify";
+import {TermPropsBase} from "../model/props";
 
 export interface TermArgProps extends TermPropsBase<TApp> {
   // Param name of the applied function

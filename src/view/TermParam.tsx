@@ -1,6 +1,7 @@
-import { InferRequest, onFuncDelete } from ".";
 import Named from "../component/Named";
 import { Term, TFunc } from "../model/term";
+import {InferRequest} from "../model/infer/model";
+import {onFuncDelete} from "../model/action/onFuncDelete";
 
 export interface TermParamProps {
   // Infer request of the function it belongs to

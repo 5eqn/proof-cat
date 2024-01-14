@@ -1,8 +1,9 @@
-import { onNumUpdate, TermPropsBase } from ".";
 import InputBar from "../component/InputBar";
 import { i18n } from "../i18n";
 import { TNum } from "../model/term";
 import { TermHeader } from "./TermHeader";
+import {TermPropsBase} from "../model/props";
+import {onNumUpdate} from "../model/action/onNumUpdate";
 
 export interface TermNumProps extends TermPropsBase<TNum> { }
 

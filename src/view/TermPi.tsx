@@ -1,8 +1,8 @@
-import { TermPropsBase } from ".";
 import Labeled from "../component/Labeled";
 import { i18n } from "../i18n";
 import { TPi } from "../model/term";
 import { TermHeader } from "./TermHeader";
+import {TermPropsBase} from "../model/props";
 
 export interface TermPiProps extends TermPropsBase<TPi> {
   froms: JSX.Element[]
