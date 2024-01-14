@@ -17,6 +17,8 @@ export default function Header(props: {
   onWrapApp: () => void
 }) {
   const addButton = props.onAdd ? <InputButton
+    title={i18n.prompt.addAnEntry}
+    placeholder={i18n.prompt.name}
     onConfirm={props.onAdd}
     validate={props.validate}
   > + </InputButton> : <div />
