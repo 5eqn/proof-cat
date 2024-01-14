@@ -12,7 +12,7 @@ export function TermType(props: TermTypeProps) {
     <TermHeader
       req={props.req}
       type={props.type}
-      label={i18n.term.var}
+      label={i18n.term.type}
     />
     <InputBar
       label={i18n.term.val}
