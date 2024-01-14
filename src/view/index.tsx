@@ -15,16 +15,23 @@ import { apply } from "../model/closure";
 import { unify } from "../model/unify";
 import { evaluate, quote } from "../model/evaluate";
 import { addVar, deleteVar, hasOccurrence } from "../model/action";
+import { TermUni } from "./TermUni";
+import { TermVar } from "./TermVar";
+import { TermNum } from "./TermNum";
+import { TermLet } from "./TermLet";
+import { TermArg } from "./TermArg";
+import { TermApp } from "./TermApp";
+import { TermAny } from "./TermAny";
+import { TermType } from "./TermType";
 
 /*******
   MODEL
  *******/
 
 // Props of a rendered component
-export type CommonProps<T> = {
-  value: T,
-  level: number,
-  onChange: (updater: DraftFunction<T>) => void,
+export interface TermPropsBase<T> {
+  req: InferRequest<T>
+  type: Val,
 }
 
 // Callback of code actions
@@ -59,7 +66,7 @@ export type InferResult = {
  ********/
 
 // Code action: anify
-const onAnify = (onChange: Callback<Term>) => {
+export const onAnify = (onChange: Callback<Term>) => {
   onChange(draft => {
     switch (draft.term) {
       case 'app':
@@ -71,7 +78,7 @@ const onAnify = (onChange: Callback<Term>) => {
   })
 }
 // Code action: wrap with let
-const onWrapLet = (name: string, onChange: Callback<Term>) => {
+export const onWrapLet = (name: string, onChange: Callback<Term>) => {
   onChange(draft => {
     const copy = { ...draft }
     const tm = draft as TLet
@@ -85,7 +92,7 @@ const onWrapLet = (name: string, onChange: Callback<Term>) => {
   })
 }
 // Code action: wrap with func
-const onWrapFunc = (onChange: Callback<Term>) => {
+export const onWrapFunc = (onChange: Callback<Term>) => {
   onChange(draft => {
     const copy = { ...draft }
     const tm = draft as TFunc
@@ -96,7 +103,7 @@ const onWrapFunc = (onChange: Callback<Term>) => {
   })
 }
 // Code action: wrap with pi
-const onWrapPi = (onChange: Callback<Term>) => {
+export const onWrapPi = (onChange: Callback<Term>) => {
   onChange(draft => {
     const copy = { ...draft }
     const tm = (draft as TPi)
@@ -107,7 +114,7 @@ const onWrapPi = (onChange: Callback<Term>) => {
   })
 }
 // Code action: wrap with app
-const onWrapApp = (ty: Val, ctx: Ctx, env: Env, onChange: Callback<Term>) => {
+export const onWrapApp = (ty: Val, ctx: Ctx, env: Env, onChange: Callback<Term>) => {
   // Make sure the applied term is a function
   if (ty.val !== 'pi') message.error(i18n.err.callNonFunc)
   else {
@@ -135,14 +142,14 @@ const onWrapApp = (ty: Val, ctx: Ctx, env: Env, onChange: Callback<Term>) => {
   }
 }
 
-const onBecomeU = (onChange: Callback<Term>) => {
+export const onBecomeU = (onChange: Callback<Term>) => {
   onChange(draft => {
     Object.assign(draft, {
       term: 'uni',
     })
   })
 }
-const onBecomeType = (type: string, onChange: Callback<Term>) => {
+export const onBecomeType = (type: string, onChange: Callback<Term>) => {
   onChange(draft => {
     Object.assign(draft, {
       term: 'type',
@@ -150,7 +157,7 @@ const onBecomeType = (type: string, onChange: Callback<Term>) => {
     })
   })
 }
-const onBecomeNum = (num: number, onChange: Callback<Term>) => {
+export const onBecomeNum = (num: number, onChange: Callback<Term>) => {
   onChange(draft => {
     Object.assign(draft, {
       term: 'num',
@@ -158,7 +165,7 @@ const onBecomeNum = (num: number, onChange: Callback<Term>) => {
     })
   })
 }
-const onBecomeVar = (ns: string[], onChange: Callback<Term>) => {
+export const onBecomeVar = (ns: string[], onChange: Callback<Term>) => {
   onChange(draft => {
     if (ns.length === 0) {
       message.error(i18n.err.noVariable)
@@ -171,9 +178,29 @@ const onBecomeVar = (ns: string[], onChange: Callback<Term>) => {
     })
   })
 }
+export const onVarUpdate = (
+  newIX: number,
+  ns: string[],
+  onChange: Callback<TVar>
+) => {
+  onChange(draft => {
+    // Incrementally update variable index and name
+    draft.ix = newIX
+    draft.id = ns[newIX]
+  })
+}
+
+export const onNumUpdate = (
+  num: number,
+  onChange: Callback<TNum>
+) => {
+  onChange(draft => {
+    draft.num = num
+  })
+}
 
 // Code action: add param
-const onPiAdd = (name: string, onChange: Callback<TPi>) => {
+export const onPiAdd = (name: string, onChange: Callback<TPi>) => {
   onChange(draft => {
     draft.from = [{ term: 'any' }, ...draft.from]
     draft.fromID = [name, ...draft.fromID]
@@ -181,7 +208,7 @@ const onPiAdd = (name: string, onChange: Callback<TPi>) => {
   })
 }
 // Code action: delete param
-const onPiDelete = (ix: number, onChange: Callback<TPi>) => {
+export const onPiDelete = (ix: number, onChange: Callback<TPi>) => {
   onChange(draft => {
     draft.from.splice(ix, 1)
     draft.fromID.splice(ix, 1)
@@ -189,7 +216,7 @@ const onPiDelete = (ix: number, onChange: Callback<TPi>) => {
   })
 }
 // Code action: add param
-const onFuncAdd = (name: string, onChange: Callback<TFunc>) => {
+export const onFuncAdd = (name: string, onChange: Callback<TFunc>) => {
   onChange(draft => {
     draft.param = [{ term: 'any' }, ...draft.param]
     draft.paramID = [name, ...draft.paramID]
@@ -197,117 +224,73 @@ const onFuncAdd = (name: string, onChange: Callback<TFunc>) => {
   })
 }
 // Code action: delete param
-const onFuncDelete = (ix: number, onChange: Callback<TFunc>) => {
+export const onFuncDelete = (ix: number, onChange: Callback<TFunc>) => {
   onChange(draft => {
     draft.param.splice(ix, 1)
     draft.paramID.splice(ix, 1)
     deleteVar(ix, draft.body)
   })
 }
+// Code action: delete let if not referred
+export const onLetDelete = (env: Env, term: Term, onChange: Callback<TLet>) => {
+  if (hasOccurrence(env.length + 1, 0, term))
+    message.error(i18n.err.referred)
+  else {
+    onChange(draft => {
+      deleteVar(0, draft.next)
+      Object.assign(draft, draft.next)
+    })
+  }
+}
 
 // Make sure variable name don't duplicate in actions
-const validate = (name: string, ns: string[]) => {
+export const validate = (name: string, ns: string[]) => {
   const containName = ns.map((n) => name === n).reduce((x, y) => x || y, false)
   return containName ? i18n.err.nameDup : null
 }
 
-export function inferUni({
-  env, ctx, ns, depth, onChange
-}: InferRequest<TUni>): InferResult {
+export function inferUni(req: InferRequest<TUni>): InferResult {
   // U has type U
   const val: Val = {
     val: 'uni',
   }
   return {
     val,
-    element: <Header
-      depth={depth}
-      label={i18n.term.uni}
-      validate={(name) => validate(name, ns)}
-      onDelete={() => onAnify(onChange)}
-      onWrapLet={(name) => onWrapLet(name, onChange)}
-      onWrapPi={() => onWrapPi(onChange)}
-      onWrapApp={() => onWrapApp(val, env, ctx, onChange)}
-      onWrapFunc={() => onWrapFunc(onChange)}
-    />
+    element: TermUni({ req, type: val })
   }
 }
 
-export function inferVar({
-  env, ctx, ns, depth, term, onChange
-}: InferRequest<TVar>): InferResult {
+export function inferVar(req: InferRequest<TVar>): InferResult {
   // Infer type for variable
+  const { ctx, term } = req
   const val = ctx[term.ix]
   return {
     val: val,
-    element: <div>
-      <Header
-        depth={depth}
-        label={i18n.term.var}
-        validate={(name) => validate(name, ns)}
-        onDelete={() => onAnify(onChange)}
-        onWrapLet={(name) => onWrapLet(name, onChange)}
-        onWrapPi={() => onWrapPi(onChange)}
-        onWrapApp={() => onWrapApp(val, env, ctx, onChange)}
-        onWrapFunc={() => onWrapFunc(onChange)}
-      />
-      <SelectBar
-        label={i18n.term.val}
-        depth={depth}
-        data={ns}
-        index={term.ix}
-        onChange={(i2) => {
-          onChange(draft => {
-            // Incrementally update variable index and name
-            draft.ix = i2
-            draft.id = ns[i2]
-          })
-        }}
-      />
-    </div>
+    element: TermVar({
+      req,
+      type: val,
+    })
   }
 }
 
-export function inferNum({
-  env, ctx, ns, depth, term, onChange
-}: InferRequest<TNum>): InferResult {
+export function inferNum(req: InferRequest<TNum>): InferResult {
   // All numbers have type number
   const val: Val = {
     val: 'type',
     type: 'number',
   }
-  // Concatenate
   return {
     val: val,
-    element: <div>
-      <Header
-        depth={depth}
-        label={i18n.term.num}
-        validate={(name) => validate(name, ns)}
-        onDelete={() => onAnify(onChange)}
-        onWrapLet={(name) => onWrapLet(name, onChange)}
-        onWrapPi={() => onWrapPi(onChange)}
-        onWrapApp={() => onWrapApp(val, env, ctx, onChange)}
-        onWrapFunc={() => onWrapFunc(onChange)}
-      />
-      <InputBar
-        depth={depth}
-        label={i18n.term.val}
-        value={term.num.toString()}
-        onChange={(value) => {
-          onChange(draft => {
-            (draft as TNum).num = +value
-          })
-        }}
-      />
-    </div>
+    element: TermNum({
+      req,
+      type: val,
+    })
   }
 }
 
-export function inferLet({
-  env, ctx, ns, depth, term, onChange
-}: InferRequest<TLet>): InferResult {
-  const { val: letBodyVal, element: letBodyElement } = infer({
+export function inferLet(req: InferRequest<TLet>): InferResult {
+  const { env, ctx, ns, depth, term, onChange } = req
+  const { val: bodyVal, element: bodyElement } = infer({
     env: env,
     ctx: ctx,
     ns: ns,
@@ -317,9 +300,9 @@ export function inferLet({
       onChange(draft => { updater((draft as TLet).body) })
     }
   })
-  const { val: letNextVal, element: letNextElement } = infer({
+  const { val: nextVal, element: nextElement } = infer({
     env: [evaluate(env, term.body), ...env],
-    ctx: [letBodyVal, ...ctx],
+    ctx: [bodyVal, ...ctx],
     ns: [term.id, ...ns],
     depth,
     term: term.next,
@@ -327,39 +310,21 @@ export function inferLet({
       onChange(draft => { updater((draft as TLet).next) })
     }
   })
-  // Code action: delete let if not referred
-  const onLetDelete = () => {
-    if (hasOccurrence(env.length + 1, 0, term.next))
-      message.error(i18n.err.referred)
-    else {
-      onChange(draft => {
-        const tm = draft as TLet
-        deleteVar(0, tm.next)
-        Object.assign(draft, tm.next)
-      })
-    }
-  }
-  // Concatenate
   return {
-    val: letNextVal,
-    element: <div>
-      <Named
-        depth={depth}
-        name={term.id}
-        onDelete={onLetDelete}
-      >
-        {letBodyElement}
-      </Named>
-      {letNextElement}
-    </div>
+    val: nextVal,
+    element: TermLet({
+      req,
+      type: nextVal,
+      body: bodyElement,
+      next: nextElement,
+    })
   }
 }
 
-export function inferApp({
-  env, ctx, ns, depth, term, onChange
-}: InferRequest<TApp>): InferResult {
+export function inferApp(req: InferRequest<TApp>): InferResult {
   // Get type from function's Pi type's destination type
-  const { val: appFuncVal, element: appFuncElement } = infer({
+  const { env, ctx, ns, depth, term, onChange } = req
+  const { val: appFuncVal, element: funcElement } = infer({
     env, ctx, ns,
     depth: depth + 1,
     term: term.func,
@@ -375,119 +340,48 @@ export function inferApp({
   }))
   const appFuncPi = appFuncVal as VPi
   const val = apply(appFuncPi.to, argVals)
-
   // Generate argument elements
-  const argElements = term.argIX.map((globalIX, argIX) => {
-    // Filter variable of correct type
-    const selection = ns
-      .map<[string, number]>((n, globalIX) => [n, globalIX])
-      .filter(([_, globalIX]) =>
-        unify(ns.length, ctx[globalIX], appFuncPi.from[argIX]) === null)
-    // Invert selection
-    let invSel = new Array(ns.length)
-    selection.forEach(([_, globalIX], localIX) => {
-      invSel[globalIX] = localIX
-    })
-    // Construct elements
-    return <Named
-      key={appFuncPi.fromID[argIX]}
-      depth={depth + 1}
-      name={appFuncPi.fromID[argIX]}
-    >
-      <SelectBar
-        depth={depth + 1}
-        label={i18n.term.val}
-        data={selection.map(([n, _]) => n)}
-        index={invSel[globalIX]}
-        onChange={(localIX) => {
-          onChange(draft => {
-            // Incrementally update argument index and name
-            draft.argIX[argIX] = selection[localIX][1]
-            draft.argID[argIX] = selection[localIX][0]
-          })
-        }}
-      />
-    </Named>
-  })
-  // Concatenate
+  const argElements = term.argIX.map((globalIX, argIX) => TermArg({
+    req, globalIX, argIX,
+    type: appFuncPi.from[argIX],
+    paramID: appFuncPi.fromID[argIX],
+  }))
   return {
     val: val,
-    element: <div>
-      <Header
-        depth={depth}
-        label={i18n.term.apply}
-        validate={(name) => validate(name, ns)}
-        onDelete={() => onAnify(onChange)}
-        onWrapLet={(name) => onWrapLet(name, onChange)}
-        onWrapPi={() => onWrapPi(onChange)}
-        onWrapApp={() => onWrapApp(val, env, ctx, onChange)}
-        onWrapFunc={() => onWrapFunc(onChange)}
-      />
-      {argElements}
-      <Labeled
-        depth={depth}
-        label={i18n.term.target}
-        children={appFuncElement}
-      />
-    </div>,
+    element: TermApp({
+      req,
+      type: val,
+      args: argElements,
+      func: funcElement,
+    }),
   }
 }
 
-export function inferAny({
-  ns, depth, onChange
-}: InferRequest<TAny>): InferResult {
+export function inferAny(req: InferRequest<TAny>): InferResult {
   // Any term has type any
   const val: Val = {
     val: 'any',
   }
   return {
     val: val,
-    element: <AnyBar
-      depth={depth}
-      validate={(name) => validate(name, ns)}
-      onWrapLet={(name) => onWrapLet(name, onChange)}
-      onWrapPi={() => onWrapPi(onChange)}
-      onWrapFunc={() => onWrapFunc(onChange)}
-      onBecomeVar={() => onBecomeVar(ns, onChange)}
-      onBecomeU={() => onBecomeU(onChange)}
-      onBecomeType={(name) => onBecomeType(name, onChange)}
-      onBecomeNum={(num) => onBecomeNum(num, onChange)}
-    />
+    element: TermAny({
+      req,
+      type: val,
+    })
   }
 }
 
-export function inferType({
-  env, ctx, ns, depth, term, onChange
-}: InferRequest<TType>): InferResult {
+export function inferType(req: InferRequest<TType>): InferResult {
   // All types have type U
   const val: Val = {
     val: 'uni',
   }
-  // Concatenate
   return {
     val: val,
-    element: <div>
-      <Header
-        depth={depth}
-        label={i18n.term.type}
-        validate={(name) => validate(name, ns)}
-        onDelete={() => onAnify(onChange)}
-        onWrapLet={(name) => onWrapLet(name, onChange)}
-        onWrapPi={() => onWrapPi(onChange)}
-        onWrapApp={() => onWrapApp(val, env, ctx, onChange)}
-        onWrapFunc={() => onWrapFunc(onChange)}
-      />
-      <InputBar
-        label={i18n.term.val}
-        depth={depth}
-        value={term.type}
-        onChange={(value) => {
-          onChange(draft => {
-            draft.type = value
-          })
-        }}
-      />
-    </div>
+    element: TermType({
+      req,
+      type: val,
+    })
   }
 }
 
