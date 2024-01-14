@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import App from './App'
-import { TNum } from './model'
 import { useImmer } from 'use-immer'
+import {TNum} from "./model/term";
 
 jest.mock('use-immer', () => ({
   useImmer: jest.fn(),

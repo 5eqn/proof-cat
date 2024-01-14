@@ -1,4 +1,5 @@
-import { evaluate, quote, Term } from '.'
+import {Term} from "./term";
+import {evaluate, quote} from "./evaluate";
 
 describe('Evaluation framework', () => {
   test('(x => x)(x = 114)', () => {

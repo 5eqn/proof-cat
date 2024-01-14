@@ -7,7 +7,14 @@ import Named from "../component/Named";
 import SelectBar from "../component/SelectBar";
 import InputBar from "../component/InputBar";
 import { i18n } from "../i18n";
-import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TNum, TPi, TType, TUni, TVar, Val, VPi, apply, unify, quote, addVar } from "../model";
+import {TApp, Term, TFunc, TLet, TNum, TPi, TType, TUni, TVar} from "../model/term";
+import {Val, VPi} from "../model/value";
+import {Env} from "../model/env";
+import {Ctx} from "../model/ctx";
+import {apply} from "../model/closure";
+import {unify} from "../model/unify";
+import {evaluate, quote} from "../model/evaluate";
+import {addVar, deleteVar, hasOccurrence} from "../model/action";
 
 /*******
   MODEL
