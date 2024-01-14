@@ -37,7 +37,12 @@ const source = {
     },
     prompt: {
       addAnEntry: 'Add an entry',
+      addLet: 'Define a variable',
+      addType: 'Make this variable a type',
+      addNum: 'Make this variable a number',
       entryName: 'Entry name',
+      name: 'Name',
+      value: 'Value',
       selectAnEntry: 'Select an entry',
       typeName: 'Type name',
     }

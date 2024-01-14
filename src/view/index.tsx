@@ -1,7 +1,6 @@
 import { message } from "antd";
 import { DraftFunction } from "use-immer";
 import AnyBar from "../component/AnyBar";
-import Entry from "../component/Entry";
 import Header from "../component/Header";
 import Labeled from "../component/Labeled";
 import Named from "../component/Named";
@@ -207,7 +206,6 @@ export function infer({
           />
           <InputBar
             depth={depth}
-            label={i18n.term.num}
             value={term.num.toString()}
             onChange={(value) => {
               onChange(draft => {
@@ -374,7 +372,6 @@ export function infer({
         val: anyVal,
         element: <AnyBar
           depth={depth}
-          label={i18n.term.any}
           validate={validate}
           onWrapPi={onWrapPi}
           onWrapLet={onWrapLet}

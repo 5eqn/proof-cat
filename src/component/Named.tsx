@@ -22,7 +22,9 @@ export default function Named(props: {
       <Text text={props.name} />
       <Spacer />
       {deleteButton}
-      <Button onClick={() => setExpanded(!expanded)}> v </Button>
+      <Button onClick={() => setExpanded(!expanded)}>
+        {expanded ? 'v' : '^'}
+      </Button>
     </Slot>
     {content}
   </div>

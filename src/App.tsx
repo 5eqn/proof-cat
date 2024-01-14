@@ -21,7 +21,7 @@ function App() {
   }}>
     <div style={{
       marginTop: "32px",
-      width: "80%",
+      width: "70%",
     }}>
     </div>
     <div style={{
