@@ -9,7 +9,7 @@ export default function Labeled(props: {
   depth: number,
   label: string,
 }) {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
   const content = expanded ?
     props.children :
     <div />

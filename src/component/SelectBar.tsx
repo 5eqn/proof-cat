@@ -5,14 +5,15 @@ import Select from "./Select"
 
 export default function SelectBar(props: {
   depth: number,
-  label: string,
+  label?: string,
   data: string[],
   index: number,
   onChange: (index: number) => void
 }) {
+  const label = props.label ? <Text text={props.label} /> : <div />
   return <div>
     <Slot depth={props.depth}>
-      <Text text={props.label} />
+      {label}
       <Spacer />
       <Select
         data={props.data}

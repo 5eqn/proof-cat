@@ -55,7 +55,13 @@ export function infer({
   // Code action: anify
   const onAnify = () => {
     onChange(draft => {
-      draft.term = 'any'
+      switch (draft.term) {
+        case 'app':
+          Object.assign(draft, draft.func)
+          return
+        default:
+          draft.term = 'any'
+      }
     })
   }
   // Code action: wrap with let
@@ -156,7 +162,7 @@ export function infer({
         element: <div>
           <Header
             depth={depth}
-            label={term.id}
+            label={i18n.term.var}
             validate={validate}
             onDelete={onAnify}
             onWrapLet={onWrapLet}
@@ -165,8 +171,7 @@ export function infer({
             onWrapFunc={onWrapFunc}
           />
           <SelectBar
-            depth={depth + 1}
-            label={i18n.term.var}
+            depth={depth}
             data={ns}
             index={term.ix}
             onChange={(i2) => {
@@ -276,8 +281,9 @@ export function infer({
         env, ctx, ns,
         depth: depth + 1,
         term: term.func,
-        onChange: (updater) => {
-          onChange(draft => { updater((draft as TApp).func) })
+        onChange: (_) => {
+          // Applied term should not change
+          message.error(i18n.err.changeApply)
         }
       })
       const argVals = term.argIX.map((ix, i) => evaluate(env, {
@@ -292,8 +298,7 @@ export function infer({
         name={term.argID[i]}
       >
         <SelectBar
-          depth={depth + 2}
-          label={i18n.term.var}
+          depth={depth + 1}
           data={ns}
           index={ix}
           onChange={(i2) => {
@@ -312,7 +317,7 @@ export function infer({
         element: <div>
           <Header
             depth={depth}
-            label={i18n.term.pi}
+            label={i18n.term.apply}
             validate={validate}
             onDelete={onAnify}
             onWrapLet={onWrapLet}
@@ -399,9 +404,8 @@ export function infer({
             onWrapApp={onWrapApp(typeVal)}
             onWrapFunc={onWrapFunc}
           />
-          <Entry
+          <InputBar
             depth={depth}
-            name={i18n.term.type}
             value={term.type}
             onChange={(value) => {
               onChange(draft => {
