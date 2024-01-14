@@ -7,7 +7,7 @@ import Named from "../component/Named";
 import SelectBar from "../component/SelectBar";
 import InputBar from "../component/InputBar";
 import { i18n } from "../i18n";
-import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TNum, TPi, TType, TUni, TVar, Val, VPi, apply, unify } from "../model";
+import { Ctx, deleteVar, Env, evaluate, hasOccurrence, TApp, Term, TFunc, TLet, TNum, TPi, TType, TUni, TVar, Val, VPi, apply, unify, quote } from "../model";
 
 /*******
   MODEL
@@ -170,6 +170,7 @@ export function infer({
             onWrapFunc={onWrapFunc}
           />
           <SelectBar
+            label={i18n.term.val}
             depth={depth}
             data={ns}
             index={term.ix}
@@ -206,6 +207,7 @@ export function infer({
           />
           <InputBar
             depth={depth}
+            label={i18n.term.val}
             value={term.num.toString()}
             onChange={(value) => {
               onChange(draft => {
@@ -292,11 +294,13 @@ export function infer({
       const appVal = apply((appFuncVal as VPi).to, argVals)
       // Generate argument elements
       const argElements = term.argIX.map((ix, i) => <Named
+        key={term.argID[i]}
         depth={depth + 1}
         name={term.argID[i]}
       >
         <SelectBar
           depth={depth + 1}
+          label={i18n.term.val}
           data={ns}
           index={ix}
           onChange={(i2) => {
@@ -402,6 +406,7 @@ export function infer({
             onWrapFunc={onWrapFunc}
           />
           <InputBar
+            label={i18n.term.val}
             depth={depth}
             value={term.type}
             onChange={(value) => {
@@ -451,7 +456,7 @@ export function infer({
       // Construct element for from types
       const fromInfers = term.from.map((t, i) => infer({
         env, ctx, ns,
-        depth: depth + 2,
+        depth: depth + 1,
         term: t,
         onChange: (updater) => {
           if (hasOccurrence(piLen, i, term.to)) message.error(i18n.err.referred)
@@ -460,6 +465,7 @@ export function infer({
       }))
       const fromElements = fromInfers.map(({ element }, i) =>
         <Named
+          key={term.fromID[i]}
           name={term.fromID[i]}
           depth={depth + 1}
           children={element}
@@ -504,7 +510,7 @@ export function infer({
         lvl: env.length,
       }))
       const funcTypes = term.param.map((t) => evaluate(env, t))
-      const { element: bodyElement } = infer({
+      const { val: bodyVal, element: bodyElement } = infer({
         env: [...funcVars, ...env],
         ctx: [...funcTypes, ...ctx],
         ns: [...term.paramID, ...ns],
@@ -534,7 +540,7 @@ export function infer({
       // Construct element for params
       const paramInfers = term.param.map((t, i) => infer({
         env, ctx, ns,
-        depth: depth + 2,
+        depth: depth + 1,
         term: t,
         onChange: (updater) => {
           if (hasOccurrence(funcLen, i, term.body)) message.error(i18n.err.referred)
@@ -543,12 +549,13 @@ export function infer({
       }))
       const paramElements = paramInfers.map(({ element }, i) =>
         <Named
+          key={term.paramID[i]}
           name={term.paramID[i]}
           depth={depth + 1}
           children={element}
           onDelete={() => onFuncDelete(i)}
         />)
-      const paramVals = paramInfers.map(({ val }) => val)
+      const paramVals = term.param.map((t) => evaluate(env, t))
       // Construct type for func, which is Pi
       const funcVal: Val = {
         val: 'pi',
@@ -556,7 +563,7 @@ export function infer({
         fromID: term.paramID,
         to: {
           env,
-          body: term.body,
+          body: quote(env.length + funcLen, bodyVal),
         }
       }
       // Concatenate

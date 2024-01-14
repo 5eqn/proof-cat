@@ -1,12 +1,14 @@
 import { useImmer } from "use-immer";
-import { Term } from "./model";
+import Center from "./component/Center";
+import Text from "./component/Text";
+import { pretty, quote, Term } from "./model";
 import { infer } from "./view";
 
 function App() {
   const [state, setState] = useImmer<Term>({
     term: 'any'
   })
-  const { element } = infer({
+  const { val, element } = infer({
     env: [],
     ctx: [],
     ns: [],
@@ -16,16 +18,22 @@ function App() {
       setState(updater)
     },
   })
-  return <div style={{
-    display: "flex",
-  }}>
+  const tytm = quote(0, val)
+  return <div>
     <div style={{
-      marginTop: "32px",
+      position: "fixed",
+      left: "30%",
       width: "70%",
+      top: "32px",
     }}>
+      <Center>
+        <Text text="You have proven: " />
+        <div style={{ height: '16px' }} />
+        <Text text={pretty([], tytm)} />
+      </Center>
     </div>
     <div style={{
-      flexGrow: 1,
+      width: "30%",
     }}>
       {element}
     </div>

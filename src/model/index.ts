@@ -216,17 +216,14 @@ export function unify(len: number, x: Val, y: Val): string | null {
         return funcRes
       case 'any': return null
       case 'uni': return null
-      case 'rec': return null // TODO judge equality for resursive value
+      case 'rec': return null
       case 'type':
         return x.type === (y as VType).type ? null
           : i18n.err.typeMismatch(x.type, (y as VType).type)
     }
   } else {
-    if (x.val === 'any' || y.val === 'any') {
-      return null
-    } else {
-      return i18n.err.astMismatch(x.val, y.val)
-    }
+    // TODO recursive resolution
+    return i18n.err.astMismatch(x.val, y.val)
   }
 }
 
@@ -444,6 +441,25 @@ export function deleteVar(len: number, ix: number, term: Draft<Term>) {
     case 'any': return
     case 'type': return
     case 'uni': return
+  }
+}
+
+/**************
+  PRETTY-PRINT
+ **************/
+
+// Pretty-print a term
+export function pretty(ns: string[], term: Term): string {
+  switch (term.term) {
+    case 'func': return `(${term.param.map((t, i) => `${term.paramID[i]}: ${pretty(ns, t)}`).join(', ')}) => ${pretty([...term.paramID, ...ns], term.body)}`
+    case 'pi': return `(${term.from.map((t, i) => `${term.fromID[i]}: ${pretty(ns, t)}`).join(', ')}) -> ${pretty([...term.fromID, ...ns], term.to)}`
+    case 'app': return `(${pretty(ns, term.func)})(${term.argIX.map((ix, i) => `${term.argID[i]} = ${ns[ix]}`).join(', ')})`
+    case 'var': return `Var(${term.id})`
+    case 'num': return term.num.toString()
+    case 'type': return term.type
+    case 'any': return '*'
+    case 'uni': return 'U'
+    case 'let': return `${term.id} = ${pretty([term.id, ...ns], term.body)}; ${pretty([term.id, ...ns], term.next)}`
   }
 }
 

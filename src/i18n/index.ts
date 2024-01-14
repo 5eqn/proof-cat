@@ -14,6 +14,7 @@ const source = {
       target: 'Target',
       var: 'Variable',
       ref: 'Reference',
+      val: 'Value',
     },
     err: {
       referred: 'This variable is referred to, so you cannot edit it!',
