@@ -15,7 +15,7 @@ export function TermApp(props: TermAppProps) {
     <TermHeader
       req={props.req}
       type={props.type}
-      label={i18n.term.var}
+      label={i18n.term.apply}
     />
     {props.args}
     <Labeled

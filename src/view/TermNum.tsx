@@ -13,7 +13,7 @@ export function TermNum(props: TermNumProps) {
     <TermHeader
       req={props.req}
       type={props.type}
-      label={i18n.term.var}
+      label={i18n.term.num}
     />
     <InputBar
       depth={depth}
