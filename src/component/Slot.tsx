@@ -1,4 +1,10 @@
-function getBackgroundColor(level: number, maxLevel: number) {
+function getBackgroundColor(
+  level: number,
+  maxLevel: number,
+  color?: boolean
+) {
+  // Color bar
+  if (color) return getTagColor(level, 5, 1)
   // Divide the RGB range by the maximum level
   let rgbStep = 255 / maxLevel;
   // Subtract the RGB step from the maximum value for each component
@@ -20,6 +26,7 @@ export default function Slot(props: {
   children: JSX.Element[] | JSX.Element,
   depth: number,
   tagged?: boolean,
+  colored?: boolean,
 }) {
   const tag = props.tagged ? <div style={{
     width: "4px",
@@ -27,7 +34,7 @@ export default function Slot(props: {
   }} /> : <div />
   return <div style={{
     height: "24px",
-    backgroundColor: getBackgroundColor(props.depth, 40),
+    backgroundColor: getBackgroundColor(props.depth, 40, props.colored),
     paddingTop: '8px',
     paddingBottom: '8px',
     paddingRight: '8px',

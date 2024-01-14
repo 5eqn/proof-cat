@@ -3,10 +3,11 @@ import Text from "../component/Text"
 import Spacer from "../component/Spacer"
 import Button from "./Button"
 import InputButton from "./InputButton"
+import { i18n } from "../i18n"
 
 export default function AnyBar(props: {
   depth: number,
-  label: string,
+  label?: string,
   validate: (name: string) => string | null
   onWrapLet: (name: string) => void
   onWrapFunc: () => void
@@ -16,38 +17,45 @@ export default function AnyBar(props: {
   onBecomeU: () => void
   onBecomeNum: (num: number) => void
 }) {
+  const label = props.label ? <Text text={props.label} /> : <div />
   return <div>
-    <Slot depth={props.depth}>
-      <Text text={props.label} />
+    <Slot depth={props.depth} colored>
+      {label}
       <Spacer />
       <Button
         onClick={props.onBecomeVar}
-      > V </Button>
+      > Var </Button>
       <InputButton
+        title={i18n.prompt.addLet}
+        placeholder={i18n.prompt.name}
         onConfirm={props.onWrapLet}
         validate={props.validate}
-      > L </InputButton>
+      > {'x=val,*'} </InputButton>
       <InputButton
+        title={i18n.prompt.addType}
+        placeholder={i18n.prompt.name}
         onConfirm={props.onBecomeType}
         validate={props.validate}
-      > T </InputButton>
+      > Type </InputButton>
       <Button
         onClick={props.onWrapFunc}
-      > F </Button>
+      > {'*=>*'} </Button>
       <Button
         onClick={props.onWrapPi}
-      > P </Button>
+      > {'*->*'} </Button>
       <Button
         onClick={props.onBecomeU}
       > U </Button>
       <InputButton
+        title={i18n.prompt.addNum}
+        placeholder={i18n.prompt.value}
         onConfirm={(str) => {
           props.onBecomeNum(+str)
         }}
         validate={(str) => {
           return isNaN(+str) ? `${str} is not a number!` : null
         }}
-      > n </InputButton>
+      > Num </InputButton>
     </Slot>
   </div>
 }

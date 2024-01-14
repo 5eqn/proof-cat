@@ -6,7 +6,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLElement> {
 }
 
 export default function Button(props: ButtonProps) {
-  return <AButton onClick={props.onClick} danger={props.danger} >
+  return <AButton
+    style={{
+      fontFamily: 'monospace'
+    }}
+    onClick={props.onClick}
+    danger={props.danger}
+  >
     {props.children}
   </AButton>
 }

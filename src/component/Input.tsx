@@ -9,6 +9,7 @@ export default function Input(props: InputProps) {
   return <AInput
     style={{
       width: '144px',
+      fontFamily: 'monospace',
     }}
     onChange={props.onChange}
     value={props.value}

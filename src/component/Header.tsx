@@ -3,6 +3,7 @@ import Text from "../component/Text"
 import Spacer from "../component/Spacer"
 import Button from "./Button"
 import InputButton from "./InputButton"
+import { i18n } from "../i18n"
 
 export default function Header(props: {
   depth: number,
@@ -29,18 +30,20 @@ export default function Header(props: {
         onClick={props.onDelete}
       > x </Button>
       <InputButton
+        title={i18n.prompt.addLet}
+        placeholder={i18n.prompt.name}
         onConfirm={props.onWrapLet}
         validate={props.validate}
-      > L </InputButton>
+      > {'x=val,*'} </InputButton>
       <Button
         onClick={props.onWrapFunc}
-      > F </Button>
+      > {'x=>*'} </Button>
       <Button
         onClick={props.onWrapPi}
-      > P </Button>
+      > {'x->*'} </Button>
       <Button
         onClick={props.onWrapApp}
-      > A </Button>
+      > {'*(arg)'} </Button>
     </Slot>
   </div>
 }
