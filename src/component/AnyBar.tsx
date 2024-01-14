@@ -24,28 +24,28 @@ export default function AnyBar(props: {
       <Spacer />
       <Button
         onClick={props.onBecomeVar}
-      > Var </Button>
+      > {i18n.prompt.becomeVar} </Button>
       <InputButton
         title={i18n.prompt.addLet}
         placeholder={i18n.prompt.name}
         onConfirm={props.onWrapLet}
         validate={props.validate}
-      > {'x=val,*'} </InputButton>
+      > {i18n.prompt.wrapLet} </InputButton>
       <InputButton
         title={i18n.prompt.addType}
         placeholder={i18n.prompt.name}
         onConfirm={props.onBecomeType}
         validate={props.validate}
-      > Type </InputButton>
+      > {i18n.prompt.becomeType} </InputButton>
       <Button
         onClick={props.onWrapFunc}
-      > {'*=>*'} </Button>
+      > {i18n.prompt.wrapFunc} </Button>
       <Button
         onClick={props.onWrapPi}
-      > {'*->*'} </Button>
+      > {i18n.prompt.wrapPi} </Button>
       <Button
         onClick={props.onBecomeU}
-      > U </Button>
+      > {i18n.prompt.becomeU} </Button>
       <InputButton
         title={i18n.prompt.addNum}
         placeholder={i18n.prompt.value}
@@ -55,7 +55,7 @@ export default function AnyBar(props: {
         validate={(str) => {
           return isNaN(+str) ? `${str} is not a number!` : null
         }}
-      > Num </InputButton>
+      > {i18n.prompt.becomeNum} </InputButton>
     </Slot>
   </div>
 }

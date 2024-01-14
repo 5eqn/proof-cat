@@ -117,19 +117,13 @@ export type VVar = {
   lvl: number, // de-Bruijn level, 0 is the outermost variable
 }
 
-// Thunk value to avoid self reference, `() => ...`, used in recursive eval
-export type VRec = {
-  val: 'rec',
-  thunk: Closure,
-}
-
 // Universe type, `U`
 export type VUni = {
   val: 'uni'
 }
 
 // All possible values
-export type Val = VType | VFunc | VApp | VNum | VAny | VPi | VVar | VRec | VUni
+export type Val = VType | VFunc | VApp | VNum | VAny | VPi | VVar | VUni
 
 // Mapping from id to value
 export type Env = Val[]
@@ -216,7 +210,6 @@ export function unify(len: number, x: Val, y: Val): string | null {
         return funcRes
       case 'any': return null
       case 'uni': return null
-      case 'rec': return null
       case 'type':
         return x.type === (y as VType).type ? null
           : i18n.err.typeMismatch(x.type, (y as VType).type)
@@ -238,14 +231,8 @@ export function evaluate(env: Env, term: Term): Val {
       val: 'uni',
     }
     case 'let':
-      // Store body = term.body in env, and evaluate term.next
-      return evaluate([{
-        val: 'rec',
-        thunk: {
-          env,
-          body: term.body,
-        }
-      }, ...env], term.next)
+      const body = evaluate(env, term.body)
+      return evaluate([body, ...env], term.next)
     case 'app':
       const func = evaluate(env, term.func)
       const arg = term.argIX.map((ix, i) => evaluate(env, {
@@ -281,17 +268,7 @@ export function evaluate(env: Env, term: Term): Val {
       }
     }
     case 'var':
-      const res = env[term.ix]
-      if (res.val !== 'rec') {
-        return res
-      }
-      return evaluate([{
-        val: 'rec',
-        thunk: {
-          env: res.thunk.env,
-          body: res.thunk.body,
-        },
-      }, ...res.thunk.env], res.thunk.body)
+      return env[term.ix]
     case 'num': return {
       val: 'num',
       num: term.num
@@ -312,7 +289,6 @@ export function quote(len: number, val: Val): Term {
     case 'uni': return {
       term: 'uni',
     }
-    case 'rec': return val.thunk.body
     case 'type': return {
       term: 'type',
       type: val.type,
@@ -333,17 +309,20 @@ export function quote(len: number, val: Val): Term {
         paramID: val.paramID,
         body: quote(len + val.paramID.length, apply(val.func, arg))
       }
-    case 'var': return {
-      term: 'var',
-      id: val.id,
-      ix: len - val.lvl - 1
-    }
+    case 'var':
+      return {
+        term: 'var',
+        id: val.id,
+        ix: len - val.lvl - 1
+      }
     case 'pi':
       const from = val.from.map((v) => quote(len, v))
-      const piArg = val.fromID.map((id) => ({
+      // Level is calculated by total variable count - new variable index - 1
+      const piArg = val.fromID.map((id, ix) => ({
         val: 'var',
         id,
-      } as Val))
+        lvl: len + val.fromID.length - ix - 1,
+      } as VVar))
       return {
         term: 'pi',
         from: from,
@@ -351,9 +330,10 @@ export function quote(len: number, val: Val): Term {
         to: quote(len + val.fromID.length, apply(val.to, piArg))
       }
     case 'app':
+      // Quote length is appended by length of argID because auxillary Let is added
       var core: Term = {
         term: 'app',
-        func: quote(len, val.func),
+        func: quote(len + val.argID.length, val.func),
         argIX: val.arg.map((_, i) => i),
         argID: val.argID,
       }
@@ -454,7 +434,7 @@ export function pretty(ns: string[], term: Term): string {
     case 'func': return `(${term.param.map((t, i) => `${term.paramID[i]}: ${pretty(ns, t)}`).join(', ')}) => ${pretty([...term.paramID, ...ns], term.body)}`
     case 'pi': return `(${term.from.map((t, i) => `${term.fromID[i]}: ${pretty(ns, t)}`).join(', ')}) -> ${pretty([...term.fromID, ...ns], term.to)}`
     case 'app': return `(${pretty(ns, term.func)})(${term.argIX.map((ix, i) => `${term.argID[i]} = ${ns[ix]}`).join(', ')})`
-    case 'var': return `Var(${term.id})`
+    case 'var': return `${term.id}`
     case 'num': return term.num.toString()
     case 'type': return term.type
     case 'any': return '*'

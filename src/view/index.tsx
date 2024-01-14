@@ -218,21 +218,10 @@ export function infer({
         </div>
       }
     case 'let':
-      // Initialize recursive value and any value
-      const recVal: Val = {
-        val: 'rec',
-        thunk: {
-          env,
-          body: term.body,
-        }
-      }
-      const any: Val = {
-        val: 'any',
-      }
       const { val: letBodyVal, element: letBodyElement } = infer({
-        env: [recVal, ...env],
-        ctx: [any, ...ctx],
-        ns: [term.id, ...ns],
+        env: env,
+        ctx: ctx,
+        ns: ns,
         depth: depth + 1,
         term: term.body,
         onChange: (updater) => {
@@ -240,7 +229,7 @@ export function infer({
         }
       })
       const { val: letNextVal, element: letNextElement } = infer({
-        env: [recVal, ...env],
+        env: [evaluate(env, term.body), ...env],
         ctx: [letBodyVal, ...ctx],
         ns: [term.id, ...ns],
         depth,
@@ -291,28 +280,43 @@ export function infer({
         id: term.argID[i],
         ix: ix
       }))
-      const appVal = apply((appFuncVal as VPi).to, argVals)
+      const appFuncPi = appFuncVal as VPi
+      const appVal = apply(appFuncPi.to, argVals)
+
       // Generate argument elements
-      const argElements = term.argIX.map((ix, i) => <Named
-        key={term.argID[i]}
-        depth={depth + 1}
-        name={term.argID[i]}
-      >
-        <SelectBar
+      const argElements = term.argIX.map((globalIX, argIX) => {
+        // Filter variable of correct type
+        const selection = ns
+          .map<[string, number]>((n, globalIX) => [n, globalIX])
+          .filter(([_, globalIX]) =>
+            unify(ns.length, ctx[globalIX], appFuncPi.from[argIX]) === null)
+        // Invert selection
+        let invSel = new Array(ns.length)
+        selection.forEach(([_, globalIX], localIX) => {
+          invSel[globalIX] = localIX
+        })
+        // Construct elements
+        return <Named
+          key={appFuncPi.fromID[argIX]}
           depth={depth + 1}
-          label={i18n.term.val}
-          data={ns}
-          index={ix}
-          onChange={(i2) => {
-            onChange(draft => {
-              // Incrementally update argument index and name
-              const tm = draft as TApp
-              tm.argIX[i] = i2
-              tm.argID[i] = ns[i2]
-            })
-          }}
-        />
-      </Named>)
+          name={appFuncPi.fromID[argIX]}
+        >
+          <SelectBar
+            depth={depth + 1}
+            label={i18n.term.val}
+            data={selection.map(([n, _]) => n)}
+            index={invSel[globalIX]}
+            onChange={(localIX) => {
+              onChange(draft => {
+                // Incrementally update argument index and name
+                const tm = draft as TApp
+                tm.argIX[argIX] = selection[localIX][1]
+                tm.argID[argIX] = selection[localIX][0]
+              })
+            }}
+          />
+        </Named>
+      })
       // Concatenate
       return {
         val: appVal,

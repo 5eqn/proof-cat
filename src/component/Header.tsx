@@ -36,16 +36,16 @@ export default function Header(props: {
         placeholder={i18n.prompt.name}
         onConfirm={props.onWrapLet}
         validate={props.validate}
-      > {'x=val,*'} </InputButton>
+      > {i18n.prompt.wrapLet} </InputButton>
       <Button
         onClick={props.onWrapFunc}
-      > {'x=>*'} </Button>
+      > {i18n.prompt.wrapFunc} </Button>
       <Button
         onClick={props.onWrapPi}
-      > {'x->*'} </Button>
+      > {i18n.prompt.wrapPi} </Button>
       <Button
         onClick={props.onWrapApp}
-      > {'*(arg)'} </Button>
+      > {i18n.prompt.wrapApp} </Button>
     </Slot>
   </div>
 }
