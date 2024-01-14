@@ -393,29 +393,63 @@ export function hasOccurrence(len: number, ix: number, term: Term): boolean {
 }
 
 // Delete Var(ix) in term (should only be called when no occurence)
-export function deleteVar(len: number, ix: number, term: Draft<Term>) {
+// len: length of env before deletion
+export function deleteVar(ix: number, term: Draft<Term>) {
   switch (term.term) {
     case 'pi':
-      term.from.forEach((t) => deleteVar(len, ix, t))
-      deleteVar(len + term.from.length, ix + term.from.length, term.to)
+      term.from.forEach((t) => deleteVar(ix, t))
+      deleteVar(ix + term.from.length, term.to)
       return
     case 'let':
-      deleteVar(len + 1, ix + 1, term.body)
-      deleteVar(len + 1, ix + 1, term.next)
+      deleteVar(ix + 1, term.body)
+      deleteVar(ix + 1, term.next)
       return
     case 'var':
       // Subtract index if the index will fall after deletion
       if (term.ix > ix) term.ix--
       return
     case 'app':
-      deleteVar(len, ix, term.func)
+      deleteVar(ix, term.func)
       term.argIX.forEach((t, i) => {
         if (t > ix) term.argIX[i]--
       })
       return
     case 'func':
-      term.param.forEach((t) => deleteVar(len, ix, t))
-      deleteVar(len + term.param.length, ix + term.param.length, term.body)
+      term.param.forEach((t) => deleteVar(ix, t))
+      deleteVar(ix + term.param.length, term.body)
+      return
+    case 'num': return
+    case 'any': return
+    case 'type': return
+    case 'uni': return
+  }
+}
+
+// Add Var(ix) in term
+// len: length of env before addition
+export function addVar(ix: number, term: Draft<Term>) {
+  switch (term.term) {
+    case 'pi':
+      term.from.forEach((t) => addVar(ix, t))
+      addVar(ix + term.from.length, term.to)
+      return
+    case 'let':
+      addVar(ix + 1, term.body)
+      addVar(ix + 1, term.next)
+      return
+    case 'var':
+      // Add index if the index will rise after addition
+      if (term.ix >= ix) term.ix++
+      return
+    case 'app':
+      addVar(ix, term.func)
+      term.argIX.forEach((t, i) => {
+        if (t >= ix) term.argIX[i]++
+      })
+      return
+    case 'func':
+      term.param.forEach((t) => addVar(ix, t))
+      addVar(ix + term.param.length, term.body)
       return
     case 'num': return
     case 'any': return
@@ -433,8 +467,8 @@ export function pretty(ns: string[], term: Term): string {
   switch (term.term) {
     case 'func': return `(${term.param.map((t, i) => `${term.paramID[i]}: ${pretty(ns, t)}`).join(', ')}) => ${pretty([...term.paramID, ...ns], term.body)}`
     case 'pi': return `(${term.from.map((t, i) => `${term.fromID[i]}: ${pretty(ns, t)}`).join(', ')}) -> ${pretty([...term.fromID, ...ns], term.to)}`
-    case 'app': return `(${pretty(ns, term.func)})(${term.argIX.map((ix, i) => `${term.argID[i]} = ${ns[ix]}`).join(', ')})`
-    case 'var': return `${term.id}`
+    case 'app': return `(${pretty(ns, term.func)})(${term.argIX.map((ix, i) => `${term.argID[i]} = ${ns[ix]}_${ix}`).join(', ')})`
+    case 'var': return `${term.id}_${term.ix}`
     case 'num': return term.num.toString()
     case 'type': return term.type
     case 'any': return '*'

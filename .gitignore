@@ -18,6 +18,10 @@
 .env.test.local
 .env.production.local
 
+# code complexity
+/genese
+ast.json
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
