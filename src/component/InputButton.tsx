@@ -12,6 +12,8 @@ interface InputButtonProps extends Pick<HTMLAttributes<HTMLElement>, 'children'>
   onConfirm: (name: string) => void
   // Validator for input value
   validate?: (name: string) => string | null
+  // Testing
+  'data-testid'?: string
 }
 
 export default function InputButton(props: InputButtonProps) {
@@ -36,7 +38,10 @@ export default function InputButton(props: InputButtonProps) {
           setOpen(false)
         }
       }}>
-      <Button onClick={() => setOpen(!open)}>
+      <Button
+        onClick={() => setOpen(!open)}
+        data-testid={props["data-testid"]}
+      >
         {props.children}
       </Button>
     </Popconfirm>

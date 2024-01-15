@@ -1,18 +1,18 @@
-import { Button as AButton } from "antd"
 import { ButtonHTMLAttributes } from "react"
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLElement> {
   danger?: boolean
+  'data-testid'?: string
 }
 
 export default function Button(props: ButtonProps) {
-  return <AButton
+  return <button
     style={{
       fontFamily: 'monospace'
     }}
     onClick={props.onClick}
-    danger={props.danger}
+    data-testid={props["data-testid"]}
   >
     {props.children}
-  </AButton>
+  </button>
 }

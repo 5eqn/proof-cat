@@ -1,15 +1,15 @@
-import {Env} from "../model/env";
-import {Term} from "../model/term";
-import {Val} from "../model/value";
-import {evaluateUni} from "./uni";
-import {evaluateLet} from "./let";
-import {evaluateApp} from "./app";
-import {evaluateFunc} from "./func";
-import {evaluatePi} from "./pi";
-import {evaluateVar} from "./var";
-import {evaluateNum} from "./num";
-import {evaluateType} from "./type";
-import {evaluateAny} from "./any";
+import { Env } from "../model/env";
+import { Term } from "../model/term";
+import { Val } from "../model/value";
+import { evaluateUni } from "./uni";
+import { evaluateLet } from "./let";
+import { evaluateApp } from "./app";
+import { evaluateFunc } from "./func";
+import { evaluatePi } from "./pi";
+import { evaluateVar } from "./var";
+import { evaluateNum } from "./num";
+import { evaluateType } from "./type";
+import { evaluateAny } from "./any";
 
 // Evaluate a term to a value
 export function evaluate(env: Env, term: Term): Val {
@@ -37,4 +37,3 @@ export function evaluate(env: Env, term: Term): Val {
 
 // Curried evaluation
 export const evalIn = (env: Env) => (term: Term) => evaluate(env, term)
-
