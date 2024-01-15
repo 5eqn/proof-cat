@@ -18,7 +18,7 @@ export interface TermParamProps {
   body: Term
 }
 
-export function TermParam(props: TermParamProps) {
+export function TermParam(props: TermParamProps): JSX.Element {
   return <Named
     key={props.paramID}
     name={props.paramID}

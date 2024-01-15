@@ -4,11 +4,12 @@ import { TNum } from "../model/term";
 import { TermHeader } from "./TermHeader";
 import { TermPropsBase } from "../model/props";
 import { numUpdateTo } from "../model/action/onNumUpdate";
+import { InferRequest } from "../model/infer/model";
 
 export interface TermNumProps extends TermPropsBase<TNum> { }
 
-export function TermNum(props: TermNumProps) {
-  const { term, depth, onChange } = props.req
+export function TermNum(props: TermNumProps): JSX.Element {
+  const { term, depth, onChange }: InferRequest<TNum> = props.req
   return <div>
     <TermHeader
       req={props.req}
@@ -19,7 +20,7 @@ export function TermNum(props: TermNumProps) {
       depth={depth}
       label={i18n.term.val}
       value={term.num.toString()}
-      onChange={(str) => onChange(numUpdateTo(+str))}
+      onChange={(str: string) => onChange(numUpdateTo(+str))}
     />
   </div>
 }
