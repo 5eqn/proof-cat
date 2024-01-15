@@ -9,7 +9,7 @@ import { mapCallback } from "../model/callback";
 import { Draft } from "immer";
 
 export function inferParam(req: InferRequest<TFunc | TPi>): JSX.Element[] {
-  // Construct element for params
+  // Call infer on params
   const { env, ctx, ns, depth, term, onChange }: InferRequest<TFunc | TPi> = req
   const len: number = term.paramID.length + env.length
   const paramInfers: InferResult[] = term.param.map((t, i) => infer({
@@ -22,6 +22,7 @@ export function inferParam(req: InferRequest<TFunc | TPi>): JSX.Element[] {
       hasOccurrence(len, i, term.body) ? i18n.err.referred : undefined
     )
   }))
+  // Construct element for params
   const paramElements: JSX.Element[] = paramInfers.map(({ element }, i) =>
     TermParam({
       req,
