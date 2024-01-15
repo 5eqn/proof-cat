@@ -8,10 +8,14 @@ describe('Input component', () => {
     const onChange = jest.fn();
 
     // Act
-    const { getByTestId } = render(<Input value={value} onChange={onChange} />);
+    const { getByTestId } = render(<Input 
+      value={value} 
+      onChange={onChange}
+      data-testid="input"
+    />);
 
     // Assert
-    const inputElement = getByTestId(`input-${value}`);
+    const inputElement = getByTestId("input");
     expect(inputElement).toBeInTheDocument();
     expect(inputElement).toHaveValue(value);
   });
@@ -19,16 +23,21 @@ describe('Input component', () => {
   test('calls onChange handler when input value changes', () => {
     // Arrange
     const value = 'Hello';
-    const onChange = jest.fn();
+    const receiver = jest.fn();
+    const onChange = jest.fn((e) => receiver(e.target.value));
 
     // Act
-    const { getByTestId } = render(<Input value={value} onChange={onChange} />);
-    const inputElement = getByTestId(`input-${value}`);
+    const { getByTestId } = render(<Input
+      value={value}
+      onChange={onChange}
+      data-testid="input"
+    />);
+    const inputElement = getByTestId("input");
     fireEvent.change(inputElement, { target: { value: 'World' } });
 
     // Assert
-    expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith('World');
+    expect(receiver).toHaveBeenCalledTimes(1);
+    expect(receiver).toHaveBeenCalledWith('World');
   });
 });
 
