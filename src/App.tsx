@@ -2,9 +2,9 @@ import { useImmer } from "use-immer";
 import Center from "./component/Center";
 import Text from "./component/Text";
 import {Term} from "./typecheck/model/term";
-import {quote} from "./typecheck/evaluate";
 import {pretty} from "./typecheck/pretty";
 import {infer} from "./typecheck/infer";
+import {quote} from "./typecheck/quote";
 
 function App() {
   const [state, setState] = useImmer<Term>({

@@ -2,12 +2,13 @@ import { InferRequest, InferResult } from "../model/infer";
 import { TPi } from "../model/term";
 import { Draft } from "immer";
 import { Val } from "../model/value";
-import { evalIn, makeSpineIn } from "../evaluate";
+import { evalIn } from "../evaluate";
 
 import { infer } from "./index";
 import { mapCallback } from "../model/callback";
 import { inferParam } from "./param";
 import { TermPi } from "../../view/TermPi";
+import {makeSpineIn} from "../action/makeSpineIn";
 
 
 export function inferPi(req: InferRequest<TPi>): InferResult {

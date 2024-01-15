@@ -2,12 +2,14 @@ import { Draft } from "immer";
 import { InferRequest, InferResult } from "../model/infer";
 import { TFunc } from "../model/term";
 import { Val } from "../model/value";
-import { evalIn, makeSpineIn, quote } from "../evaluate";
+import { evalIn } from "../evaluate";
 import { TermFunc } from "../../view/TermFunc";
 
 import { infer } from "./index";
 import { mapCallback } from "../model/callback";
 import { inferParam } from "./param";
+import {quote} from "../quote";
+import {makeSpineIn} from "../action/makeSpineIn";
 
 export function inferFunc(req: InferRequest<TFunc>): InferResult {
   // Construct element for function body
