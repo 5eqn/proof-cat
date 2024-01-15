@@ -1,6 +1,3 @@
-/************
- EVALUATION
- ************/
 import { Env } from "../model/env";
 import { Term } from "../model/term";
 import { Val } from "../model/value";
