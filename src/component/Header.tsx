@@ -21,6 +21,7 @@ export default function Header(props: {
     placeholder={i18n.prompt.name}
     onConfirm={props.onAdd}
     validate={props.validate}
+    data-testid={`add-${props.label}-${props.depth}`}
   > + </InputButton> : <div />
   return <div>
     <Slot depth={props.depth}>
@@ -30,21 +31,26 @@ export default function Header(props: {
       <Button
         danger
         onClick={props.onDelete}
+        data-testid={`delete-${props.label}-${props.depth}`}
       > x </Button>
       <InputButton
         title={i18n.prompt.addLet}
         placeholder={i18n.prompt.name}
         onConfirm={props.onWrapLet}
         validate={props.validate}
+        data-testid={`wrapLet-${props.label}-${props.depth}`}
       > {i18n.prompt.wrapLet} </InputButton>
       <Button
         onClick={props.onWrapFunc}
+        data-testid={`wrapFunc-${props.label}-${props.depth}`}
       > {i18n.prompt.wrapFunc} </Button>
       <Button
         onClick={props.onWrapPi}
+        data-testid={`wrapPi-${props.label}-${props.depth}`}
       > {i18n.prompt.wrapPi} </Button>
       <Button
         onClick={props.onWrapApp}
+        data-testid={`wrapApp-${props.label}-${props.depth}`}
       > {i18n.prompt.wrapApp} </Button>
     </Slot>
   </div>
