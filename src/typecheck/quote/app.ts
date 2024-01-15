@@ -1,6 +1,6 @@
-import { quote } from "../evaluate";
 import { Term } from "../model/term";
 import { VApp } from "../model/value";
+import {quote} from "./index";
 
 // Quote a value to a term
 export function quoteApp(len: number, val: VApp): Term {
