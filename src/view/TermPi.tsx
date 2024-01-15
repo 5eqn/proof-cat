@@ -4,20 +4,21 @@ import { TPi } from "../model/term";
 import { TermHeader } from "./TermHeader";
 import { TermPropsBase } from "../model/props";
 import { funcAddOf } from "../model/action/onFuncAdd";
+import { InferRequest } from "../model/infer/model";
 
 export interface TermPiProps extends TermPropsBase<TPi> {
   params: JSX.Element[]
   body: JSX.Element
 }
 
-export function TermPi(props: TermPiProps) {
-  const { depth, onChange } = props.req
+export function TermPi(props: TermPiProps): JSX.Element {
+  const { depth, onChange }: InferRequest<TPi> = props.req
   return <div>
     <TermHeader
       req={props.req}
       type={props.type}
       label={i18n.term.pi}
-      onAdd={(name) => onChange(funcAddOf(name))}
+      onAdd={(name: string) => onChange(funcAddOf(name))}
     />
     {props.params}
     <Labeled

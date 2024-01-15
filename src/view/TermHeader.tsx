@@ -17,13 +17,13 @@ export interface TermHeaderProps {
 }
 
 export function TermHeader(props: TermHeaderProps): JSX.Element {
-  const { ctx, ns, depth, onChange } = props.req
+  const { ctx, ns, depth, onChange }: InferRequest<Term> = props.req
   return <Header
     depth={depth}
     label={props.label}
-    validate={(name) => validate(name, ns)}
+    validate={(name: string) => validate(name, ns)}
     onDelete={() => onChange(onAnify)}
-    onWrapLet={(name) => onChange(wrapLetOf(name))}
+    onWrapLet={(name: string) => onChange(wrapLetOf(name))}
     onWrapPi={() => onChange(onWrapPi)}
     onWrapApp={() => onChange(wrapAppIn(props.type, ctx))}
     onWrapFunc={() => onChange(onWrapFunc)}

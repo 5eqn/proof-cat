@@ -3,7 +3,10 @@ import SelectBar from "../component/SelectBar";
 import { i18n } from "../i18n";
 import { TApp } from "../model/term";
 import { unify } from "../model/unify";
-import {TermPropsBase} from "../model/props";
+import { TermPropsBase } from "../model/props";
+import { index, invert } from "../util";
+import { argUpdateTo } from "../model/action/onArgUpdate";
+import { InferRequest } from "../model/infer/model";
 
 export interface TermArgProps extends TermPropsBase<TApp> {
   // Param name of the applied function
@@ -14,18 +17,13 @@ export interface TermArgProps extends TermPropsBase<TApp> {
   argIX: number
 }
 
-export function TermArg(props: TermArgProps) {
+export function TermArg(props: TermArgProps): JSX.Element {
   // Filter variable of correct type
-  const { ctx, ns, depth, onChange } = props.req
-  const selection = ns
-    .map<[string, number]>((n, globalIX) => [n, globalIX])
-    .filter(([_, globalIX]) =>
-      unify(ns.length, ctx[globalIX], props.type) === null)
+  const { ctx, ns, depth, onChange }: InferRequest<TApp> = props.req
+  const selection: [string, number][] = index(ns).filter(([_, globalIX]) =>
+    unify(ns.length, ctx[globalIX], props.type) === null)
   // Invert selection
-  let invSel = new Array(ns.length)
-  selection.forEach(([_, globalIX], localIX) => {
-    invSel[globalIX] = localIX
-  })
+  const invSel: number[] = invert(selection)
   // Construct elements
   return <Named
     key={props.paramID}
@@ -37,13 +35,10 @@ export function TermArg(props: TermArgProps) {
       label={i18n.term.val}
       data={selection.map(([n, _]) => n)}
       index={invSel[props.globalIX]}
-      onChange={(localIX) => {
-        onChange(draft => {
-          // Incrementally update argument index and name
-          draft.argIX[props.argIX] = selection[localIX][1]
-          draft.argID[props.argIX] = selection[localIX][0]
-        })
-      }}
+      onChange={(localIX: number) => onChange(argUpdateTo(
+        selection[localIX],
+        props.argIX,
+      ))}
     />
   </Named>
 }
