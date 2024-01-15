@@ -17,7 +17,7 @@ export interface TermHeaderProps {
 }
 
 export function TermHeader(props: TermHeaderProps): JSX.Element {
-  const { env, ctx, ns, depth, onChange } = props.req
+  const { ctx, ns, depth, onChange } = props.req
   return <Header
     depth={depth}
     label={props.label}
@@ -25,7 +25,7 @@ export function TermHeader(props: TermHeaderProps): JSX.Element {
     onDelete={() => onAnify(onChange)}
     onWrapLet={(name) => onWrapLet(name, onChange)}
     onWrapPi={() => onWrapPi(onChange)}
-    onWrapApp={() => onWrapApp(props.type, ctx, env, onChange)}
+    onWrapApp={() => onChange((draft: any) => onWrapApp(props.type, ctx, draft))}
     onWrapFunc={() => onWrapFunc(onChange)}
     onAdd={props.onAdd}
   />

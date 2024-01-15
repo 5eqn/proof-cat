@@ -1,39 +1,41 @@
-// Delete Var(ix) in term (should only be called when no occurence)
+// Delete Var(ix) in term
 // len: length of env before deletion
-import {Draft} from "immer";
-import {Term} from "../term";
+import { Draft } from "immer";
+import { TApp, Term, TFunc, TLet, TPi, TVar } from "../term";
 
-export function deleteVar(ix: number, term: Draft<Term>) {
-    switch (term.term) {
-        case 'pi':
-            term.from.forEach((t) => deleteVar(ix, t))
-            deleteVar(ix + term.from.length, term.to)
-            return
-        case 'let':
-            deleteVar(ix + 1, term.body)
-            deleteVar(ix + 1, term.next)
-            return
-        case 'var':
-            // Subtract index if the index will fall after deletion
-            if (term.ix > ix) term.ix--
-            return
-        case 'app':
-            deleteVar(ix, term.func)
-            term.argIX.forEach((t, i) => {
-                if (t > ix) term.argIX[i]--
-            })
-            return
-        case 'func':
-            term.param.forEach((t) => deleteVar(ix, t))
-            deleteVar(ix + term.param.length, term.body)
-            return
-        case 'num':
-            return
-        case 'any':
-            return
-        case 'type':
-            return
-        case 'uni':
-            return
-    }
+export function deleteVar(ix: number, term: Draft<Term>): void {
+  switch (term.term) {
+    case 'func':
+    case 'pi':
+      return deleteFuncVar(ix, term)
+    case 'let':
+      return deleteLetVar(ix, term)
+    case 'var':
+      return deleteVarVar(ix, term)
+    case 'app':
+      return deleteAppVar(ix, term)
+  }
 }
+
+function deleteFuncVar(ix: number, term: Draft<TFunc | TPi>): void {
+  for (let i = 0; i < term.param.length; i++)
+    deleteVar(ix, term.param[i])
+  deleteVar(ix + term.param.length, term.body)
+}
+
+function deleteLetVar(ix: number, term: Draft<TLet>): void {
+  deleteVar(ix, term.body)
+  deleteVar(ix + 1, term.next)
+}
+
+function deleteVarVar(ix: number, term: Draft<TVar>): void {
+  if (term.ix > ix) term.ix--
+}
+
+function deleteAppVar(ix: number, term: Draft<TApp>): void {
+  deleteVar(ix, term.func)
+  for (let i = 0; i < term.argIX.length; i++)
+    if (term.argIX[i] > ix)
+      term.argIX[i]--
+}
+
