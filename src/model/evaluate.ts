@@ -3,71 +3,46 @@
  ************/
 import { Env } from "./env";
 import { Term } from "./term";
-import { Val, VVar } from "./value";
-import { apply } from "./closure";
+import { Val } from "./value";
+import { evaluateUni } from "./evaluate/evaluateUni";
+import { evaluateLet } from "./evaluate/evaluateLet";
+import { evaluateApp } from "./evaluate/evaluateApp";
+import { evaluateFunc } from "./evaluate/evaluateFunc";
+import { evaluatePi } from "./evaluate/evaluatePi";
+import { evaluateVar } from "./evaluate/evaluateVar";
+import { evaluateNum } from "./evaluate/evaluateNum";
+import { evaluateType } from "./evaluate/evaluateType";
+import { evaluateAny } from "./evaluate/evaluateAny";
+import { quoteUni } from "./quote/quoteUni";
+import { quoteApp } from "./quote/quoteApp";
+import { quoteFunc } from "./quote/quoteFunc";
+import { quotePi } from "./quote/quotePi";
+import { quoteVar } from "./quote/quoteVar";
+import { quoteNum } from "./quote/quoteNum";
+import { quoteType } from "./quote/quoteType";
+import { quoteAny } from "./quote/quoteAny";
 
 // Evaluate a term to a value
 export function evaluate(env: Env, term: Term): Val {
   switch (term.term) {
     case 'uni':
-      return {
-        val: 'uni',
-      }
+      return evaluateUni()
     case 'let':
-      const body = evaluate(env, term.body)
-      return evaluate([body, ...env], term.next)
+      return evaluateLet(env, term)
     case 'app':
-      const func = evaluate(env, term.func)
-      const arg = term.argIX.map((ix, i) => evaluate(env, {
-        term: 'var',
-        id: term.argID[i],
-        ix: ix
-      }))
-      if (func.val === 'func') {
-        return apply(func.func, arg)
-      }
-      return {
-        val: 'app',
-        func: func,
-        arg: arg,
-        argID: term.argID,
-      }
+      return evaluateApp(env, term)
     case 'func':
-      return {
-        val: 'func',
-        param: term.param.map((t) => evaluate(env, t)),
-        paramID: term.paramID,
-        func: {
-          env,
-          body: term.body,
-        }
-      }
+      return evaluateFunc(env, term)
     case 'pi':
-      return {
-        val: 'pi',
-        from: term.param.map((t) => evaluate(env, t)),
-        fromID: term.paramID,
-        to: {
-          env,
-          body: term.body
-        }
-      }
+      return evaluatePi(env, term)
     case 'var':
-      return env[term.ix]
+      return evaluateVar(env, term)
     case 'num':
-      return {
-        val: 'num',
-        num: term.num
-      }
+      return evaluateNum(term)
     case 'type':
-      return {
-        val: 'type',
-        type: term.type,
-      }
+      return evaluateType(term)
     case 'any':
-      return {
-        val: 'any',
-      }
+      return evaluateAny()
   }
 }
 
@@ -75,72 +50,30 @@ export function evaluate(env: Env, term: Term): Val {
 export function quote(len: number, val: Val): Term {
   switch (val.val) {
     case 'uni':
-      return {
-        term: 'uni',
-      }
-    case 'type':
-      return {
-        term: 'type',
-        type: val.type,
-      }
-    case 'num':
-      return {
-        term: 'num',
-        num: val.num,
-      }
-    case 'func':
-      const param = val.param.map((v) => quote(len, v))
-      const arg = val.paramID.map((id) => ({
-        val: 'var',
-        id,
-      } as Val))
-      return {
-        term: 'func',
-        param: param,
-        paramID: val.paramID,
-        body: quote(len + val.paramID.length, apply(val.func, arg))
-      }
-    case 'var':
-      return {
-        term: 'var',
-        id: val.id,
-        ix: len - val.lvl - 1
-      }
-    case 'pi':
-      const from = val.from.map((v) => quote(len, v))
-      // Level is calculated by total variable count - new variable index - 1
-      const piArg = val.fromID.map((id, ix) => ({
-        val: 'var',
-        id,
-        lvl: len + val.fromID.length - ix - 1,
-      } as VVar))
-      return {
-        term: 'pi',
-        param: from,
-        paramID: val.fromID,
-        body: quote(len + val.fromID.length, apply(val.to, piArg))
-      }
+      return quoteUni()
     case 'app':
-      // Quote length is appended by length of argID because auxillary Let is added
-      var core: Term = {
-        term: 'app',
-        func: quote(len + val.argID.length, val.func),
-        argIX: val.arg.map((_, i) => i),
-        argID: val.argID,
-      }
-      // Innermost variable is arg[0], which will have de-Bruijn index 0
-      val.arg.forEach((v, i) => {
-        core = {
-          term: 'let',
-          id: val.argID[i],
-          body: quote(len, v),
-          next: core
-        }
-      })
-      return core
+      return quoteApp(len, val)
+    case 'func':
+      return quoteFunc(len, val)
+    case 'pi':
+      return quotePi(len, val)
+    case 'var':
+      return quoteVar(len, val)
+    case 'num':
+      return quoteNum(val)
+    case 'type':
+      return quoteType(val)
     case 'any':
-      return {
-        term: 'any',
-      }
+      return quoteAny()
   }
 }
+
+// Curried evaluation
+export const evalIn = (env: Env) => (term: Term) => evaluate(env, term)
+
+// Make spine
+export const makeSpineIn = (len: number) => (id: string, ix: number) => ({
+  val: 'var',
+  id,
+  lvl: len - ix - 1,
+} as Val)
