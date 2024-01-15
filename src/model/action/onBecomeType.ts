@@ -1,11 +1,12 @@
-import {Callback} from "../callback";
-import {Term} from "../term";
+import { Draft } from "immer";
+import { Term } from "../term";
 
-export const onBecomeType = (type: string, onChange: Callback<Term>) => {
-    onChange(draft => {
-        Object.assign(draft, {
-            term: 'type',
-            type,
-        })
-    })
+function onBecomeType(type: string, draft: Draft<Term>): void {
+  Object.assign(draft, {
+    term: 'type',
+    type,
+  })
 }
+
+export const becomeTypeOf = (type: string) => (draft: Draft<Term>) =>
+  onBecomeType(type, draft)

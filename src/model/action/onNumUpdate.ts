@@ -1,11 +1,12 @@
-import {Callback} from "../callback";
-import {TNum} from "../term";
+import { Draft } from "immer";
+import { TNum } from "../term";
 
-export const onNumUpdate = (
-    num: number,
-    onChange: Callback<TNum>
-) => {
-    onChange(draft => {
-        draft.num = num
-    })
+function onNumUpdate(
+  num: number,
+  draft: Draft<TNum>
+): void {
+  draft.num = num
 }
+
+export const numUpdateTo = (num: number) => (draft: Draft<TNum>) =>
+  onNumUpdate(num, draft)

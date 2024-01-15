@@ -1,14 +1,12 @@
 // Code action: wrap with func
-import {Callback} from "../callback";
-import {Term, TFunc} from "../term";
+import { Draft } from "immer";
+import { Term, TFunc } from "../term";
 
-export const onWrapFunc = (onChange: Callback<Term>) => {
-    onChange(draft => {
-        const copy = {...draft}
-        const tm = draft as TFunc
-        tm.term = 'func'
-        tm.param = []
-        tm.paramID = []
-        tm.body = copy
-    })
+export function onWrapFunc(draft: Draft<Term>): void {
+  const copy = { ...draft }
+  const tm = draft as TFunc
+  tm.term = 'func'
+  tm.param = []
+  tm.paramID = []
+  tm.body = copy
 }
