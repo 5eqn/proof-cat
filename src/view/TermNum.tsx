@@ -1,10 +1,10 @@
 import InputBar from "../component/InputBar";
 import { i18n } from "../i18n";
-import { TNum } from "../model/term";
+import { TNum } from "../typecheck/model/term";
 import { TermHeader } from "./TermHeader";
-import { TermPropsBase } from "../model/props";
-import { numUpdateTo } from "../model/action/onNumUpdate";
-import { InferRequest } from "../model/infer/model";
+import { TermPropsBase } from "../typecheck/model/props";
+import { numUpdateTo } from "../typecheck/action/onNumUpdate";
+import { InferRequest } from "../typecheck/model/infer";
 
 export interface TermNumProps extends TermPropsBase<TNum> { }
 

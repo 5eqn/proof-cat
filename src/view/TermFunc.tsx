@@ -1,10 +1,10 @@
 import Labeled from "../component/Labeled";
 import { i18n } from "../i18n";
-import { TFunc } from "../model/term";
+import { TFunc } from "../typecheck/model/term";
 import { TermHeader } from "./TermHeader";
-import { TermPropsBase } from "../model/props";
-import { funcAddOf } from "../model/action/onFuncAdd";
-import { InferRequest } from "../model/infer/model";
+import { TermPropsBase } from "../typecheck/model/props";
+import { funcAddOf } from "../typecheck/action/onFuncAdd";
+import { InferRequest } from "../typecheck/model/infer";
 
 export interface TermFuncProps extends TermPropsBase<TFunc> {
   params: JSX.Element[]

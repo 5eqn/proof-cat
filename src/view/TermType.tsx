@@ -1,9 +1,9 @@
 import InputBar from "../component/InputBar";
 import { i18n } from "../i18n";
-import { TType } from "../model/term";
+import { TType } from "../typecheck/model/term";
 import { TermHeader } from "./TermHeader";
-import { TermPropsBase } from "../model/props";
-import { InferRequest } from "../model/infer/model";
+import { TermPropsBase } from "../typecheck/model/props";
+import { InferRequest } from "../typecheck/model/infer";
 
 export interface TermTypeProps extends TermPropsBase<TType> { }
 

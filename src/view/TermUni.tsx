@@ -1,7 +1,7 @@
 import { i18n } from "../i18n";
-import { TUni } from "../model/term";
+import { TUni } from "../typecheck/model/term";
 import { TermHeader } from "./TermHeader";
-import { TermPropsBase } from "../model/props";
+import { TermPropsBase } from "../typecheck/model/props";
 
 export interface TermUniProps extends TermPropsBase<TUni> { }
 
