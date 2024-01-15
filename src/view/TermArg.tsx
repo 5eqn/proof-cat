@@ -1,12 +1,12 @@
 import Named from "../component/Named";
 import SelectBar from "../component/SelectBar";
 import { i18n } from "../i18n";
-import { TApp } from "../model/term";
-import { unify } from "../model/unify";
-import { TermPropsBase } from "../model/props";
+import { TApp } from "../typecheck/model/term";
+import { unify } from "../typecheck/unify";
+import { TermPropsBase } from "../typecheck/model/props";
 import { index, invert } from "../util";
-import { argUpdateTo } from "../model/action/onArgUpdate";
-import { InferRequest } from "../model/infer/model";
+import { argUpdateTo } from "../typecheck/action/onArgUpdate";
+import { InferRequest } from "../typecheck/model/infer";
 
 export interface TermArgProps extends TermPropsBase<TApp> {
   // Param name of the applied function

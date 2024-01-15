@@ -1,10 +1,10 @@
 import SelectBar from "../component/SelectBar";
 import { i18n } from "../i18n";
-import { TVar } from "../model/term";
+import { TVar } from "../typecheck/model/term";
 import { TermHeader } from "./TermHeader";
-import { TermPropsBase } from "../model/props";
-import { varUpdateIn } from "../model/action/onVarUpdate";
-import { InferRequest } from "../model/infer/model";
+import { TermPropsBase } from "../typecheck/model/props";
+import { varUpdateIn } from "../typecheck/action/onVarUpdate";
+import { InferRequest } from "../typecheck/model/infer";
 
 export interface TermVarProps extends TermPropsBase<TVar> { }
 

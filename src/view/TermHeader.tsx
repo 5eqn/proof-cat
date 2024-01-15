@@ -1,13 +1,13 @@
 import Header from "../component/Header"
-import { Term } from "../model/term"
-import { Val } from "../model/value"
-import { InferRequest } from "../model/infer/model";
-import { onAnify } from "../model/action/onAnify";
-import { onWrapFunc } from "../model/action/onWrapFunc";
-import { onWrapPi } from "../model/action/onWrapPi";
-import { wrapAppIn } from "../model/action/onWrapApp";
-import { validate } from "../model/action/validate";
-import { wrapLetOf } from "../model/action/onWrapLet";
+import { Term } from "../typecheck/model/term"
+import { Val } from "../typecheck/model/value"
+import { InferRequest } from "../typecheck/model/infer";
+import { onAnify } from "../typecheck/action/onAnify";
+import { onWrapFunc } from "../typecheck/action/onWrapFunc";
+import { onWrapPi } from "../typecheck/action/onWrapPi";
+import { wrapAppIn } from "../typecheck/action/onWrapApp";
+import { validate } from "../typecheck/action/validate";
+import { wrapLetOf } from "../typecheck/action/onWrapLet";
 
 export interface TermHeaderProps {
   req: InferRequest<Term>

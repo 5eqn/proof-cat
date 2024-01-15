@@ -1,9 +1,9 @@
 import Labeled from "../component/Labeled";
 import { i18n } from "../i18n";
-import { TApp } from "../model/term";
+import { TApp } from "../typecheck/model/term";
 import { TermHeader } from "./TermHeader";
-import { TermPropsBase } from "../model/props";
-import { InferRequest } from "../model/infer/model";
+import { TermPropsBase } from "../typecheck/model/props";
+import { InferRequest } from "../typecheck/model/infer";
 
 export interface TermAppProps extends TermPropsBase<TApp> {
   args: JSX.Element[]

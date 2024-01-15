@@ -1,15 +1,15 @@
 import AnyBar from "../component/AnyBar";
-import { TAny } from "../model/term";
-import { TermPropsBase } from "../model/props";
-import { onWrapFunc } from "../model/action/onWrapFunc";
-import { onWrapPi } from "../model/action/onWrapPi";
-import { onBecomeU } from "../model/action/onBecomeU";
-import { becomeVarIn } from "../model/action/onBecomeVar";
-import { validate } from "../model/action/validate";
-import { wrapLetOf } from "../model/action/onWrapLet";
-import { becomeTypeOf } from "../model/action/onBecomeType";
-import { becomeNumOf } from "../model/action/onBecomeNum";
-import { InferRequest } from "../model/infer/model";
+import { TAny } from "../typecheck/model/term";
+import { TermPropsBase } from "../typecheck/model/props";
+import { onWrapFunc } from "../typecheck/action/onWrapFunc";
+import { onWrapPi } from "../typecheck/action/onWrapPi";
+import { onBecomeU } from "../typecheck/action/onBecomeU";
+import { becomeVarIn } from "../typecheck/action/onBecomeVar";
+import { validate } from "../typecheck/action/validate";
+import { wrapLetOf } from "../typecheck/action/onWrapLet";
+import { becomeTypeOf } from "../typecheck/action/onBecomeType";
+import { becomeNumOf } from "../typecheck/action/onBecomeNum";
+import { InferRequest } from "../typecheck/model/infer";
 
 export interface TermAnyProps extends TermPropsBase<TAny> { }
 
