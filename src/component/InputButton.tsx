@@ -1,6 +1,5 @@
 import { message, Popconfirm } from "antd"
 import { HTMLAttributes, useState } from "react"
-import { i18n } from "../i18n"
 import Button from "./Button"
 import Input from "./Input"
 
@@ -18,7 +17,7 @@ interface InputButtonProps extends Pick<HTMLAttributes<HTMLElement>, 'children'>
 export default function InputButton(props: InputButtonProps) {
   const [name, setName] = useState('')
   const [open, setOpen] = useState(false)
-  const form = <Input
+  const form: JSX.Element = <Input
     placeholder={props.placeholder}
     value={name}
     onChange={(e) => setName(e.target.value)}
@@ -30,14 +29,11 @@ export default function InputButton(props: InputButtonProps) {
       open={open}
       onCancel={() => setOpen(false)}
       onConfirm={() => {
-        if (name === '') message.error(i18n.err.empty)
+        const msg: string | null = props.validate ? props.validate(name) : null
+        if (msg !== null) message.error(msg)
         else {
-          const msg = props.validate ? props.validate(name) : null
-          if (msg !== null) message.error(msg)
-          else {
-            props.onConfirm(name)
-            setOpen(false)
-          }
+          props.onConfirm(name)
+          setOpen(false)
         }
       }}>
       <Button onClick={() => setOpen(!open)}>

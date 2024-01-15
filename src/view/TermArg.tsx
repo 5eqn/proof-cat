@@ -42,4 +42,3 @@ export function TermArg(props: TermArgProps): JSX.Element {
     />
   </Named>
 }
-
