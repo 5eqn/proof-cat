@@ -1,10 +1,8 @@
-import {Callback} from "../callback";
-import {Term} from "../term";
+import { Draft } from "immer";
+import { Term } from "../term";
 
-export const onBecomeU = (onChange: Callback<Term>) => {
-    onChange(draft => {
-        Object.assign(draft, {
-            term: 'uni',
-        })
-    })
+export function onBecomeU(draft: Draft<Term>): void {
+  Object.assign(draft, {
+    term: 'uni',
+  })
 }

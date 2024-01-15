@@ -1,11 +1,12 @@
-import {Callback} from "../callback";
-import {Term} from "../term";
+import { Draft } from "immer";
+import { Term } from "../term";
 
-export const onBecomeNum = (num: number, onChange: Callback<Term>) => {
-    onChange(draft => {
-        Object.assign(draft, {
-            term: 'num',
-            num,
-        })
-    })
+function onBecomeNum(num: number, draft: Draft<Term>): void {
+  Object.assign(draft, {
+    term: 'num',
+    num,
+  })
 }
+
+export const becomeNumOf = (num: number) => (draft: Draft<Term>) =>
+  onBecomeNum(num, draft)

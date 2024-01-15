@@ -1,14 +1,11 @@
-import {Callback} from "../callback";
-import {TVar} from "../term";
+import { Draft } from "immer";
+import { TVar } from "../term";
 
-export const onVarUpdate = (
-    newIX: number,
-    ns: string[],
-    onChange: Callback<TVar>
-) => {
-    onChange(draft => {
-        // Incrementally update variable index and name
-        draft.ix = newIX
-        draft.id = ns[newIX]
-    })
+function onVarUpdate(newIX: number, ns: string[], draft: Draft<TVar>): void {
+  // Incrementally update variable index and name
+  draft.ix = newIX
+  draft.id = ns[newIX]
 }
+
+export const varUpdateIn = (newIX: number, ns: string[]) => (draft: Draft<TVar>) =>
+  onVarUpdate(newIX, ns, draft)

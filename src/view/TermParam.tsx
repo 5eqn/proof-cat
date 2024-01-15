@@ -1,7 +1,7 @@
 import Named from "../component/Named";
 import { Term, TFunc, TPi } from "../model/term";
 import { InferRequest } from "../model/infer/model";
-import { onFuncDelete } from "../model/action/onFuncDelete";
+import { funcDeleteIn } from "../model/action/onFuncDelete";
 
 export interface TermParamProps {
   // Infer request of the function it belongs to
@@ -24,12 +24,12 @@ export function TermParam(props: TermParamProps) {
     name={props.paramID}
     depth={props.req.depth + 1}
     children={props.param}
-    onDelete={() => onFuncDelete(
-      props.paramIX,
-      props.len,
-      props.body,
-      props.req.onChange
-    )}
+    onDelete={() => props.req.onChange(
+      funcDeleteIn(
+        props.paramIX,
+        props.len,
+        props.body,
+      ))}
   />
 }
 

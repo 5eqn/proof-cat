@@ -3,11 +3,11 @@ import { Term } from "../model/term"
 import { Val } from "../model/value"
 import { InferRequest } from "../model/infer/model";
 import { onAnify } from "../model/action/onAnify";
-import { onWrapLet } from "../model/action/onWrapLet";
 import { onWrapFunc } from "../model/action/onWrapFunc";
 import { onWrapPi } from "../model/action/onWrapPi";
-import { onWrapApp } from "../model/action/onWrapApp";
+import { wrapAppIn } from "../model/action/onWrapApp";
 import { validate } from "../model/action/validate";
+import { wrapLetOf } from "../model/action/onWrapLet";
 
 export interface TermHeaderProps {
   req: InferRequest<Term>
@@ -22,11 +22,11 @@ export function TermHeader(props: TermHeaderProps): JSX.Element {
     depth={depth}
     label={props.label}
     validate={(name) => validate(name, ns)}
-    onDelete={() => onAnify(onChange)}
-    onWrapLet={(name) => onWrapLet(name, onChange)}
-    onWrapPi={() => onWrapPi(onChange)}
-    onWrapApp={() => onChange((draft: any) => onWrapApp(props.type, ctx, draft))}
-    onWrapFunc={() => onWrapFunc(onChange)}
+    onDelete={() => onChange(onAnify)}
+    onWrapLet={(name) => onChange(wrapLetOf(name))}
+    onWrapPi={() => onChange(onWrapPi)}
+    onWrapApp={() => onChange(wrapAppIn(props.type, ctx))}
+    onWrapFunc={() => onChange(onWrapFunc)}
     onAdd={props.onAdd}
   />
 }

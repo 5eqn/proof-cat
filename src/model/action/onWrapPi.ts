@@ -1,14 +1,12 @@
 // Code action: wrap with pi
-import { Callback } from "../callback";
+import { Draft } from "immer";
 import { Term, TPi } from "../term";
 
-export const onWrapPi = (onChange: Callback<Term>) => {
-  onChange(draft => {
-    const copy = { ...draft }
-    const tm = (draft as TPi)
-    tm.term = 'pi'
-    tm.param = []
-    tm.paramID = []
-    tm.body = copy
-  })
+export function onWrapPi(draft: Draft<Term>): void {
+  const copy = { ...draft }
+  const tm = (draft as TPi)
+  tm.term = 'pi'
+  tm.param = []
+  tm.paramID = []
+  tm.body = copy
 }

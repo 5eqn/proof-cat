@@ -7,7 +7,7 @@ import { i18n } from "../../i18n";
 import { unify } from "../unify";
 import { Draft } from "immer";
 
-export function onWrapApp(ty: Val, ctx: Ctx, draft: Draft<TApp>): void {
+function onWrapApp(ty: Val, ctx: Ctx, draft: Draft<Term>): void {
   // Make sure the applied term is a function
   if (ty.val !== 'pi') {
     message.error(i18n.err.callNonFunc)
@@ -25,11 +25,15 @@ export function onWrapApp(ty: Val, ctx: Ctx, draft: Draft<TApp>): void {
   }
   // Update term
   const copy: Term = { ...draft }
-  draft.term = 'app'
-  draft.func = copy
-  draft.argIX = argIX
-  draft.argID = argID
+  const tm = draft as TApp
+  tm.term = 'app'
+  tm.func = copy
+  tm.argIX = argIX
+  tm.argID = argID
 }
+
+export const wrapAppIn = (ty: Val, ctx: Ctx) => (draft: Draft<Term>) =>
+  onWrapApp(ty, ctx, draft)
 
 const firstTypeMatch = (ctx: Ctx) => (ty: Val) =>
   ctx.findIndex((t) => unify(ctx.length, t, ty) === null)

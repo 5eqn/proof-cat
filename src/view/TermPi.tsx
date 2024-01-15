@@ -3,7 +3,7 @@ import { i18n } from "../i18n";
 import { TPi } from "../model/term";
 import { TermHeader } from "./TermHeader";
 import { TermPropsBase } from "../model/props";
-import { onPiAdd } from "../model/action/onPiAdd";
+import { funcAddOf } from "../model/action/onFuncAdd";
 
 export interface TermPiProps extends TermPropsBase<TPi> {
   params: JSX.Element[]
@@ -17,7 +17,7 @@ export function TermPi(props: TermPiProps) {
       req={props.req}
       type={props.type}
       label={i18n.term.pi}
-      onAdd={(name) => onPiAdd(name, onChange)}
+      onAdd={(name) => onChange(funcAddOf(name))}
     />
     {props.params}
     <Labeled
