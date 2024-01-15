@@ -1,5 +1,5 @@
-import {Term} from "./term";
-import {evaluate, quote} from "./evaluate";
+import { Term } from "./term";
+import { evaluate, quote } from "./evaluate";
 
 describe('Evaluation framework', () => {
   test('(x => x)(x = 114)', () => {
@@ -68,16 +68,16 @@ describe('Evaluation framework', () => {
             param: [
               {
                 term: 'pi',
-                from: [
+                param: [
                   {
                     term: 'type',
                     type: 'number',
                   }
                 ],
-                fromID: [
+                paramID: [
                   'u',
                 ],
-                to: {
+                body: {
                   term: 'type',
                   type: 'number',
                 }

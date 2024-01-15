@@ -1,41 +1,40 @@
 // Does Var(ix) occur in term? (can only be referred in Var or App)
-import {Term} from "../term";
+import { TApp, Term, TFunc, TLet, TPi } from "../term";
 
 export function hasOccurrence(len: number, ix: number, term: Term): boolean {
-    switch (term.term) {
-        case 'pi':
-            const occurInFrom = term.from
-                .map((t) => hasOccurrence(len, ix, t))
-                .reduce((x, y) => x || y, false)
-            const l = term.from.length
-            const occurInTo = hasOccurrence(len + l, ix + l, term.to)
-            return occurInFrom || occurInTo
-        case 'let':
-            const occurInBody = hasOccurrence(len + 1, ix + 1, term.body)
-            const occurInNext = hasOccurrence(len + 1, ix + 1, term.next)
-            return occurInBody || occurInNext
-        case 'var':
-            return term.ix === ix
-        case 'app':
-            const occurInFunc = hasOccurrence(len, ix, term.func)
-            const occurInArg = term.argIX
-                .map((x) => x === ix)
-                .reduce((x, y) => x || y, false)
-            return occurInFunc || occurInArg
-        case 'func':
-            const occurInParam = term.param
-                .map((t) => hasOccurrence(len, ix, t))
-                .reduce((x, y) => x || y, false)
-            const fl = term.param.length
-            const occurInFBody = hasOccurrence(len + fl, ix + fl, term.body)
-            return occurInParam || occurInFBody
-        case 'num':
-            return false
-        case 'any':
-            return false
-        case 'type':
-            return false
-        case 'uni':
-            return false
-    }
+  switch (term.term) {
+    case 'func':
+    case 'pi':
+      return occurInFunc(len, ix, term)
+    case 'let':
+      return occurInLet(len, ix, term)
+    case 'var':
+      return term.ix === ix
+    case 'app':
+      return occurInApp(len, ix, term)
+  }
+  return false
+}
+
+function occurInFunc(len: number, ix: number, term: TPi | TFunc): boolean {
+  const occurInParam: boolean = term.param
+    .map((t: Term) => hasOccurrence(len, ix, t))
+    .reduce((x: boolean, y: boolean) => x || y, false)
+  const l: number = term.param.length
+  const occurInFBody: boolean = hasOccurrence(len + l, ix + l, term.body)
+  return occurInParam || occurInFBody
+}
+
+function occurInLet(len: number, ix: number, term: TLet): boolean {
+  const occurInBody: boolean = hasOccurrence(len, ix, term.body)
+  const occurInNext: boolean = hasOccurrence(len + 1, ix + 1, term.next)
+  return occurInBody || occurInNext
+}
+
+function occurInApp(len: number, ix: number, term: TApp): boolean {
+  const occurInFunc: boolean = hasOccurrence(len, ix, term.func)
+  const occurInArg: boolean = term.argIX
+    .map((x: number) => x === ix)
+    .reduce((x: boolean, y: boolean) => x || y, false)
+  return occurInFunc || occurInArg
 }
