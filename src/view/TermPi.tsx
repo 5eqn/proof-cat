@@ -6,8 +6,8 @@ import { TermPropsBase } from "../model/props";
 import { onPiAdd } from "../model/action/onPiAdd";
 
 export interface TermPiProps extends TermPropsBase<TPi> {
-  froms: JSX.Element[]
-  to: JSX.Element
+  params: JSX.Element[]
+  body: JSX.Element
 }
 
 export function TermPi(props: TermPiProps) {
@@ -19,11 +19,11 @@ export function TermPi(props: TermPiProps) {
       label={i18n.term.pi}
       onAdd={(name) => onPiAdd(name, onChange)}
     />
-    {props.froms}
+    {props.params}
     <Labeled
       depth={depth}
       label={i18n.term.to}
-      children={props.to}
+      children={props.body}
     />
   </div>
 }

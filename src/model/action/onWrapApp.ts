@@ -14,8 +14,8 @@ export function onWrapApp(ty: Val, ctx: Ctx, draft: Draft<TApp>): void {
     return
   }
   // Automatically find variable of same type in context
-  const argID: string[] = ty.fromID
-  const argIX: number[] = ty.from.map(firstTypeMatch(ctx))
+  const argID: string[] = ty.paramID
+  const argIX: number[] = ty.param.map(firstTypeMatch(ctx))
   // Make sure variable of given type exists
   for (const ix of argIX) {
     if (ix === -1) {
