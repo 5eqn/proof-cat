@@ -23,10 +23,16 @@ describe('onBecomeVar function', () => {
     jest.clearAllMocks()
   })
 
-  test('should make term the first variable in context', () => {
+  test('should make term the first variable in context if exist', () => {
     const term = cloneDeep(before)
     onBecomeVar(ns)(term)
     expect(term).toStrictEqual(expected)
+  })
+
+  test('should do nothing if no variable in context', () => {
+    const term = cloneDeep(before)
+    onBecomeVar([])(term)
+    expect(term).toStrictEqual(before)
   })
 })
 

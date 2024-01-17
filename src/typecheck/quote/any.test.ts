@@ -1,8 +1,9 @@
+import { quote } from "."
 import { quoteAny } from "./any"
 
 describe('quoteAny function', () => {
   test('should return an object with term property as "any"', () => {
-    const result = quoteAny()
+    const result = quote(0, { val: 'any' })
     expect(result).toEqual({ term: 'any' })
   })
 

@@ -1,8 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { message } from 'antd'
+import cloneDeep from 'lodash.clonedeep'
 import { i18n } from '../../i18n'
 import { InferRequest } from "../model/infer"
-import { TPi, TType, TVar } from "../model/term"
+import { TAny, TPi, TType, TVar } from "../model/term"
 import { VUni } from "../model/value"
 import { inferPi } from "./pi"
 
@@ -45,6 +46,19 @@ describe('inferPi function', () => {
     val: 'uni',
   }
 
+  // any
+  const anyTerm: TAny = {
+    term: 'any',
+  }
+
+  // Expected term after deleting body
+  const expectedDeleteBody: TPi = {
+    term: 'pi',
+    param: [mockTType],
+    paramID: ['a'],
+    body: anyTerm,
+  }
+
   // Infer request
   const onChange = jest.fn()
   const mockReq: InferRequest<TPi> = {
@@ -72,5 +86,9 @@ describe('inferPi function', () => {
     fireEvent.click(button)
     expect(mockError).toBeCalledTimes(0)
     expect(onChange).toBeCalledTimes(1)
+    const updater = onChange.mock.lastCall[0]
+    const term = cloneDeep(mockTPi)
+    updater(term)
+    expect(term).toStrictEqual(expectedDeleteBody)
   })
 })

@@ -1,7 +1,7 @@
+import { evaluate } from "."
 import { Env } from "../model/env"
 import { Term } from "../model/term"
 import { Val } from "../model/value"
-import { evaluateLet } from "./let"
 
 describe('evaluateLet function', () => {
   // Empty environment
@@ -39,7 +39,7 @@ describe('evaluateLet function', () => {
   })
 
   test('should evaluate body and apply to next', () => {
-    const val = evaluateLet(mockEnv, mockTLet)
+    const val = evaluate(mockEnv, mockTLet)
     expect(val).toStrictEqual(mockVLet)
   })
 })

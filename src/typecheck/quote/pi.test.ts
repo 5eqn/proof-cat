@@ -1,7 +1,7 @@
+import { quote } from "."
 import { Env } from "../model/env"
 import { Term } from "../model/term"
 import { Val } from "../model/value"
-import { quotePi } from "./pi"
 
 describe('quotePi function', () => {
   // Empty environment
@@ -43,7 +43,7 @@ describe('quotePi function', () => {
   })
 
   test('should quote params', () => {
-    const val = quotePi(mockEnv.length, mockVPi)
+    const val = quote(mockEnv.length, mockVPi)
     expect(val).toStrictEqual(mockTPi)
   })
 })

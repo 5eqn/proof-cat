@@ -1,8 +1,9 @@
+import { evaluate } from "."
 import { evaluateAny } from "./any"
 
 describe('evaluateAny function', () => {
   test('should return an object with val property as "any"', () => {
-    const result = evaluateAny()
+    const result = evaluate([], { term: 'any' })
     expect(result).toEqual({ val: 'any' })
   })
 

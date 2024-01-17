@@ -1,3 +1,4 @@
+import { evaluate } from "."
 import { Env } from "../model/env"
 import { Term } from "../model/term"
 import { Val } from "../model/value"
@@ -74,7 +75,7 @@ describe('evaluateApp function', () => {
   })
 
   test('should apply closure if target is a function', () => {
-    const val = evaluateApp(mockEnv, mockTAppFunc)
+    const val = evaluate(mockEnv, mockTAppFunc)
     expect(val).toStrictEqual(mockVAppFunc)
   })
 
