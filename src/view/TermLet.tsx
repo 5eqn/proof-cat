@@ -1,7 +1,7 @@
 import Named from "../component/Named";
 import { TLet } from "../typecheck/model/term";
 import { TermPropsBase } from "../typecheck/model/props";
-import { letDeleteIn } from "../typecheck/action/onLetDelete";
+import { onLetDelete } from "../typecheck/action/onLetDelete";
 import { InferRequest } from "../typecheck/model/infer";
 
 export interface TermLetProps extends TermPropsBase<TLet> {
@@ -15,7 +15,7 @@ export function TermLet(props: TermLetProps): JSX.Element {
     <Named
       depth={depth}
       name={term.id}
-      onDelete={() => onChange(letDeleteIn(env, term.next))}
+      onDelete={() => onChange(onLetDelete(env, term.next))}
     >
       {props.body}
     </Named>

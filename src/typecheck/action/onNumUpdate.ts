@@ -1,12 +1,12 @@
 import { Draft } from "immer";
 import { TNum } from "../model/term";
 
-function onNumUpdate(
+function _onNumUpdate(
   num: number,
   draft: Draft<TNum>
 ): void {
   draft.num = num
 }
 
-export const numUpdateTo = (num: number) => (draft: Draft<TNum>) =>
-  onNumUpdate(num, draft)
+export const onNumUpdate = (num: number) => (draft: Draft<TNum>) =>
+  _onNumUpdate(num, draft)

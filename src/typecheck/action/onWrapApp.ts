@@ -8,7 +8,7 @@ import { unify } from "../unify";
 import { Draft } from "immer";
 import { deleteFields } from "./deleteFields";
 
-function onWrapApp(ty: Val, ctx: Ctx, draft: Draft<Term>): void {
+function _onWrapApp(ty: Val, ctx: Ctx, draft: Draft<Term>): void {
   // Make sure the applied term is a function
   if (ty.val !== 'pi') {
     message.error(i18n.err.callNonFunc)
@@ -34,8 +34,8 @@ function onWrapApp(ty: Val, ctx: Ctx, draft: Draft<Term>): void {
   tm.argID = argID
 }
 
-export const wrapAppIn = (ty: Val, ctx: Ctx) => (draft: Draft<Term>) =>
-  onWrapApp(ty, ctx, draft)
+export const onWrapApp = (ty: Val, ctx: Ctx) => (draft: Draft<Term>) =>
+  _onWrapApp(ty, ctx, draft)
 
 const firstTypeMatch = (ctx: Ctx) => (ty: Val) =>
   ctx.findIndex((t) => unify(ctx.length, t, ty) === null)

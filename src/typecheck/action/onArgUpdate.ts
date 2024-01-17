@@ -1,7 +1,7 @@
 import { Draft } from "immer";
 import { TApp } from "../model/term";
 
-function onArgUpdate(
+function _onArgUpdate(
   name: string,
   newIX: number,
   localIX: number,
@@ -12,8 +12,8 @@ function onArgUpdate(
   draft.argID[localIX] = name
 }
 
-export const argUpdateTo = (
+export const onArgUpdate = (
   [name, newIX]: [string, number],
   localIX: number,
 ) => (draft: Draft<TApp>) =>
-    onArgUpdate(name, newIX, localIX, draft)
+    _onArgUpdate(name, newIX, localIX, draft)

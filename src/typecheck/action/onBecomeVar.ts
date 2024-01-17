@@ -4,7 +4,7 @@ import { i18n } from "../../i18n";
 import { Draft } from "immer";
 import { deleteFields } from "./deleteFields";
 
-function onBecomeVar(ns: string[], draft: Draft<Term>): void {
+function _onBecomeVar(ns: string[], draft: Draft<Term>): void {
   if (ns.length === 0) {
     message.error(i18n.err.noVariable)
     return
@@ -17,5 +17,5 @@ function onBecomeVar(ns: string[], draft: Draft<Term>): void {
   })
 }
 
-export const becomeVarIn = (ns: string[]) => (draft: Draft<Term>) =>
-  onBecomeVar(ns, draft)
+export const onBecomeVar = (ns: string[]) => (draft: Draft<Term>) =>
+  _onBecomeVar(ns, draft)

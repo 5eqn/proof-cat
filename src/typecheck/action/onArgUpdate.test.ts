@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash.clonedeep'
 import { TApp } from "../model/term"
-import { argUpdateTo } from './onArgUpdate'
+import { onArgUpdate } from './onArgUpdate'
 
 describe('argUpdateTo function', () => {
   // Before action
@@ -29,7 +29,7 @@ describe('argUpdateTo function', () => {
 
   test('should update arg properly', () => {
     const term = cloneDeep(before)
-    argUpdateTo(['yuanmengzhixing', 1919810], 0)(term)
+    onArgUpdate(['yuanmengzhixing', 1919810], 0)(term)
     expect(term).toStrictEqual(expected)
   })
 })

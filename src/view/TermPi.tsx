@@ -3,7 +3,7 @@ import { i18n } from "../i18n";
 import { TPi } from "../typecheck/model/term";
 import { TermHeader } from "./TermHeader";
 import { TermPropsBase } from "../typecheck/model/props";
-import { funcAddOf } from "../typecheck/action/onFuncAdd";
+import { onFuncAdd } from "../typecheck/action/onFuncAdd";
 import { InferRequest } from "../typecheck/model/infer";
 
 export interface TermPiProps extends TermPropsBase<TPi> {
@@ -18,7 +18,7 @@ export function TermPi(props: TermPiProps): JSX.Element {
       req={props.req}
       type={props.type}
       label={i18n.term.pi}
-      onAdd={(name: string) => onChange(funcAddOf(name))}
+      onAdd={(name: string) => onChange(onFuncAdd(name))}
     />
     {props.params}
     <Labeled

@@ -2,7 +2,7 @@ import { Draft } from "immer";
 import { Term } from "../model/term";
 import { deleteFields } from "./deleteFields";
 
-function onBecomeNum(num: number, draft: Draft<Term>): void {
+function _onBecomeNum(num: number, draft: Draft<Term>): void {
   deleteFields(draft)
   Object.assign(draft, {
     term: 'num',
@@ -10,5 +10,5 @@ function onBecomeNum(num: number, draft: Draft<Term>): void {
   })
 }
 
-export const becomeNumOf = (num: number) => (draft: Draft<Term>) =>
-  onBecomeNum(num, draft)
+export const onBecomeNum = (num: number) => (draft: Draft<Term>) =>
+  _onBecomeNum(num, draft)

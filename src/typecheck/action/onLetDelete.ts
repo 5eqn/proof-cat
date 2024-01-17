@@ -8,7 +8,7 @@ import { deleteVar } from "./deleteVar";
 import { Draft } from "immer";
 import { deleteFields } from "./deleteFields";
 
-function onLetDelete(env: Env, term: Term, draft: Draft<TLet>): void {
+function _onLetDelete(env: Env, term: Term, draft: Draft<TLet>): void {
   if (hasOccurrence(env.length + 1, 0, term))
     message.error(i18n.err.referred)
   else {
@@ -18,5 +18,5 @@ function onLetDelete(env: Env, term: Term, draft: Draft<TLet>): void {
   }
 }
 
-export const letDeleteIn = (env: Env, term: Term) => (draft: Draft<TLet>) =>
-  onLetDelete(env, term, draft)
+export const onLetDelete = (env: Env, term: Term) => (draft: Draft<TLet>) =>
+  _onLetDelete(env, term, draft)
