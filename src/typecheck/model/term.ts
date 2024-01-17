@@ -24,7 +24,7 @@ export type TFunc = {
 export type TApp = {
   term: 'app'
   func: Term
-  argIX: number[]
+  arg: Term[]
   argID: string[]
 }
 // Let bind, `let id = body in next`

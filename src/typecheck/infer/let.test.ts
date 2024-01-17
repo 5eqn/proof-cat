@@ -52,7 +52,13 @@ describe('inferLet function', () => {
   const app: TApp = {
     term: 'app',
     argID: ['n'],
-    argIX: [1],
+    arg: [
+      {
+        term: 'var',
+        id: 'x',
+        ix: 1,
+      }
+    ],
     func: varF,
   }
 

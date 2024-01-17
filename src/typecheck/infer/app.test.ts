@@ -80,7 +80,7 @@ describe('inferApp function', () => {
   const mockTApp: TApp = {
     term: 'app',
     argID: ['T'],
-    argIX: [mockTVarX.ix],
+    arg: [mockTVarX],
     func: mockTVarF,
   }
 

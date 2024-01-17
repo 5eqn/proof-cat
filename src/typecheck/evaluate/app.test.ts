@@ -43,7 +43,7 @@ describe('evaluateApp function', () => {
   const mockTAppFunc: Term = {
     term: 'app',
     argID: ['a'],
-    argIX: [0],
+    arg: [mockTVar],
     func: mockTFunc,
   }
 
@@ -54,11 +54,11 @@ describe('evaluateApp function', () => {
     lvl: 0,
   }
 
-  // Assign `x`as argument `a` of `x`
+  // Assign `x` as argument `a` of `x`
   const mockTAppVar: Term = {
     term: 'app',
     argID: ['a'],
-    argIX: [0],
+    arg: [mockTVar],
     func: mockTVar,
   }
 
