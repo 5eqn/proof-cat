@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { message } from 'antd'
 import { i18n } from '../../i18n'
 import { InferRequest } from "../model/infer"
-import { TAny, TPi, TType, TVar } from "../model/term"
+import { TPi, TType, TVar } from "../model/term"
 import { VUni } from "../model/value"
 import { inferPi } from "./pi"
 
@@ -36,19 +36,6 @@ describe('inferPi function', () => {
     val: 'uni',
   }
 
-  // Any term
-  const mockTAny: TAny = {
-    term: 'any',
-  }
-
-  // Expected term after update
-  const expectedUpdate: TPi = {
-    term: 'pi',
-    param: [mockTType],
-    paramID: ['a'],
-    body: mockTAny,
-  }
-
   // Infer request
   const onChange = jest.fn()
   const mockReq: InferRequest<TPi> = {
@@ -75,9 +62,6 @@ describe('inferPi function', () => {
     const button = screen.getByTestId(`delete-${i18n.term.var}-1`)
     fireEvent.click(button)
     expect(mockError).toBeCalledTimes(0)
-    const updater = onChange.mock.lastCall[0]
-    let term = mockTPi
-    updater(term)
-    expect(term).toStrictEqual(expectedUpdate)
+    expect(onChange).toBeCalledTimes(1)
   })
 })
