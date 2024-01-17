@@ -1,10 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { message } from 'antd'
 import { i18n } from '../../i18n'
-import { evaluate } from '../evaluate'
 import { InferRequest } from "../model/infer"
 import { TAny, TFunc, TType, TUni, TVar } from "../model/term"
-import { unify } from '../unify'
 import { inferFunc } from "./func"
 
 jest.mock('antd')
@@ -73,8 +71,7 @@ describe('inferParam function', () => {
     const updater = onChange.mock.lastCall[0]
     let term = mockTFunc
     updater(term)
-    const unifyRes = unify(0, evaluate([], term), evaluate([], expectedUpdate))
-    expect(unifyRes).toBeNull()
+    expect(term).toStrictEqual(expectedUpdate)
   })
 
 
