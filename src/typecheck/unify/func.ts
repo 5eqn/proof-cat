@@ -6,7 +6,7 @@ import { VFunc, VVar } from "../model/value"
 export function unifyFunc(len: number, x: VFunc, y: VFunc): string | null {
   const funcLen = x.param.length
   if (funcLen !== y.param.length)
-    return i18n.err.fromLenMismatch(funcLen, y.param.length)
+    return i18n.err.fromLenMismatch
   for (let i = 0; i < funcLen; i++) {
     const res = unify(len, x.param[i], y.param[i])
     if (res !== null) return res

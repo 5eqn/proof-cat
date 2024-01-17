@@ -1,10 +1,10 @@
 import { useImmer } from "use-immer";
 import Center from "./component/Center";
 import Text from "./component/Text";
-import {Term} from "./typecheck/model/term";
-import {pretty} from "./typecheck/pretty";
-import {infer} from "./typecheck/infer";
-import {quote} from "./typecheck/quote";
+import { Term } from "./typecheck/model/term";
+import { pretty } from "./typecheck/pretty";
+import { infer } from "./typecheck/infer";
+import { quote } from "./typecheck/quote";
 
 function App() {
   const [state, setState] = useImmer<Term>({
@@ -29,7 +29,9 @@ function App() {
       top: "32px",
     }}>
       <Center>
-        <Text text="Target: (forall x. A(x) -> B(x)) -> (forall x. A(x)) -> (forall x. B(x))" />
+        <Text text="1. (A -> B) -> ((B -> 0) -> (A -> 0))" />
+        <div style={{ height: '16px' }} />
+        <Text text="2. (forall x. A(x) -> B(x)) -> (forall x. A(x)) -> (forall x. B(x))" />
         <div style={{ height: '16px' }} />
         <Text text="You have proven: " />
         <div style={{ height: '16px' }} />

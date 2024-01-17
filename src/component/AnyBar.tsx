@@ -32,17 +32,17 @@ export default function AnyBar(props: {
         validate={props.validate}
       > {i18n.prompt.wrapLet} </InputButton>
       <InputButton
-        title={i18n.prompt.addType}
-        placeholder={i18n.prompt.name}
-        onConfirm={props.onBecomeType}
-        validate={props.validate}
-      > {i18n.prompt.becomeType} </InputButton>
-      <InputButton
         title={i18n.prompt.addAnEntry}
         placeholder={i18n.prompt.name}
         onConfirm={props.onWrapFunc}
         validate={props.validate}
       > {i18n.prompt.wrapFunc} </InputButton>
+      <InputButton
+        title={i18n.prompt.addType}
+        placeholder={i18n.prompt.name}
+        onConfirm={props.onBecomeType}
+        validate={props.validate}
+      > {i18n.prompt.becomeType} </InputButton>
       <InputButton
         title={i18n.prompt.addAnEntry}
         placeholder={i18n.prompt.name}
