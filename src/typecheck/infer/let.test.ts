@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { message } from 'antd'
+import cloneDeep from 'lodash.clonedeep'
 import { i18n } from '../../i18n'
 import { evaluate } from '../evaluate'
 import { InferRequest } from "../model/infer"
 import { TApp, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
-import { unify } from '../unify'
 import { inferLet } from "./let"
 
 jest.mock('antd')
@@ -84,7 +84,7 @@ describe('inferLet function', () => {
     term: 'let',
     id: 'x',
     body: one,
-    next: { ...typeA },
+    next: typeA,
   }
 
   // () -> 1
@@ -165,12 +165,9 @@ describe('inferLet function', () => {
     fireEvent.click(button)
     expect(mockError).toBeCalledTimes(0)
     const updater = onChange.mock.lastCall[0]
-    const mutTerm = { ...unrefTerm }
+    const mutTerm = cloneDeep(unrefTerm)
     updater(mutTerm)
-    const unifyRes = unify(0,
-      evaluate([], mutTerm),
-      evaluate([], unrefUpdatedBody))
-    expect(unifyRes).toBeNull()
+    expect(mutTerm).toStrictEqual(unrefUpdatedBody)
   })
 
   test('change in next should be reflected', () => {
@@ -180,12 +177,9 @@ describe('inferLet function', () => {
     fireEvent.click(button)
     expect(mockError).toBeCalledTimes(0)
     const updater = onChange.mock.lastCall[0]
-    const mutTerm = { ...unrefTerm }
+    const mutTerm = cloneDeep(unrefTerm)
     updater(mutTerm)
-    const unifyRes = unify(0,
-      evaluate([], mutTerm),
-      evaluate([], unrefUpdatedNext))
-    expect(unifyRes).toBeNull()
+    expect(mutTerm).toStrictEqual(unrefUpdatedNext)
   })
 })
 

@@ -6,6 +6,7 @@ import { message } from "antd";
 import { i18n } from "../../i18n";
 import { unify } from "../unify";
 import { Draft } from "immer";
+import { deleteFields } from "./deleteFields";
 
 function onWrapApp(ty: Val, ctx: Ctx, draft: Draft<Term>): void {
   // Make sure the applied term is a function
@@ -26,6 +27,7 @@ function onWrapApp(ty: Val, ctx: Ctx, draft: Draft<Term>): void {
   // Update term
   const copy: Term = { ...draft }
   const tm = draft as TApp
+  deleteFields(tm)
   tm.term = 'app'
   tm.func = copy
   tm.argIX = argIX
