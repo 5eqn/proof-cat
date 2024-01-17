@@ -1,7 +1,7 @@
 import Named from "../component/Named";
 import { Term, TFunc, TPi } from "../typecheck/model/term";
 import { InferRequest } from "../typecheck/model/infer";
-import { funcDeleteIn } from "../typecheck/action/onFuncDelete";
+import { onFuncDelete } from "../typecheck/action/onFuncDelete";
 
 export interface TermParamProps {
   // Infer request of the function it belongs to
@@ -25,7 +25,7 @@ export function TermParam(props: TermParamProps): JSX.Element {
     depth={props.req.depth + 1}
     children={props.param}
     onDelete={() => props.req.onChange(
-      funcDeleteIn(
+      onFuncDelete(
         props.paramIX,
         props.len,
         props.body,

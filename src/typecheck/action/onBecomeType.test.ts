@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash.clonedeep'
 import { TNum, TType } from "../model/term"
-import { becomeTypeOf } from './onBecomeType'
+import { onBecomeType } from './onBecomeType'
 
 describe('onBecomeType function', () => {
   // Before action
@@ -21,7 +21,7 @@ describe('onBecomeType function', () => {
 
   test('should make term a type', () => {
     const term = cloneDeep(before)
-    becomeTypeOf('456$^')(term)
+    onBecomeType('456$^')(term)
     expect(term).toStrictEqual(expected)
   })
 })

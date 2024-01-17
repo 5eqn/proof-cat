@@ -5,9 +5,9 @@ import { InferRequest } from "../typecheck/model/infer";
 import { onAnify } from "../typecheck/action/onAnify";
 import { onWrapFunc } from "../typecheck/action/onWrapFunc";
 import { onWrapPi } from "../typecheck/action/onWrapPi";
-import { wrapAppIn } from "../typecheck/action/onWrapApp";
+import { onWrapApp } from "../typecheck/action/onWrapApp";
 import { validate } from "../typecheck/action/validate";
-import { wrapLetOf } from "../typecheck/action/onWrapLet";
+import { onWrapLet } from "../typecheck/action/onWrapLet";
 
 export interface TermHeaderProps {
   req: InferRequest<Term>
@@ -23,9 +23,9 @@ export function TermHeader(props: TermHeaderProps): JSX.Element {
     label={props.label}
     validate={(name: string) => validate(name, ns)}
     onDelete={() => onChange(onAnify)}
-    onWrapLet={(name: string) => onChange(wrapLetOf(name))}
+    onWrapLet={(name: string) => onChange(onWrapLet(name))}
     onWrapPi={() => onChange(onWrapPi)}
-    onWrapApp={() => onChange(wrapAppIn(props.type, ctx))}
+    onWrapApp={() => onChange(onWrapApp(props.type, ctx))}
     onWrapFunc={() => onChange(onWrapFunc)}
     onAdd={props.onAdd}
   />

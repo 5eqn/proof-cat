@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash.clonedeep'
 import { TNum, TVar } from "../model/term"
-import { becomeVarIn } from './onBecomeVar'
+import { onBecomeVar } from './onBecomeVar'
 
 describe('onBecomeVar function', () => {
   // Before action
@@ -25,7 +25,7 @@ describe('onBecomeVar function', () => {
 
   test('should make term the first variable in context', () => {
     const term = cloneDeep(before)
-    becomeVarIn(ns)(term)
+    onBecomeVar(ns)(term)
     expect(term).toStrictEqual(expected)
   })
 })

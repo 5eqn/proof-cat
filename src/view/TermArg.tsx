@@ -5,7 +5,7 @@ import { TApp } from "../typecheck/model/term";
 import { unify } from "../typecheck/unify";
 import { TermPropsBase } from "../typecheck/model/props";
 import { index, invert } from "../util";
-import { argUpdateTo } from "../typecheck/action/onArgUpdate";
+import { onArgUpdate } from "../typecheck/action/onArgUpdate";
 import { InferRequest } from "../typecheck/model/infer";
 
 export interface TermArgProps extends TermPropsBase<TApp> {
@@ -35,7 +35,7 @@ export function TermArg(props: TermArgProps): JSX.Element {
       label={i18n.term.val}
       data={selection.map(([n, _]) => n)}
       index={invSel[props.globalIX]}
-      onChange={(localIX: number) => onChange(argUpdateTo(
+      onChange={(localIX: number) => onChange(onArgUpdate(
         selection[localIX],
         props.argIX,
       ))}

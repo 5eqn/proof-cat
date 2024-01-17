@@ -6,7 +6,7 @@ import { i18n } from "../../i18n";
 import { deleteVar } from "./deleteVar";
 import { Draft } from "immer";
 
-function onFuncDelete(
+function _onFuncDelete(
   ix: number,
   len: number,
   term: Term,
@@ -21,9 +21,9 @@ function onFuncDelete(
   }
 }
 
-export const funcDeleteIn = (
+export const onFuncDelete = (
   ix: number,
   len: number,
   term: Term,
 ) => (draft: Draft<TFunc | TPi>) =>
-    onFuncDelete(ix, len, term, draft)
+    _onFuncDelete(ix, len, term, draft)

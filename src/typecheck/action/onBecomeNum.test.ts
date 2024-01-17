@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash.clonedeep'
 import { TNum, TType } from "../model/term"
-import { becomeNumOf } from './onBecomeNum'
+import { onBecomeNum } from './onBecomeNum'
 
 describe('onBecomeNum function', () => {
   // Before action
@@ -21,7 +21,7 @@ describe('onBecomeNum function', () => {
 
   test('should make term a num', () => {
     const term = cloneDeep(before)
-    becomeNumOf(456)(term)
+    onBecomeNum(456)(term)
     expect(term).toStrictEqual(expected)
   })
 })

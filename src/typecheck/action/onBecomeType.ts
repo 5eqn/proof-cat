@@ -2,7 +2,7 @@ import { Draft } from "immer";
 import { Term } from "../model/term";
 import { deleteFields } from "./deleteFields";
 
-function onBecomeType(type: string, draft: Draft<Term>): void {
+function _onBecomeType(type: string, draft: Draft<Term>): void {
   deleteFields(draft)
   Object.assign(draft, {
     term: 'type',
@@ -10,5 +10,5 @@ function onBecomeType(type: string, draft: Draft<Term>): void {
   })
 }
 
-export const becomeTypeOf = (type: string) => (draft: Draft<Term>) =>
-  onBecomeType(type, draft)
+export const onBecomeType = (type: string) => (draft: Draft<Term>) =>
+  _onBecomeType(type, draft)
