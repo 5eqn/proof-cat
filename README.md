@@ -81,3 +81,70 @@ Visually manipulate the Abstract Syntax Tree of a dependently-typed language wit
     body: innerF,
   }
 ```
+
+```typescript
+  // context: T = number
+  const env: Env = [
+    {
+      val: 'type',
+      type: 'number',
+    },
+  ]
+  const ctx: Ctx = [
+    {
+      val: 'uni',
+    }
+  ]
+  const ns: string[] = ['T']
+
+  // let a = 1 in ((T: U) => (x: T) => x)(T = T)(x = a)
+  const before: TLet = {
+    // let a = 1
+    term: 'let',
+    id: 'a',
+    body: {
+      term: 'num',
+      num: 1,
+    },
+    next: {
+      term: 'app',
+      // x = a
+      argID: ['x'],
+      argIX: [0],
+      func: {
+        term: 'app',
+        // T = number
+        argID: ['T'],
+        argIX: [1],
+        func: {
+          // T: U
+          term: 'func',
+          paramID: ['T'],
+          param: [
+            {
+              term: 'uni',
+            }
+          ],
+          body: {
+            // x: T
+            term: 'func',
+            paramID: ['x'],
+            param: [
+              {
+                term: 'var',
+                id: 'T',
+                ix: 0,
+              }
+            ],
+            body: {
+              // x
+              term: 'var',
+              id: 'x',
+              ix: 0,
+            }
+          }
+        }
+      }
+    }
+  }
+```

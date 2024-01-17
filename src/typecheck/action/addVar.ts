@@ -1,5 +1,4 @@
 // Add Var(ix) in term
-// len: length of env before addition
 import { Draft } from "immer";
 import { TApp, Term, TFunc, TLet, TPi, TVar } from "../model/term";
 
