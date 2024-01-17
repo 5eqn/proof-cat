@@ -6,7 +6,16 @@ import { TPi, TType, TVar } from "../model/term"
 import { VUni } from "../model/value"
 import { inferPi } from "./pi"
 
-jest.mock('antd')
+jest.mock('antd', () => {
+  const originalModule = jest.requireActual('antd')
+  return {
+    __esModule: true,
+    ...originalModule,
+    message: {
+      error: jest.fn(),
+    }
+  }
+})
 const mockError = jest.mocked(message.error)
 
 describe('inferPi function', () => {
