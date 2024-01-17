@@ -1,8 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { message } from 'antd'
+import cloneDeep from 'lodash.clonedeep'
 import { i18n } from '../../i18n'
 import { InferRequest } from "../model/infer"
-import { TFunc, TType, TVar } from "../model/term"
+import { TAny, TFunc, TType, TVar } from "../model/term"
 import { VPi, VType } from "../model/value"
 import { inferFunc } from "./func"
 
@@ -57,6 +58,19 @@ describe('inferFunc function', () => {
     }
   }
 
+  // any
+  const anyTerm: TAny = {
+    term: 'any',
+  }
+
+  // Expected term after deleting body
+  const expectedDeleteBody: TFunc = {
+    term: 'func',
+    param: [mockTType],
+    paramID: ['a'],
+    body: anyTerm,
+  }
+
   // Infer request
   const onChange = jest.fn()
   const mockReq: InferRequest<TFunc> = {
@@ -84,6 +98,10 @@ describe('inferFunc function', () => {
     fireEvent.click(button)
     expect(mockError).toBeCalledTimes(0)
     expect(onChange).toBeCalledTimes(1)
+    const updater = onChange.mock.lastCall[0]
+    const term = cloneDeep(mockTFunc)
+    updater(term)
+    expect(term).toStrictEqual(expectedDeleteBody)
   })
 })
 

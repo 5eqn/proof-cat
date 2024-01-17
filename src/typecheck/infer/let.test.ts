@@ -1,9 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { message } from 'antd'
+import cloneDeep from 'lodash.clonedeep'
+import { infer } from '.'
 import { i18n } from '../../i18n'
 import { evaluate } from '../evaluate'
 import { InferRequest } from "../model/infer"
-import { TApp, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
+import { TAny, TApp, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
 import { inferLet } from "./let"
 
 jest.mock('antd', () => {
@@ -95,6 +97,27 @@ describe('inferLet function', () => {
     next: typeA,
   }
 
+  // any
+  const anyTerm: TAny = {
+    term: 'any',
+  }
+
+  // let x = any in A
+  const unrefDeleteBody: TLet = {
+    term: 'let',
+    id: 'x',
+    body: anyTerm,
+    next: typeA,
+  }
+
+  // let x = 1 in any
+  const unrefDeleteNext: TLet = {
+    term: 'let',
+    id: 'x',
+    body: one,
+    next: anyTerm,
+  }
+
   // Infer request
   const onChange = jest.fn()
   const mockReq: InferRequest<TLet> = {
@@ -121,7 +144,7 @@ describe('inferLet function', () => {
   })
 
   test('type of dependent let should be calculated correctly', () => {
-    const { val } = inferLet(mockReq)
+    const { val } = infer(mockReq)
     expect(val).toStrictEqual(expected)
   })
 
@@ -141,6 +164,10 @@ describe('inferLet function', () => {
     fireEvent.click(button)
     expect(mockError).toBeCalledTimes(0)
     expect(onChange).toBeCalledTimes(1)
+    const updater = onChange.mock.lastCall[0]
+    const term = cloneDeep(unrefTerm)
+    updater(term)
+    expect(term).toStrictEqual(unrefDeleteBody)
   })
 
   test('change in next should be reflected', () => {
@@ -150,6 +177,10 @@ describe('inferLet function', () => {
     fireEvent.click(button)
     expect(mockError).toBeCalledTimes(0)
     expect(onChange).toBeCalledTimes(1)
+    const updater = onChange.mock.lastCall[0]
+    const term = cloneDeep(unrefTerm)
+    updater(term)
+    expect(term).toStrictEqual(unrefDeleteNext)
   })
 })
 

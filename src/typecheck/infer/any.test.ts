@@ -1,7 +1,7 @@
+import { infer } from "."
 import { InferRequest } from "../model/infer"
 import { TAny } from "../model/term"
 import { Val } from "../model/value"
-import { inferAny } from "./any"
 
 describe('inferAny function', () => {
   // A any with long name
@@ -29,7 +29,7 @@ describe('inferAny function', () => {
   })
 
   test('type of any should be any', () => {
-    const { val } = inferAny(mockReq)
+    const { val } = infer(mockReq)
     expect(val).toStrictEqual(expected)
   })
 })

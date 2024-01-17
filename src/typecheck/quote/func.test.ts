@@ -1,7 +1,7 @@
+import { quote } from "."
 import { Env } from "../model/env"
 import { Term } from "../model/term"
 import { Val } from "../model/value"
-import { quoteFunc } from "./func"
 
 describe('quoteFunc function', () => {
   // Empty environment
@@ -45,7 +45,7 @@ describe('quoteFunc function', () => {
   })
 
   test('should quote params', () => {
-    const val = quoteFunc(mockEnv.length, mockVFunc)
+    const val = quote(mockEnv.length, mockVFunc)
     expect(val).toStrictEqual(mockTFunc)
   })
 })

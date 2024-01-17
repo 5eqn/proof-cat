@@ -1,6 +1,6 @@
+import { quote } from "."
 import { TApp, TLet, TNum, TVar } from "../model/term"
 import { VApp, VNum, VVar } from "../model/value"
-import { quoteApp } from "./app"
 
 describe('quoteApp function', () => {
   const varD: VVar = {
@@ -70,7 +70,7 @@ describe('quoteApp function', () => {
   })
 
   test('should add let for non-variables', () => {
-    const val = quoteApp(4, valApp)
+    const val = quote(4, valApp)
     expect(val).toStrictEqual(termLet)
   })
 })

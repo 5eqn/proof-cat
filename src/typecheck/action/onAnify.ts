@@ -6,7 +6,9 @@ import { deleteFields } from "./deleteFields";
 export function onAnify(draft: Draft<Term>): void {
   switch (draft.term) {
     case 'app':
-      Object.assign(draft, draft.func)
+      const copy = { ...draft.func }
+      deleteFields(draft)
+      Object.assign(draft, copy)
       return
     default:
       deleteFields(draft)
