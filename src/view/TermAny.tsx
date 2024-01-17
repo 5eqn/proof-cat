@@ -19,8 +19,8 @@ export function TermAny(props: TermAnyProps): JSX.Element {
     depth={depth}
     validate={(name: string) => validate(name, ns)}
     onWrapLet={(name: string) => onChange(onWrapLet(name))}
-    onWrapPi={() => onChange(onWrapPi)}
-    onWrapFunc={() => onChange(onWrapFunc)}
+    onWrapPi={(name: string) => onChange(onWrapPi(name))}
+    onWrapFunc={(name: string) => onChange(onWrapFunc(name))}
     onBecomeVar={() => onChange(onBecomeVar(ns))}
     onBecomeU={() => onChange(onBecomeU)}
     onBecomeType={(name: string) => onChange(onBecomeType(name))}

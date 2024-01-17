@@ -10,8 +10,8 @@ export default function AnyBar(props: {
   label?: string,
   validate: (name: string) => string | null
   onWrapLet: (name: string) => void
-  onWrapFunc: () => void
-  onWrapPi: () => void
+  onWrapFunc: (name: string) => void
+  onWrapPi: (name: string) => void
   onBecomeVar: () => void
   onBecomeType: (name: string) => void
   onBecomeU: () => void
@@ -37,12 +37,18 @@ export default function AnyBar(props: {
         onConfirm={props.onBecomeType}
         validate={props.validate}
       > {i18n.prompt.becomeType} </InputButton>
-      <Button
-        onClick={props.onWrapFunc}
-      > {i18n.prompt.wrapFunc} </Button>
-      <Button
-        onClick={props.onWrapPi}
-      > {i18n.prompt.wrapPi} </Button>
+      <InputButton
+        title={i18n.prompt.addAnEntry}
+        placeholder={i18n.prompt.name}
+        onConfirm={props.onWrapFunc}
+        validate={props.validate}
+      > {i18n.prompt.wrapFunc} </InputButton>
+      <InputButton
+        title={i18n.prompt.addAnEntry}
+        placeholder={i18n.prompt.name}
+        onConfirm={props.onWrapPi}
+        validate={props.validate}
+      > {i18n.prompt.wrapPi} </InputButton>
       <Button
         onClick={props.onBecomeU}
       > {i18n.prompt.becomeU} </Button>

@@ -6,7 +6,16 @@ import { InferRequest } from "../model/infer"
 import { TApp, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
 import { inferLet } from "./let"
 
-jest.mock('antd')
+jest.mock('antd', () => {
+  const originalModule = jest.requireActual('antd')
+  return {
+    __esModule: true,
+    ...originalModule,
+    message: {
+      error: jest.fn(),
+    }
+  }
+})
 const mockError = jest.mocked(message.error)
 
 describe('inferLet function', () => {
@@ -119,7 +128,7 @@ describe('inferLet function', () => {
   test('change in referenced body should be forbidden', () => {
     const { element } = inferLet(mockReq)
     render(element)
-    const button = screen.getByTestId(`wrapFunc-${i18n.term.num}-1`)
+    const button = screen.getByTestId(`delete-${i18n.term.num}-1`)
     fireEvent.click(button)
     expect(mockError).toBeCalledWith(i18n.err.referred)
     expect(onChange).toBeCalledTimes(0)
@@ -128,7 +137,7 @@ describe('inferLet function', () => {
   test('change in unreferenced body should be reflected', () => {
     const { element } = inferLet(mockReqUnref)
     render(element)
-    const button = screen.getByTestId(`wrapPi-${i18n.term.num}-1`)
+    const button = screen.getByTestId(`delete-${i18n.term.num}-1`)
     fireEvent.click(button)
     expect(mockError).toBeCalledTimes(0)
     expect(onChange).toBeCalledTimes(1)
@@ -137,7 +146,7 @@ describe('inferLet function', () => {
   test('change in next should be reflected', () => {
     const { element } = inferLet(mockReqUnref)
     render(element)
-    const button = screen.getByTestId(`wrapPi-${i18n.term.type}-0`)
+    const button = screen.getByTestId(`delete-${i18n.term.type}-0`)
     fireEvent.click(button)
     expect(mockError).toBeCalledTimes(0)
     expect(onChange).toBeCalledTimes(1)

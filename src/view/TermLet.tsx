@@ -15,7 +15,7 @@ export function TermLet(props: TermLetProps): JSX.Element {
     <Named
       depth={depth}
       name={term.id}
-      onDelete={() => onChange(onLetDelete(env, term.next))}
+      onDelete={() => onChange(onLetDelete(env.length, term.next))}
     >
       {props.body}
     </Named>

@@ -6,7 +6,16 @@ import { TFunc, TType, TVar } from "../model/term"
 import { VPi, VType } from "../model/value"
 import { inferFunc } from "./func"
 
-jest.mock('antd')
+jest.mock('antd', () => {
+  const originalModule = jest.requireActual('antd')
+  return {
+    __esModule: true,
+    ...originalModule,
+    message: {
+      error: jest.fn(),
+    }
+  }
+})
 const mockError = jest.mocked(message.error)
 
 describe('inferFunc function', () => {

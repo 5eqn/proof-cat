@@ -2,8 +2,9 @@
 import { Draft } from "immer";
 import { Term, TPi } from "../model/term";
 import { deleteFields } from "./deleteFields";
+import { onFuncAdd } from "./onFuncAdd";
 
-export function onWrapPi(draft: Draft<Term>): void {
+function _onWrapPi(draft: Draft<Term>): void {
   const copy = { ...draft }
   const tm = (draft as TPi)
   deleteFields(tm)
@@ -11,4 +12,9 @@ export function onWrapPi(draft: Draft<Term>): void {
   tm.param = []
   tm.paramID = []
   tm.body = copy
+}
+
+export const onWrapPi = (name: string) => (draft: Draft<Term>) => {
+  _onWrapPi(draft)
+  onFuncAdd(name)(draft as TPi)
 }

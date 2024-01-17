@@ -24,9 +24,9 @@ export function TermHeader(props: TermHeaderProps): JSX.Element {
     validate={(name: string) => validate(name, ns)}
     onDelete={() => onChange(onAnify)}
     onWrapLet={(name: string) => onChange(onWrapLet(name))}
-    onWrapPi={() => onChange(onWrapPi)}
+    onWrapPi={(name: string) => onChange(onWrapPi(name))}
     onWrapApp={() => onChange(onWrapApp(props.type, ctx))}
-    onWrapFunc={() => onChange(onWrapFunc)}
+    onWrapFunc={(name) => onChange(onWrapFunc(name))}
     onAdd={props.onAdd}
   />
 }

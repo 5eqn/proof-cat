@@ -12,8 +12,8 @@ export default function Header(props: {
   onDelete: () => void
   onAdd?: (name: string) => void
   onWrapLet: (name: string) => void
-  onWrapFunc: () => void
-  onWrapPi: () => void
+  onWrapFunc: (name: string) => void
+  onWrapPi: (name: string) => void
   onWrapApp: () => void
 }) {
   const addButton = props.onAdd ? <InputButton
@@ -40,14 +40,20 @@ export default function Header(props: {
         validate={props.validate}
         data-testid={`wrapLet-${props.label}-${props.depth}`}
       > {i18n.prompt.wrapLet} </InputButton>
-      <Button
-        onClick={props.onWrapFunc}
+      <InputButton
+        title={i18n.prompt.addAnEntry}
+        placeholder={i18n.prompt.name}
+        onConfirm={props.onWrapFunc}
+        validate={props.validate}
         data-testid={`wrapFunc-${props.label}-${props.depth}`}
-      > {i18n.prompt.wrapFunc} </Button>
-      <Button
-        onClick={props.onWrapPi}
+      > {i18n.prompt.wrapFunc} </InputButton>
+      <InputButton
+        title={i18n.prompt.addAnEntry}
+        placeholder={i18n.prompt.name}
+        onConfirm={props.onWrapFunc}
+        validate={props.validate}
         data-testid={`wrapPi-${props.label}-${props.depth}`}
-      > {i18n.prompt.wrapPi} </Button>
+      > {i18n.prompt.wrapPi} </InputButton>
       <Button
         onClick={props.onWrapApp}
         data-testid={`wrapApp-${props.label}-${props.depth}`}

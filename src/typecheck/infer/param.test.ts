@@ -5,7 +5,16 @@ import { InferRequest } from "../model/infer"
 import { TFunc, TType, TUni, TVar } from "../model/term"
 import { inferFunc } from "./func"
 
-jest.mock('antd')
+jest.mock('antd', () => {
+  const originalModule = jest.requireActual('antd')
+  return {
+    __esModule: true,
+    ...originalModule,
+    message: {
+      error: jest.fn(),
+    }
+  }
+})
 const mockError = jest.mocked(message.error)
 
 describe('inferParam function', () => {

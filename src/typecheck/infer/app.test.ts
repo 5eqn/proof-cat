@@ -6,7 +6,16 @@ import { TApp, TVar } from "../model/term"
 import { VVar, VPi, VUni } from "../model/value"
 import { inferApp } from "./app"
 
-jest.mock('antd')
+jest.mock('antd', () => {
+  const originalModule = jest.requireActual('antd')
+  return {
+    __esModule: true,
+    ...originalModule,
+    message: {
+      error: jest.fn(),
+    }
+  }
+})
 const mockError = jest.mocked(message.error)
 
 describe('inferApp function', () => {
@@ -101,7 +110,7 @@ describe('inferApp function', () => {
   test('change in function should be forbidden', () => {
     const { element } = inferApp(mockReq)
     render(element)
-    const button = screen.getByTestId(`wrapFunc-${i18n.term.var}-1`)
+    const button = screen.getByTestId(`delete-${i18n.term.var}-1`)
     fireEvent.click(button)
     expect(mockError).toBeCalledWith(i18n.err.changeApply)
     expect(onChange).toBeCalledTimes(0)
