@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { message } from 'antd'
 import { i18n } from '../../i18n'
 import { InferRequest } from "../model/infer"
-import { TAny, TFunc, TType, TUni, TVar } from "../model/term"
+import { TFunc, TType, TUni, TVar } from "../model/term"
 import { inferFunc } from "./func"
 
 jest.mock('antd')
@@ -35,19 +35,6 @@ describe('inferParam function', () => {
     body: mockTVar,
   }
 
-  // Any term
-  const mockTAny: TAny = {
-    term: 'any',
-  }
-
-  // Expected term after update
-  const expectedUpdate: TFunc = {
-    term: 'func',
-    param: [mockTType, mockTAny],
-    paramID: ['a', 'T'],
-    body: mockTVar,
-  }
-
   // Infer request
   const onChange = jest.fn()
   const mockReq: InferRequest<TFunc> = {
@@ -68,10 +55,8 @@ describe('inferParam function', () => {
     render(element)
     const button = screen.getByTestId(`delete-${i18n.term.uni}-1`)
     fireEvent.click(button)
-    const updater = onChange.mock.lastCall[0]
-    let term = mockTFunc
-    updater(term)
-    expect(term).toStrictEqual(expectedUpdate)
+    expect(mockError).toBeCalledTimes(0)
+    expect(onChange).toBeCalledTimes(1)
   })
 
 

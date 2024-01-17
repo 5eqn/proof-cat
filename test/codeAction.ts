@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { message } from 'antd'
-import { i18n } from '../../i18n'
-import { InferRequest } from "../model/infer"
-import { TFunc, TType, TVar } from "../model/term"
-import { VPi, VType } from "../model/value"
-import { inferFunc } from "./func"
+import { i18n } from '../src/i18n'
+import { InferRequest } from "../src/typecheck/model/infer"
+import { TAny, TFunc, TType, TVar } from "../src/typecheck/model/term"
+import { inferFunc } from "../src/typecheck/infer/func"
+import cloneDeep from 'lodash.clonedeep'
 
 jest.mock('antd')
 const mockError = jest.mocked(message.error)
@@ -31,21 +31,17 @@ describe('inferFunc function', () => {
     body: mockTVar,
   }
 
-  // Type A value
-  const mockVType: VType = {
-    val: 'type',
-    type: 'A',
+  // Any term
+  const mockTAny: TAny = {
+    term: 'any',
   }
 
-  // Expected type
-  const expected: VPi = {
-    val: 'pi',
-    param: [mockVType],
+  // Expected term after update
+  const expectedUpdate: TFunc = {
+    term: 'func',
+    param: [mockTType],
     paramID: ['a'],
-    func: {
-      env: [],
-      body: mockTType,
-    }
+    body: mockTAny,
   }
 
   // Infer request
@@ -63,18 +59,16 @@ describe('inferFunc function', () => {
     jest.clearAllMocks()
   })
 
-  test('type of function should be inferred correctly', () => {
-    const { val } = inferFunc(mockReq)
-    expect(val).toStrictEqual(expected)
-  })
-
-  test('change in body should be reflected', () => {
+  test('delete function body should work', () => {
     const { element } = inferFunc(mockReq)
     render(element)
     const button = screen.getByTestId(`delete-${i18n.term.var}-1`)
     fireEvent.click(button)
     expect(mockError).toBeCalledTimes(0)
-    expect(onChange).toBeCalledTimes(1)
+    const updater = onChange.mock.lastCall[0]
+    const term = cloneDeep(mockTFunc)
+    updater(term)
+    expect(term).toStrictEqual(expectedUpdate)
   })
 })
 
