@@ -1,5 +1,5 @@
 import { quote } from "."
-import { TApp, TLet, TNum, TVar } from "../model/term"
+import { TApp, TVar } from "../model/term"
 import { VApp, VNum, VVar } from "../model/value"
 
 describe('quoteApp function', () => {
@@ -38,39 +38,43 @@ describe('quoteApp function', () => {
   const termF: TVar = {
     term: 'var',
     id: 'f',
-    // 4 because a let is inserted for `c`
-    ix: 4,
+    ix: 3,
   }
 
   // f(d, a, c, b)
   const termApp: TApp = {
     term: 'app',
-    // `c` is 0 because inserted let is innermost
-    argIX: [1, 3, 0, 2],
+    arg: [
+      {
+        term: 'var',
+        id: 'd',
+        ix: 0,
+      },
+      {
+        term: 'var',
+        id: 'a',
+        ix: 2,
+      },
+      {
+        term: 'num',
+        num: 114,
+      },
+      {
+        term: 'var',
+        id: 'b',
+        ix: 1,
+      }
+    ],
     argID: ['d', 'a', 'c', 'b'],
     func: termF,
-  }
-
-  // 114
-  const oneOneFour: TNum = {
-    term: 'num',
-    num: 114,
-  }
-
-  // let c = 114 in f(d, a, c, b)
-  const termLet: TLet = {
-    term: 'let',
-    id: 'c',
-    body: oneOneFour,
-    next: termApp,
   }
 
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
-  test('should add let for non-variables', () => {
+  test('should quote args and func', () => {
     const val = quote(4, valApp)
-    expect(val).toStrictEqual(termLet)
+    expect(val).toStrictEqual(termApp)
   })
 })

@@ -63,7 +63,18 @@ describe('onWrapApp function', () => {
   const expected: Term = {
     term: 'app',
     argID: ['ain', 'T'],
-    argIX: [1, 0],
+    arg: [
+      {
+        term: 'var',
+        id: 'a',
+        ix: 1,
+      },
+      {
+        term: 'var',
+        id: 'A',
+        ix: 0,
+      },
+    ],
     func: before,
   }
 

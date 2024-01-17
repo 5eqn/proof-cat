@@ -3,7 +3,7 @@ import { Term } from "../model/term";
 import { deleteFields } from "./deleteFields";
 
 // Code action: anify
-export function onAnify(draft: Draft<Term>): void {
+export function onOverride(draft: Draft<Term>, to: Term): void {
   deleteFields(draft)
-  draft.term = 'any'
+  Object.assign(draft, to)
 }

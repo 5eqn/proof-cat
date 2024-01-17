@@ -1,5 +1,5 @@
 import { InferRequest, InferResult } from "../model/infer";
-import { TApp } from "../model/term";
+import { TApp, Term } from "../model/term";
 import { message } from "antd";
 import { i18n } from "../../i18n";
 import { evaluate } from "../evaluate";
@@ -24,12 +24,7 @@ export function inferApp(req: InferRequest<TApp>): InferResult {
   })
   const funcType: VPi = funcVal as VPi
   // Apply arguments to function type to get applied type
-  const argVals: Val[] = term.argIX.map((ix: number, i: number) =>
-    evaluate(env, {
-      term: 'var',
-      id: term.argID[i],
-      ix: ix
-    }))
+  const argVals: Val[] = term.arg.map((v: Term) => evaluate(env, v))
   const val: Val = apply(funcType.func, argVals)
   // Generate argument elements
   const argElements = inferArg(req, funcType)
