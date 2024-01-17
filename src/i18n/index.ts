@@ -15,6 +15,7 @@ const source = {
       var: 'Variable',
       ref: 'Reference',
       val: 'Value',
+      hasType: 'has type:',
     },
     err: {
       referred: 'This variable is referred to, so you cannot edit it!',
@@ -23,18 +24,12 @@ const source = {
       nameDup: 'This name already exists in context, so you cannot redeclare it!',
       changeApply: 'This term is called as a function, so you cannot change it!',
       noVariable: 'There is no suitable variable in context!',
-      fromLenMismatch: (x: number, y: number) =>
-        `Source of Pi has different length: ${x} and ${y}`,
-      argLenMismatch: (x: number, y: number) =>
-        `Arguments has different length: ${x} and ${y}`,
-      variableMismatch: (xid: string, yid: string, xlvl: number, ylvl: number) =>
-        `Variable mismatch: ${xid}-${xlvl} and ${yid}-${ylvl}`,
-      numMismatch: (x: number, y: number) =>
-        `Number mismatch: ${x} != ${y}`,
-      typeMismatch: (x: string, y: string) =>
-        `Type mismatch: ${x} != ${y}`,
-      astMismatch: (x: string, y: string) =>
-        `AST mismatch: ${x} != ${y}`,
+      fromLenMismatch: `Source of Pi has different length`,
+      argLenMismatch: `Arguments has different length`,
+      variableMismatch: `Variable mismatch`,
+      numMismatch: `Number mismatch`,
+      typeMismatch: `Type mismatch`,
+      astMismatch: `AST mismatch`,
     },
     prompt: {
       addAnEntry: 'Add an entry',
@@ -71,6 +66,7 @@ const source = {
       var: '引用',
       ref: '依据',
       val: '值',
+      hasType: '代表下面的命题：',
     },
     err: {
       referred: '该变量已被引用，故不可修改！',
@@ -79,18 +75,12 @@ const source = {
       nameDup: '该变量名在语境中已存在！',
       changeApply: '该蕴含式已被消除，故不可修改！',
       noVariable: '语境中没有合适的变量！',
-      fromLenMismatch: (x: number, y: number) =>
-        `蕴含前件长度不同：${x} 和 ${y}`,
-      argLenMismatch: (x: number, y: number) =>
-        `参数长度不同：${x} 和 ${y}`,
-      variableMismatch: (xid: string, yid: string, xlvl: number, ylvl: number) =>
-        `变量不同：${xid}-${xlvl} 和 ${yid}-${ylvl}`,
-      numMismatch: (x: number, y: number) =>
-        `数字不同：${x} != ${y}`,
-      typeMismatch: (x: string, y: string) =>
-        `类型不同：${x} != ${y}`,
-      astMismatch: (x: string, y: string) =>
-        `概念不同：${x} != ${y}`,
+      fromLenMismatch: `蕴含前件长度不同`,
+      argLenMismatch: `参数长度不同`,
+      variableMismatch: `变量不同`,
+      numMismatch: `数字不同`,
+      typeMismatch: `类型不同`,
+      astMismatch: `概念不同`,
     },
     prompt: {
       addAnEntry: '增加一个前件',
@@ -102,13 +92,13 @@ const source = {
       value: '值',
       selectAnEntry: '选择一个变量',
       typeName: '命题名',
-      wrapLet: '定义',
-      wrapFunc: '假设引入',
+      wrapLet: '创建依赖',
+      wrapFunc: '引入假设',
       wrapPi: '蕴含',
       wrapApp: '蕴含消除',
       becomeType: '命题',
-      becomeNum: '数字',
-      becomeVar: '证毕',
+      becomeNum: '别点',
+      becomeVar: '应用公理',
       becomeU: '宇宙',
     }
   }

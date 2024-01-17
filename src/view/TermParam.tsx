@@ -2,6 +2,7 @@ import Named from "../component/Named";
 import { Term, TFunc, TPi } from "../typecheck/model/term";
 import { InferRequest } from "../typecheck/model/infer";
 import { onFuncDelete } from "../typecheck/action/onFuncDelete";
+import { i18n } from "../i18n";
 
 export interface TermParamProps {
   // Infer request of the function it belongs to
@@ -21,7 +22,7 @@ export interface TermParamProps {
 export function TermParam(props: TermParamProps): JSX.Element {
   return <Named
     key={props.paramID}
-    name={props.paramID}
+    name={props.paramID + ' ' + i18n.term.hasType}
     depth={props.req.depth + 1}
     children={props.param}
     onDelete={() => props.req.onChange(

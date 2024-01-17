@@ -33,6 +33,6 @@ export function unify(len: number, x: Val, y: Val): string | null {
     }
   } else {
     // TODO recursive resolution
-    return i18n.err.astMismatch(x.val, y.val)
+    return i18n.err.astMismatch
   }
 }
