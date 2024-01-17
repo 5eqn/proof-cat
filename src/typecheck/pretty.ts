@@ -15,7 +15,7 @@ export function pretty(ns: string[], term: Term): string {
     case 'let':
       return prettyLet(ns, term)
     case 'var':
-      return `${term.id}_${term.ix}`
+      return `${term.id}`
     case 'num':
       return term.num.toString()
     case 'type':
@@ -28,7 +28,7 @@ export function pretty(ns: string[], term: Term): string {
 }
 
 function prettyFunc(ns: string[], term: TFunc): string {
-  return `(${term.param.map((t, i) => `${term.paramID[i]}: ${pretty(ns, t)}`).join(', ')}) => ${pretty([...term.paramID, ...ns], term.body)}`
+  return `((${term.param.map((t, i) => `${term.paramID[i]}: ${pretty(ns, t)}`).join(', ')}) => ${pretty([...term.paramID, ...ns], term.body)})`
 }
 
 function prettyPi(ns: string[], term: TPi): string {
@@ -36,7 +36,7 @@ function prettyPi(ns: string[], term: TPi): string {
 }
 
 function prettyApp(ns: string[], term: TApp): string {
-  return `(${pretty(ns, term.func)})(${term.argIX.map((ix, i) => `${term.argID[i]} = ${ns[ix]}_${ix}`).join(', ')})`
+  return `${pretty(ns, term.func)}(${term.argIX.map((ix, i) => `${term.argID[i]} = ${ns[ix]}`).join(', ')})`
 }
 
 function prettyLet(ns: string[], term: TLet): string {
