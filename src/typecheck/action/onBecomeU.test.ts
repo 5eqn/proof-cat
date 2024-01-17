@@ -1,26 +1,26 @@
 import cloneDeep from 'lodash.clonedeep'
-import { TAny, TNum } from "../model/term"
-import { onAnify } from './onAnify'
+import { TNum, TUni } from "../model/term"
+import { onBecomeU } from './onBecomeU'
 
-describe('onAnify function', () => {
+describe('onBecomeU function', () => {
   // Before action
   const before: TNum = {
     term: 'num',
-    num: 114,
+    num: 1145,
   }
 
   // After action
-  const expected: TAny = {
-    term: 'any',
+  const expected: TUni = {
+    term: 'uni',
   }
 
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
-  test('should change term to any and clear other fields', () => {
+  test('should make term a type', () => {
     const term = cloneDeep(before)
-    onAnify(term)
+    onBecomeU(term)
     expect(term).toStrictEqual(expected)
   })
 })
