@@ -1,23 +1,8 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import { message } from 'antd'
-import cloneDeep from 'lodash.clonedeep'
-import { i18n } from '../../i18n'
+import { onOverride } from '../action/onOverride'
 import { InferRequest } from "../model/infer"
-import { TAny, TPi, TType, TVar } from "../model/term"
+import { TAny, Term, TPi, TType, TVar } from "../model/term"
 import { VUni } from "../model/value"
 import { inferPi } from "./pi"
-
-jest.mock('antd', () => {
-  const originalModule = jest.requireActual('antd')
-  return {
-    __esModule: true,
-    ...originalModule,
-    message: {
-      error: jest.fn(),
-    }
-  }
-})
-const mockError = jest.mocked(message.error)
 
 describe('inferPi function', () => {
   // Most recent var term
@@ -80,15 +65,8 @@ describe('inferPi function', () => {
   })
 
   test('change in body should be reflected', () => {
-    const { element } = inferPi(mockReq)
-    render(element)
-    const button = screen.getByTestId(`delete-${i18n.term.var}-1`)
-    fireEvent.click(button)
-    expect(mockError).toBeCalledTimes(0)
-    expect(onChange).toBeCalledTimes(1)
-    const updater = onChange.mock.lastCall[0]
-    const term = cloneDeep(mockTPi)
-    updater(term)
-    expect(term).toStrictEqual(expectedDeleteBody)
+    const { debug } = inferPi(mockReq)
+    debug.onBodyChange((draft: Term) => onOverride(draft, anyTerm))
+    expect(mockTPi).toStrictEqual(expectedDeleteBody)
   })
 })

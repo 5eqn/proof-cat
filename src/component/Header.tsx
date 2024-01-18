@@ -8,19 +8,17 @@ import { i18n } from "../i18n"
 export default function Header(props: {
   depth: number,
   label: string,
-  validate: (name: string) => string | null
-  onDelete: () => void
-  onAdd?: (name: string) => void
-  onWrapLet: (name: string) => void
-  onWrapFunc: (name: string) => void
-  onWrapPi: (name: string) => void
-  onWrapApp: () => void
+  onDelete: () => boolean
+  onAdd?: (name: string) => boolean
+  onWrapLet: (name: string) => boolean
+  onWrapFunc: (name: string) => boolean
+  onWrapPi: (name: string) => boolean
+  onWrapApp: () => boolean
 }) {
   const addButton = props.onAdd ? <InputButton
     title={i18n.prompt.addAnEntry}
     placeholder={i18n.prompt.name}
     onConfirm={props.onAdd}
-    validate={props.validate}
     data-testid={`add-${props.label}-${props.depth}`}
   > + </InputButton> : <div />
   return <div>
@@ -37,21 +35,18 @@ export default function Header(props: {
         title={i18n.prompt.addLet}
         placeholder={i18n.prompt.name}
         onConfirm={props.onWrapLet}
-        validate={props.validate}
         data-testid={`wrapLet-${props.label}-${props.depth}`}
       > {i18n.prompt.wrapLet} </InputButton>
       <InputButton
         title={i18n.prompt.addAnEntry}
         placeholder={i18n.prompt.name}
         onConfirm={props.onWrapFunc}
-        validate={props.validate}
         data-testid={`wrapFunc-${props.label}-${props.depth}`}
       > {i18n.prompt.wrapFunc} </InputButton>
       <InputButton
         title={i18n.prompt.addAnEntry}
         placeholder={i18n.prompt.name}
         onConfirm={props.onWrapFunc}
-        validate={props.validate}
         data-testid={`wrapPi-${props.label}-${props.depth}`}
       > {i18n.prompt.wrapPi} </InputButton>
       <Button

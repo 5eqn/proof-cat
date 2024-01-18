@@ -1,24 +1,10 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import { message } from 'antd'
 import cloneDeep from 'lodash.clonedeep'
 import { infer } from '.'
-import { i18n } from '../../i18n'
+import { onOverride } from '../action/onOverride'
 import { evaluate } from '../evaluate'
 import { InferRequest } from "../model/infer"
-import { TAny, TApp, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
+import { TAny, TApp, Term, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
 import { inferLet } from "./let"
-
-jest.mock('antd', () => {
-  const originalModule = jest.requireActual('antd')
-  return {
-    __esModule: true,
-    ...originalModule,
-    message: {
-      error: jest.fn(),
-    }
-  }
-})
-const mockError = jest.mocked(message.error)
 
 describe('inferLet function', () => {
   // number
@@ -154,39 +140,18 @@ describe('inferLet function', () => {
     expect(val).toStrictEqual(expected)
   })
 
-  test('change in referenced body should be forbidden', () => {
-    const { element } = inferLet(mockReq)
-    render(element)
-    const button = screen.getByTestId(`delete-${i18n.term.num}-1`)
-    fireEvent.click(button)
-    expect(mockError).toBeCalledWith(i18n.err.referred)
-    expect(onChange).toBeCalledTimes(0)
-  })
-
-  test('change in unreferenced body should be reflected', () => {
-    const { element } = inferLet(mockReqUnref)
-    render(element)
-    const button = screen.getByTestId(`delete-${i18n.term.num}-1`)
-    fireEvent.click(button)
-    expect(mockError).toBeCalledTimes(0)
-    expect(onChange).toBeCalledTimes(1)
-    const updater = onChange.mock.lastCall[0]
-    const term = cloneDeep(unrefTerm)
-    updater(term)
-    expect(term).toStrictEqual(unrefDeleteBody)
+  test('change in body should be reflected', () => {
+    const req = cloneDeep(mockReqUnref)
+    const { debug } = inferLet(req)
+    debug.onBodyChange((term: Term) => onOverride(term, anyTerm))
+    expect(req.term).toStrictEqual(unrefDeleteBody)
   })
 
   test('change in next should be reflected', () => {
-    const { element } = inferLet(mockReqUnref)
-    render(element)
-    const button = screen.getByTestId(`delete-${i18n.term.type}-0`)
-    fireEvent.click(button)
-    expect(mockError).toBeCalledTimes(0)
-    expect(onChange).toBeCalledTimes(1)
-    const updater = onChange.mock.lastCall[0]
-    const term = cloneDeep(unrefTerm)
-    updater(term)
-    expect(term).toStrictEqual(unrefDeleteNext)
+    const req = cloneDeep(mockReqUnref)
+    const { debug } = inferLet(req)
+    debug.onNextChange((term: Term) => onOverride(term, anyTerm))
+    expect(req.term).toStrictEqual(unrefDeleteNext)
   })
 })
 

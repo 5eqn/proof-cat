@@ -1,7 +1,6 @@
-import { i18n } from "../../i18n"
+import { ErrorNumMismatch } from "../model/error"
 import { VNum } from "../model/value"
 
-export function unifyNum(x: VNum, y: VNum): string | null {
-  return x.num === (y as VNum).num ? null
-    : i18n.err.numMismatch
+export function unifyNum(x: VNum, y: VNum): void {
+  if (x.num !== (y as VNum).num) throw new ErrorNumMismatch()
 }

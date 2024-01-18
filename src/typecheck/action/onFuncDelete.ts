@@ -12,5 +12,5 @@ export function onFuncDelete(
   assertNotOccur(len, ix, draft.body)
   draft.param.splice(ix, 1)
   draft.paramID.splice(ix, 1)
-  deleteVar(ix, draft.body)
+  deleteVar(ix, 1, draft.body)
 }

@@ -10,6 +10,8 @@ import { onFuncAdd } from "./onFuncAdd";
 import { onFuncDelete } from "./onFuncDelete";
 import { onNumUpdate } from "./onNumUpdate";
 import { onOverride } from "./onOverride";
+import { onRemove } from "./onRemove";
+import { onRevertRemove } from "./onRevertRemove";
 import { onTypeUpdate } from "./onTypeUpdate";
 import { onVarUpdate } from "./onVarUpdate";
 import { onWrapApp } from "./onWrapApp";
@@ -17,15 +19,23 @@ import { onWrapFunc } from "./onWrapFunc";
 import { onWrapLet } from "./onWrapLet";
 import { onWrapPi } from "./onWrapPi";
 
-export function run(pack: ActionPack, draft: Draft<Term>): void {
-  const { undo }: ActionPack = pack
+// All actions, if throw error, should not change state
+export function runAction(pack: ActionPack<Term, Term>, draft: Draft<Term>): void {
+  const { undo }: ActionPack<Term, Term> = pack
   if (undo) runUndo(pack, draft)
   else runDo(pack, draft)
 }
 
-function runUndo({ action, lens }: ActionPack, draft: Draft<Term>): void {
+function runUndo(
+  { action, lens }: ActionPack<Term, Term>,
+  draft: Draft<Term>
+): void {
   const term = lens(draft) as any
   switch (action.action) {
+    case 'identity':
+      return
+    case 'remove':
+      return onRevertRemove(action.len, action.backup, term)
     case 'updateVar':
       return onVarUpdate(
         action.oldID,
@@ -57,9 +67,16 @@ function runUndo({ action, lens }: ActionPack, draft: Draft<Term>): void {
   }
 }
 
-function runDo({ action, lens }: ActionPack, draft: Draft<Term>): void {
+function runDo(
+  { action, lens }: ActionPack<Term, Term>,
+  draft: Draft<Term>
+): void {
   const term = lens(draft) as any
   switch (action.action) {
+    case 'identity':
+      return
+    case 'remove':
+      return onRemove(action.len, term)
     case 'updateVar':
       return onVarUpdate(
         action.newID,

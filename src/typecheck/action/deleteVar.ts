@@ -1,39 +1,39 @@
 // Delete Var(ix) in term
-// len: length of env before deletion
 import { Draft } from "immer";
 import { TApp, Term, TFunc, TLet, TPi, TVar } from "../model/term";
 
-export function deleteVar(ix: number, term: Draft<Term>): void {
+export function deleteVar(ix: number, size: number, term: Draft<Term>): void {
   switch (term.term) {
     case 'func':
     case 'pi':
-      return deleteFuncVar(ix, term)
+      return deleteFuncVar(ix, size, term)
     case 'let':
-      return deleteLetVar(ix, term)
+      return deleteLetVar(ix, size, term)
     case 'var':
-      return deleteVarVar(ix, term)
+      return deleteVarVar(ix, size, term)
     case 'app':
-      return deleteAppVar(ix, term)
+      return deleteAppVar(ix, size, term)
   }
 }
 
-function deleteFuncVar(ix: number, term: Draft<TFunc | TPi>): void {
+function deleteFuncVar(ix: number, size: number, term: Draft<TFunc | TPi>): void {
   for (let i = 0; i < term.param.length; i++)
-    deleteVar(ix, term.param[i])
-  deleteVar(ix + term.param.length, term.body)
+    deleteVar(ix, size, term.param[i])
+  deleteVar(ix + term.param.length, size, term.body)
 }
 
-function deleteLetVar(ix: number, term: Draft<TLet>): void {
-  deleteVar(ix, term.body)
-  deleteVar(ix + 1, term.next)
+function deleteLetVar(ix: number, size: number, term: Draft<TLet>): void {
+  deleteVar(ix, size, term.body)
+  deleteVar(ix + 1, size, term.next)
 }
 
-function deleteVarVar(ix: number, term: Draft<TVar>): void {
-  if (term.ix > ix) term.ix--
+function deleteVarVar(ix: number, size: number, term: Draft<TVar>): void {
+  if (term.ix > ix) term.ix -= size
 }
 
-function deleteAppVar(ix: number, term: Draft<TApp>): void {
-  deleteVar(ix, term.func)
+function deleteAppVar(ix: number, size: number, term: Draft<TApp>): void {
+  deleteVar(ix, size, term.func)
   for (let i = 0; i < term.arg.length; i++)
-    deleteVar(ix, term.arg[i])
+    deleteVar(ix, size, term.arg[i])
 }
+

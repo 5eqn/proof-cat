@@ -7,13 +7,12 @@ import { InferRequest } from "../typecheck/model/infer";
 import { mkAction } from "../typecheck/model/action";
 
 export interface TermPiProps extends TermPropsBase<TPi> {
-  len: number,
   params: JSX.Element[]
   body: JSX.Element
 }
 
 export function TermPi(props: TermPiProps): JSX.Element {
-  const { depth, onChange }: InferRequest<TPi> = props.req
+  const { ns, depth, onChange }: InferRequest<TPi> = props.req
   return <div>
     <TermHeader
       req={props.req}
@@ -23,7 +22,7 @@ export function TermPi(props: TermPiProps): JSX.Element {
         action: 'addParam',
         id: name,
         ix: 0,
-        len: props.len,
+        len: ns.length,
       }))}
     />
     {props.params}

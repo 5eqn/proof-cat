@@ -8,16 +8,21 @@ import { Draft } from "immer";
 
 export function inferLet(req: InferRequest<TLet>): InferResult {
   const { env, ctx, ns, depth, term, onChange } = req
+  const onBodyChange = mapCallback(
+    onChange,
+    (draft: Draft<TLet>) => draft.body,
+  )
+  const onNextChange = mapCallback(
+    onChange,
+    (draft: Draft<TLet>) => draft.next
+  )
   const { val: bodyVal, element: bodyElement } = infer({
     env: env,
     ctx: ctx,
     ns: ns,
     depth: depth + 1,
     term: term.body,
-    onChange: mapCallback(
-      onChange,
-      (draft: Draft<TLet>) => draft.body,
-    )
+    onChange: onBodyChange,
   })
   const { val: nextVal, element: nextElement } = infer({
     env: [evaluate(env, term.body), ...env],
@@ -25,10 +30,7 @@ export function inferLet(req: InferRequest<TLet>): InferResult {
     ns: [term.id, ...ns],
     depth,
     term: term.next,
-    onChange: mapCallback(
-      onChange,
-      (draft: Draft<TLet>) => draft.next
-    )
+    onChange: onNextChange,
   })
   return {
     val: nextVal,
@@ -37,6 +39,10 @@ export function inferLet(req: InferRequest<TLet>): InferResult {
       type: nextVal,
       body: bodyElement,
       next: nextElement,
-    })
+    }),
+    debug: {
+      onBodyChange,
+      onNextChange,
+    }
   }
 }

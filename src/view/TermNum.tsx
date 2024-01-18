@@ -3,8 +3,8 @@ import { i18n } from "../i18n";
 import { TNum } from "../typecheck/model/term";
 import { TermHeader } from "./TermHeader";
 import { TermPropsBase } from "../typecheck/model/props";
-import { onNumUpdate } from "../typecheck/action/onNumUpdate";
 import { InferRequest } from "../typecheck/model/infer";
+import { mkAction } from "../typecheck/model/action";
 
 export interface TermNumProps extends TermPropsBase<TNum> { }
 
@@ -20,7 +20,11 @@ export function TermNum(props: TermNumProps): JSX.Element {
       depth={depth}
       label={i18n.term.val}
       value={term.num.toString()}
-      onChange={(str: string) => onChange(onNumUpdate(+str))}
+      onChange={(str: string) => onChange(mkAction({
+        action: 'updateNum',
+        oldNum: term.num,
+        newNum: +str,
+      }))}
     />
   </div>
 }

@@ -2,31 +2,41 @@ import Header from "../component/Header"
 import { Term } from "../typecheck/model/term"
 import { Val } from "../typecheck/model/value"
 import { InferRequest } from "../typecheck/model/infer";
-import { onAnify } from "../typecheck/action/onAnify";
-import { onWrapFunc } from "../typecheck/action/onWrapFunc";
-import { onWrapPi } from "../typecheck/action/onWrapPi";
-import { onWrapApp } from "../typecheck/action/onWrapApp";
-import { validate } from "../typecheck/action/validate";
-import { onWrapLet } from "../typecheck/action/onWrapLet";
+import { mkAction } from "../typecheck/model/action";
 
 export interface TermHeaderProps {
   req: InferRequest<Term>
   type: Val,
   label: string,
-  onAdd?: (name: string) => void
+  onAdd?: (name: string) => boolean
 }
 
 export function TermHeader(props: TermHeaderProps): JSX.Element {
-  const { ctx, ns, depth, onChange }: InferRequest<Term> = props.req
+  const { ns, term, depth, onChange }: InferRequest<Term> = props.req
   return <Header
     depth={depth}
     label={props.label}
-    validate={(name: string) => validate(name, ns)}
-    onDelete={() => onChange(onAnify)}
-    onWrapLet={(name: string) => onChange(onWrapLet(name))}
-    onWrapPi={(name: string) => onChange(onWrapPi(name))}
-    onWrapApp={() => onChange(onWrapApp(props.type, ctx))}
-    onWrapFunc={(name) => onChange(onWrapFunc(name))}
+    onDelete={() => onChange(mkAction({
+      action: 'remove',
+      backup: { ...term },
+      len: ns.length,
+    }))}
+    onWrapLet={(name: string) => onChange(mkAction({
+      action: 'wrapLet',
+      name,
+    }))}
+    onWrapPi={(name: string) => onChange(mkAction({
+      action: 'wrapPi',
+      name,
+    }))}
+    onWrapFunc={(name) => onChange(mkAction({
+      action: 'wrapFunc',
+      name,
+    }))}
+    onWrapApp={() => onChange(mkAction({
+      action: 'wrapApp',
+      funcType: props.type,
+    }))}
     onAdd={props.onAdd}
   />
 }

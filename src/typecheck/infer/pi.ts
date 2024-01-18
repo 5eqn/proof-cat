@@ -1,4 +1,4 @@
-import { InferRequest, InferResult } from "../model/infer";
+import { getDebugs, getElements, InferRequest, InferResult } from "../model/infer";
 import { TPi } from "../model/term";
 import { Draft } from "immer";
 import { Val } from "../model/value";
@@ -13,6 +13,10 @@ import { makeSpineIn } from "../action/makeSpineIn";
 export function inferPi(req: InferRequest<TPi>): InferResult {
   // Construct element for pi body
   const { env, ctx, ns, depth, term, onChange }: InferRequest<TPi> = req
+  const onBodyChange = mapCallback(
+    onChange,
+    (draft: Draft<TPi>) => draft.body
+  )
   const len: number = term.paramID.length + env.length
   const paramVars: Val[] = term.paramID.map(makeSpineIn(len))
   const paramVals: Val[] = term.param.map(evalIn(env))
@@ -22,24 +26,25 @@ export function inferPi(req: InferRequest<TPi>): InferResult {
     ns: [...term.paramID, ...ns],
     depth: depth + 1,
     term: term.body,
-    onChange: mapCallback(
-      onChange,
-      (draft: Draft<TPi>) => draft.body
-    )
+    onChange: onBodyChange,
   })
   // Construct type for pi, which is always U
   const val: Val = {
     val: 'uni',
   }
   // Construct element for params
-  const paramElements = inferParam(req)
+  const paramInfers = inferParam(req)
   return {
     val: val,
     element: TermPi({
       req,
       type: val,
-      params: paramElements,
+      params: getElements(paramInfers),
       body: bodyElement,
     }),
+    debug: {
+      onBodyChange,
+      onParamChange: getDebugs(paramInfers),
+    }
   }
 }
