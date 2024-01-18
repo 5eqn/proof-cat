@@ -1,6 +1,11 @@
-import { onOverride } from '../action/onOverride'
+import cloneDeep from 'lodash.clonedeep'
+import { runAction } from '../action'
+import { mkAction } from '../model/action'
+import { Ctx } from '../model/ctx'
+import { Env } from '../model/env'
 import { InferRequest } from "../model/infer"
-import { TAny, TApp, Term, TNum, TType, TVar } from "../model/term"
+import { TAny, TApp, TNum, TType, TVar } from "../model/term"
+import { VPi, VVar } from '../model/value'
 import { inferApp } from "./app"
 
 describe('inferArg apption', () => {
@@ -10,6 +15,41 @@ describe('inferArg apption', () => {
     id: 'f',
     ix: 0,
   }
+
+  // Var value: f
+  const mockVVar: VVar = {
+    val: 'var',
+    id: 'f',
+    lvl: 0,
+  }
+
+  // Env
+  const env: Env = [mockVVar]
+  const ns: string[] = ['f']
+
+  // Var type: (a: number, T: U) -> number
+  const mockVPi: VPi = {
+    val: 'pi',
+    param: [
+      {
+        val: 'type',
+        type: 'number',
+      },
+      {
+        val: 'uni',
+      },
+    ],
+    paramID: ['a', 'T'],
+    func: {
+      env,
+      body: {
+        term: 'type',
+        type: 'number',
+      }
+    }
+  }
+
+  const ctx: Ctx = [mockVPi]
 
   // Type A term
   const mockTType: TType = {
@@ -47,9 +87,9 @@ describe('inferArg apption', () => {
   // Infer request
   const onChange = jest.fn()
   const mockReq: InferRequest<TApp> = {
-    env: [],
-    ctx: [],
-    ns: [],
+    env,
+    ctx,
+    ns,
     depth: 0,
     term: mockTApp,
     onChange: onChange,
@@ -60,9 +100,15 @@ describe('inferArg apption', () => {
   })
 
   test('change in arg should be reflected', () => {
-    const { debug } = inferApp(mockReq)
-    debug.onArgChange[1]((term: Term) => onOverride(term, mockTAny))
-    expect(mockTApp).toStrictEqual(expectedDeleteArg)
+    const req = cloneDeep(mockReq)
+    const { debug } = inferApp(req)
+    debug.onArgChange[1](mkAction({
+      action: 'remove',
+    } as any))
+    expect(onChange).toBeCalledTimes(1)
+    const action = onChange.mock.lastCall[0]
+    runAction(action, req.term)
+    expect(req.term).toStrictEqual(expectedDeleteArg)
   })
 })
 

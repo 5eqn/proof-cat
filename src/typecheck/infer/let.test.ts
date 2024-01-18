@@ -1,9 +1,10 @@
 import cloneDeep from 'lodash.clonedeep'
 import { infer } from '.'
-import { onOverride } from '../action/onOverride'
+import { runAction } from '../action'
 import { evaluate } from '../evaluate'
+import { mkAction } from '../model/action'
 import { InferRequest } from "../model/infer"
-import { TAny, TApp, Term, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
+import { TAny, TApp, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
 import { inferLet } from "./let"
 
 describe('inferLet function', () => {
@@ -143,14 +144,24 @@ describe('inferLet function', () => {
   test('change in body should be reflected', () => {
     const req = cloneDeep(mockReqUnref)
     const { debug } = inferLet(req)
-    debug.onBodyChange((term: Term) => onOverride(term, anyTerm))
+    debug.onBodyChange(mkAction({
+      action: 'remove',
+    } as any))
+    expect(onChange).toBeCalledTimes(1)
+    const action = onChange.mock.lastCall[0]
+    runAction(action, req.term)
     expect(req.term).toStrictEqual(unrefDeleteBody)
   })
 
   test('change in next should be reflected', () => {
     const req = cloneDeep(mockReqUnref)
     const { debug } = inferLet(req)
-    debug.onNextChange((term: Term) => onOverride(term, anyTerm))
+    debug.onNextChange(mkAction({
+      action: 'remove',
+    } as any))
+    expect(onChange).toBeCalledTimes(1)
+    const action = onChange.mock.lastCall[0]
+    runAction(action, req.term)
     expect(req.term).toStrictEqual(unrefDeleteNext)
   })
 })

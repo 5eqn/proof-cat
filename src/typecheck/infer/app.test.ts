@@ -69,14 +69,6 @@ describe('inferApp function', () => {
     func: mockTVarF,
   }
 
-  // f(T = x)(T = x)
-  const mockTAppBad: TApp = {
-    term: 'app',
-    argID: ['T'],
-    arg: [mockTVarX],
-    func: mockTApp,
-  }
-
   // Expected result
   const expected: VVar = mockVVarX
 
@@ -91,16 +83,6 @@ describe('inferApp function', () => {
     onChange: onChange,
   }
 
-  // Bad Infer request
-  const mockReqBad: InferRequest<TApp> = {
-    env: [mockVVarX, mockVVarF],
-    ctx: [mockVUni, mockVPi],
-    ns: ['x', 'f'],
-    depth: 0,
-    term: mockTAppBad,
-    onChange: onChange,
-  }
-
   beforeEach(() => {
     jest.clearAllMocks()
   })
@@ -112,12 +94,8 @@ describe('inferApp function', () => {
 
   test('change in function should be forbidden', () => {
     const { debug } = inferApp(mockReq)
-    expect(debug.onFuncChange((draft: Term) => draft)).toThrow()
+    expect(() => debug.onFuncChange((draft: Term) => draft)).toThrow()
     expect(onChange).toBeCalledTimes(0)
   })
-
-  // test('apply to non-function should not typecheck', () => {
-  //   expect(inferApp(mockReqBad)).toThrow()
-  // })
 })
 
