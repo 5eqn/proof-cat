@@ -1,6 +1,6 @@
-import { i18n } from "../../i18n"
+import { ErrorTypeMismatch } from "../model/error"
 import { VType } from "../model/value"
 
-export function unifyType(x: VType, y: VType): string | null {
-  return x.type === (y as VType).type ? null : i18n.err.typeMismatch
+export function unifyType(x: VType, y: VType): void {
+  if (x.type !== (y as VType).type) throw new ErrorTypeMismatch()
 }

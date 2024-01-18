@@ -1,23 +1,11 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import { message } from 'antd'
 import cloneDeep from 'lodash.clonedeep'
-import { i18n } from '../../i18n'
+import { runAction } from '../action'
+import { onOverride } from '../action/onOverride'
+import { mkAction } from '../model/action'
 import { InferRequest } from "../model/infer"
-import { TAny, TFunc, TType, TVar } from "../model/term"
+import { TAny, Term, TFunc, TType, TVar } from "../model/term"
 import { VPi, VType } from "../model/value"
 import { inferFunc } from "./func"
-
-jest.mock('antd', () => {
-  const originalModule = jest.requireActual('antd')
-  return {
-    __esModule: true,
-    ...originalModule,
-    message: {
-      error: jest.fn(),
-    }
-  }
-})
-const mockError = jest.mocked(message.error)
 
 describe('inferFunc function', () => {
   // Most recent var term
@@ -92,16 +80,17 @@ describe('inferFunc function', () => {
   })
 
   test('change in body should be reflected', () => {
-    const { element } = inferFunc(mockReq)
-    render(element)
-    const button = screen.getByTestId(`delete-${i18n.term.var}-1`)
-    fireEvent.click(button)
-    expect(mockError).toBeCalledTimes(0)
+    const req = cloneDeep(mockReq)
+    const { debug } = inferFunc(req)
+    debug.onBodyChange(mkAction({
+      action: 'remove',
+      len: 1,
+      backup: { ...req.term.body },
+    }))
     expect(onChange).toBeCalledTimes(1)
-    const updater = onChange.mock.lastCall[0]
-    const term = cloneDeep(mockTFunc)
-    updater(term)
-    expect(term).toStrictEqual(expectedDeleteBody)
+    const action = onChange.mock.lastCall[0]
+    runAction(action, req.term)
+    expect(mockTFunc).toStrictEqual(expectedDeleteBody)
   })
 })
 

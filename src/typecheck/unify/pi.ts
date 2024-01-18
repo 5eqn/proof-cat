@@ -1,25 +1,21 @@
-import { i18n } from "../../i18n"
 import { apply } from "../model/closure"
 import { unify } from "./index"
 import { VPi, VVar } from "../model/value"
+import { unifyNamespace } from "./namespace"
+import { unifyArray } from "./array"
 
-export function unifyPi(len: number, x: VPi, y: VPi): string | null {
-  const piLen = x.param.length
-  if (piLen !== y.param.length)
-    return i18n.err.fromLenMismatch
-  for (let i = 0; i < piLen; i++) {
-    const res = unify(len, x.param[i], y.param[i])
-    if (res !== null) return res
-  }
+export function unifyPi(envLen: number, x: VPi, y: VPi): void {
+  unifyNamespace(x.paramID, y.paramID)
+  unifyArray(envLen, x.param, y.param)
+  const paramLen = x.param.length
   const piArgs = x.paramID.map<VVar>((id, i) => ({
     val: 'var',
     id: id,
-    lvl: len + piLen - i - 1
+    lvl: envLen + paramLen - i - 1
   }))
-  const piToRes = unify(
-    len + piLen,
+  unify(
+    envLen + paramLen,
     apply(x.func, piArgs),
     apply(y.func, piArgs),
   )
-  return piToRes
 }

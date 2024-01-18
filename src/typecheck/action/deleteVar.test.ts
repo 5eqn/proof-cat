@@ -201,13 +201,13 @@ describe('deleteVar function', () => {
 
   test('should decrease variable index of posterior env', () => {
     const term = cloneDeep(before)
-    deleteVar(0, term)
+    deleteVar(0, 1, term)
     expect(term).toStrictEqual(expectedDelete0)
   })
 
   test('should not decrease variable index of prior env', () => {
     const term = cloneDeep(before)
-    deleteVar(2, term)
+    deleteVar(2, 1, term)
     expect(term).toStrictEqual(expectedDelete2)
   })
 })

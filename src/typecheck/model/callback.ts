@@ -1,13 +1,12 @@
 // Callback of code actions
 import { Draft } from "immer";
 import { ActionPack, mapAction } from "./action";
-import { Term } from "./term";
 
-export type Callback = (updater: ActionPack) => boolean
+export type Callback<T, U> = (action: ActionPack<T, U>) => boolean
 
-export function mapCallback(
-  cb: Callback,
-  f: (t: Draft<Term>) => Draft<Term>,
-): Callback {
-  return (pack: ActionPack) => cb(mapAction(pack, f))
+export function mapCallback<T, U, V>(
+  cb: Callback<T, V>,
+  f: (t: Draft<T>) => Draft<U>,
+): Callback<U, V> {
+  return (pack: ActionPack<U, V>) => cb(mapAction(pack, f))
 }

@@ -2,37 +2,37 @@
 import { Draft } from "immer";
 import { TApp, Term, TFunc, TLet, TPi, TVar } from "../model/term";
 
-export function addVar(ix: number, term: Draft<Term>): void {
+export function addVar(ix: number, size: number, term: Draft<Term>): void {
   switch (term.term) {
     case 'func':
     case 'pi':
-      return addFuncVar(ix, term)
+      return addFuncVar(ix, size, term)
     case 'let':
-      return addLetVar(ix, term)
+      return addLetVar(ix, size, term)
     case 'var':
-      return addVarVar(ix, term)
+      return addVarVar(ix, size, term)
     case 'app':
-      return addAppVar(ix, term)
+      return addAppVar(ix, size, term)
   }
 }
 
-function addFuncVar(ix: number, term: Draft<TFunc | TPi>): void {
+function addFuncVar(ix: number, size: number, term: Draft<TFunc | TPi>): void {
   for (let i = 0; i < term.param.length; i++)
-    addVar(ix, term.param[i])
-  addVar(ix + term.param.length, term.body)
+    addVar(ix, size, term.param[i])
+  addVar(ix + term.param.length, size, term.body)
 }
 
-function addLetVar(ix: number, term: Draft<TLet>): void {
-  addVar(ix, term.body)
-  addVar(ix + 1, term.next)
+function addLetVar(ix: number, size: number, term: Draft<TLet>): void {
+  addVar(ix, size, term.body)
+  addVar(ix + 1, size, term.next)
 }
 
-function addVarVar(ix: number, term: Draft<TVar>): void {
-  if (term.ix >= ix) term.ix++
+function addVarVar(ix: number, size: number, term: Draft<TVar>): void {
+  if (term.ix >= ix) term.ix += size
 }
 
-function addAppVar(ix: number, term: Draft<TApp>): void {
-  addVar(ix, term.func)
+function addAppVar(ix: number, size: number, term: Draft<TApp>): void {
+  addVar(ix, size, term.func)
   for (let i = 0; i < term.arg.length; i++)
-    addVar(ix, term.arg[i])
+    addVar(ix, size, term.arg[i])
 }

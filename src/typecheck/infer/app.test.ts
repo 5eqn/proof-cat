@@ -1,22 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import { message } from 'antd'
-import { i18n } from '../../i18n'
 import { InferRequest } from "../model/infer"
-import { TApp, TVar } from "../model/term"
+import { TApp, Term, TVar } from "../model/term"
 import { VVar, VPi, VUni } from "../model/value"
 import { inferApp } from "./app"
-
-jest.mock('antd', () => {
-  const originalModule = jest.requireActual('antd')
-  return {
-    __esModule: true,
-    ...originalModule,
-    message: {
-      error: jest.fn(),
-    }
-  }
-})
-const mockError = jest.mocked(message.error)
 
 describe('inferApp function', () => {
   // Most recent var
@@ -84,6 +69,14 @@ describe('inferApp function', () => {
     func: mockTVarF,
   }
 
+  // f(T = x)(T = x)
+  const mockTAppBad: TApp = {
+    term: 'app',
+    argID: ['T'],
+    arg: [mockTVarX],
+    func: mockTApp,
+  }
+
   // Expected result
   const expected: VVar = mockVVarX
 
@@ -98,6 +91,16 @@ describe('inferApp function', () => {
     onChange: onChange,
   }
 
+  // Bad Infer request
+  const mockReqBad: InferRequest<TApp> = {
+    env: [mockVVarX, mockVVarF],
+    ctx: [mockVUni, mockVPi],
+    ns: ['x', 'f'],
+    depth: 0,
+    term: mockTAppBad,
+    onChange: onChange,
+  }
+
   beforeEach(() => {
     jest.clearAllMocks()
   })
@@ -108,12 +111,13 @@ describe('inferApp function', () => {
   })
 
   test('change in function should be forbidden', () => {
-    const { element } = inferApp(mockReq)
-    render(element)
-    const button = screen.getByTestId(`delete-${i18n.term.var}-1`)
-    fireEvent.click(button)
-    expect(mockError).toBeCalledWith(i18n.err.changeApply)
+    const { debug } = inferApp(mockReq)
+    expect(debug.onFuncChange((draft: Term) => draft)).toThrow()
     expect(onChange).toBeCalledTimes(0)
   })
+
+  // test('apply to non-function should not typecheck', () => {
+  //   expect(inferApp(mockReqBad)).toThrow()
+  // })
 })
 

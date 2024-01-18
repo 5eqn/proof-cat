@@ -201,13 +201,13 @@ describe('addVar function', () => {
 
   test('should increase variable index of posterior env', () => {
     const term = cloneDeep(before)
-    addVar(0, term)
+    addVar(0, 1, term)
     expect(term).toStrictEqual(expectedInsert0)
   })
 
   test('should not increase variable index of prior env', () => {
     const term = cloneDeep(before)
-    addVar(1, term)
+    addVar(1, 1, term)
     expect(term).toStrictEqual(expectedInsert1)
   })
 })

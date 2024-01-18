@@ -1,5 +1,5 @@
 import Named from "../component/Named";
-import { Term, TFunc, TPi } from "../typecheck/model/term";
+import { TFunc, TPi } from "../typecheck/model/term";
 import { InferRequest } from "../typecheck/model/infer";
 import { i18n } from "../i18n";
 import { mkAction } from "../typecheck/model/action";
@@ -15,8 +15,6 @@ export interface TermParamProps {
   param: JSX.Element
   // Context length after adding params
   len: number
-  // Body of function
-  body: Term
 }
 
 export function TermParam(props: TermParamProps): JSX.Element {
@@ -26,6 +24,7 @@ export function TermParam(props: TermParamProps): JSX.Element {
     depth={props.req.depth + 1}
     children={props.param}
     onDelete={() => props.req.onChange(mkAction({
+      // TODO this will create `any` on revert
       action: 'addParam',
       id: props.paramID,
       ix: props.paramIX,

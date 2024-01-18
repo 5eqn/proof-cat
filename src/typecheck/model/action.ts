@@ -70,7 +70,22 @@ export type ActionAddParam = {
   len: number,
 }
 
-export type Action = ActionUpdateVar
+export type ActionIdentity = {
+  action: 'identity',
+}
+
+export type ActionRemove = {
+  action: 'remove',
+  len: number,
+  // Should be shallow-copied from term before deletion
+  // Deletion process should not change deeper values except deleteVar
+  backup: Term,
+}
+
+export type Action =
+  | ActionRemove
+  | ActionIdentity
+  | ActionUpdateVar
   | ActionUpdateNum
   | ActionUpdateType
   | ActionBecomeNum
@@ -83,17 +98,23 @@ export type Action = ActionUpdateVar
   | ActionWrapLet
   | ActionAddParam
 
-export type ActionPack = {
+export type ActionPack<T, U> = {
   action: Action,
-  lens: (draft: Draft<Term>) => Draft<Term>,
+  lens: (draft: Draft<T>) => Draft<U>,
   undo: boolean,
 }
 
-export function mapAction(
-  { action, lens, undo }: ActionPack,
-  f: (draft: Draft<Term>) => Draft<Term>
-) {
-  const newLens = (draft: Draft<Term>) => lens(f(draft))
+export function revertAction<T, U>(
+  { action, lens, undo }: ActionPack<T, U>
+): ActionPack<T, U> {
+  return { action, lens, undo: !undo }
+}
+
+export function mapAction<T, U, V>(
+  { action, lens, undo }: ActionPack<U, V>,
+  f: (draft: Draft<T>) => Draft<U>
+): ActionPack<T, V> {
+  const newLens = (draft: Draft<T>) => lens(f(draft))
   return {
     action,
     lens: newLens,
@@ -101,10 +122,13 @@ export function mapAction(
   }
 }
 
-export function mkAction(action: Action, undo: boolean = false): ActionPack {
+export function mkAction<T>(
+  action: Action,
+  undo: boolean = false
+): ActionPack<T, T> {
   return {
     action,
-    lens: (draft: Draft<Term>) => draft,
+    lens: (draft: Draft<T>) => draft,
     undo,
   }
 }

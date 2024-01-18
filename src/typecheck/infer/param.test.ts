@@ -1,22 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import { message } from 'antd'
-import cloneDeep from 'lodash.clonedeep'
-import { i18n } from '../../i18n'
+import { onOverride } from '../action/onOverride'
 import { InferRequest } from "../model/infer"
-import { TAny, TFunc, TType, TUni, TVar } from "../model/term"
+import { TAny, Term, TFunc, TType, TUni, TVar } from "../model/term"
 import { inferFunc } from "./func"
-
-jest.mock('antd', () => {
-  const originalModule = jest.requireActual('antd')
-  return {
-    __esModule: true,
-    ...originalModule,
-    message: {
-      error: jest.fn(),
-    }
-  }
-})
-const mockError = jest.mocked(message.error)
 
 describe('inferParam function', () => {
   // Most recent var term
@@ -73,27 +58,10 @@ describe('inferParam function', () => {
     jest.clearAllMocks()
   })
 
-  test('change in unreferenced param should be reflected', () => {
-    const { element } = inferFunc(mockReq)
-    render(element)
-    const button = screen.getByTestId(`delete-${i18n.term.uni}-1`)
-    fireEvent.click(button)
-    expect(mockError).toBeCalledTimes(0)
-    expect(onChange).toBeCalledTimes(1)
-    const updater = onChange.mock.lastCall[0]
-    const term = cloneDeep(mockTFunc)
-    updater(term)
-    expect(term).toStrictEqual(expectedDeleteParam)
-  })
-
-
-  test('change in referenced param should be forbidden', () => {
-    const { element } = inferFunc(mockReq)
-    render(element)
-    const button = screen.getByTestId(`delete-${i18n.term.type}-1`)
-    fireEvent.click(button)
-    expect(mockError).toBeCalledWith(i18n.err.referred)
-    expect(onChange).toBeCalledTimes(0)
+  test('change in param should be reflected', () => {
+    const { debug } = inferFunc(mockReq)
+    debug.onArgChange[1]((term: Term) => onOverride(term, mockTAny))
+    expect(mockTFunc).toStrictEqual(expectedDeleteParam)
   })
 })
 

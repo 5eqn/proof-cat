@@ -7,7 +7,7 @@ import { deleteFields } from "./deleteFields";
 
 export function onLetDelete(len: number, draft: Draft<TLet>): void {
   assertNotOccur(len + 1, 0, draft.next)
-  deleteVar(0, draft.next)
+  deleteVar(0, 1, draft.next)
   const copy = { ...draft.next }
   deleteFields(draft)
   Object.assign(draft, copy)

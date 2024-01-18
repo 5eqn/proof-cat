@@ -5,6 +5,10 @@ import { Term } from "./typecheck/model/term";
 import { pretty } from "./typecheck/pretty";
 import { infer } from "./typecheck/infer";
 import { quote } from "./typecheck/quote";
+import { runAction } from "./typecheck/action";
+import { CodeActionError } from "./typecheck/model/error";
+import { message } from "antd";
+import { revertAction } from "./typecheck/model/action";
 
 function App() {
   const [state, setState] = useImmer<Term>({
@@ -16,8 +20,38 @@ function App() {
     ns: [],
     depth: 0,
     term: state,
-    onChange: (updater) => {
-      setState(updater)
+    onChange: (action) => {
+      try {
+        setState(draft => {
+          // Run action
+          runAction(action, draft)
+          try {
+            // Check if new term is well-typed
+            infer({
+              env: [],
+              ctx: [],
+              ns: [],
+              depth: 0,
+              term: draft,
+              onChange: (_) => true,
+            })
+          } catch (e) {
+            // If not, revert action and throw error
+            runAction(revertAction(action), draft)
+            throw e;
+          }
+        })
+      } catch (e) {
+        if (e instanceof CodeActionError) {
+          // Handle predefined error
+          message.error(e.toString())
+          return false;
+        } else {
+          // Unexpected error
+          throw e;
+        }
+      }
+      return true;
     },
   })
   const tytm = quote(0, val)

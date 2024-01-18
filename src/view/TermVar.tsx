@@ -3,8 +3,8 @@ import { i18n } from "../i18n";
 import { TVar } from "../typecheck/model/term";
 import { TermHeader } from "./TermHeader";
 import { TermPropsBase } from "../typecheck/model/props";
-import { onVarUpdate } from "../typecheck/action/onVarUpdate";
 import { InferRequest } from "../typecheck/model/infer";
+import { mkAction } from "../typecheck/model/action";
 
 export interface TermVarProps extends TermPropsBase<TVar> { }
 
@@ -21,7 +21,13 @@ export function TermVar(props: TermVarProps): JSX.Element {
       depth={depth}
       data={ns}
       index={term.ix}
-      onChange={(ix) => onChange(onVarUpdate(ix, ns))}
+      onChange={(ix) => onChange(mkAction({
+        action: 'updateVar',
+        oldID: term.id,
+        oldIX: term.ix,
+        newID: ns[ix],
+        newIX: ix,
+      }))}
     />
   </div>
 }
