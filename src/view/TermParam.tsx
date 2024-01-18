@@ -13,8 +13,6 @@ export interface TermParamProps {
   paramIX: number
   // Rendered element of param
   param: JSX.Element
-  // Context length after adding params
-  len: number
 }
 
 export function TermParam(props: TermParamProps): JSX.Element {
@@ -28,7 +26,7 @@ export function TermParam(props: TermParamProps): JSX.Element {
       action: 'addParam',
       id: props.paramID,
       ix: props.paramIX,
-      len: props.len,
+      envLen: props.req.ns.length,
     }, true))}
   />
 }

@@ -35,7 +35,7 @@ function runUndo(
     case 'identity':
       return
     case 'remove':
-      return onRevertRemove(action.len, action.backup, term)
+      return onRevertRemove(action.envLen, action.backup, term)
     case 'updateVar':
       return onVarUpdate(
         action.oldID,
@@ -53,7 +53,7 @@ function runUndo(
         term,
       )
     case 'addParam':
-      return onFuncDelete(action.ix, action.len, term)
+      return onFuncDelete(action.ix, action.envLen, term)
     case 'wrapPi':
       return onOverride(term, term.body)
     case 'wrapFunc':
@@ -76,7 +76,7 @@ function runDo(
     case 'identity':
       return
     case 'remove':
-      return onRemove(action.len, term)
+      return onRemove(action.envLen, term)
     case 'updateVar':
       return onVarUpdate(
         action.newID,

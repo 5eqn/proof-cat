@@ -22,7 +22,7 @@ export function TermPi(props: TermPiProps): JSX.Element {
         action: 'addParam',
         id: name,
         ix: 0,
-        len: ns.length,
+        envLen: ns.length,
       }))}
     />
     {props.params}

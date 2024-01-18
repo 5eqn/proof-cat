@@ -66,8 +66,7 @@ export type ActionAddParam = {
   action: 'addParam',
   id: string,
   ix: number,
-  // Length including env length and param length
-  len: number,
+  envLen: number,
 }
 
 export type ActionIdentity = {
@@ -76,7 +75,7 @@ export type ActionIdentity = {
 
 export type ActionRemove = {
   action: 'remove',
-  len: number,
+  envLen: number,
   // Should be shallow-copied from term before deletion
   // Deletion process should not change deeper values except deleteVar
   backup: Term,

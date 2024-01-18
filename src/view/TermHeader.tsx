@@ -19,7 +19,7 @@ export function TermHeader(props: TermHeaderProps): JSX.Element {
     onDelete={() => onChange(mkAction({
       action: 'remove',
       backup: { ...term },
-      len: ns.length,
+      envLen: ns.length,
     }))}
     onWrapLet={(name: string) => onChange(mkAction({
       action: 'wrapLet',

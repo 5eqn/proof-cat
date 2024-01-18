@@ -176,7 +176,6 @@ describe('onLetDelete function', () => {
 
   test('deleting used definition should be forbidden', () => {
     const term = cloneDeep(beforeUsed)
-    onLetDelete(2, term)
-    expect(term).toStrictEqual(beforeUsed)
+    expect(() => onLetDelete(2, term)).toThrow()
   })
 })

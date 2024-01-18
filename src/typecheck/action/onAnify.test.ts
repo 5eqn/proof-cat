@@ -23,7 +23,7 @@ describe('onAnify function', () => {
   }
 
   // Application after action
-  const expectedApp: TNum = beforeNormal
+  const expectedApp: TAny = expectedNormal
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -35,7 +35,7 @@ describe('onAnify function', () => {
     expect(term).toStrictEqual(expectedNormal)
   })
 
-  test('should remove one layer of application', () => {
+  test('should remove recursively', () => {
     const term = cloneDeep(beforeApp)
     onAnify(term)
     expect(term).toStrictEqual(expectedApp)

@@ -93,8 +93,7 @@ describe('onWrapApp function', () => {
 
   test('should not apply to non-function', () => {
     const term = cloneDeep(nonFunction)
-    onWrapApp(ctx[1], term)
-    expect(term).toStrictEqual(nonFunction)
+    expect(() => onWrapApp(ctx[1], term)).toThrow()
   })
 })
 

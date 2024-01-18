@@ -14,5 +14,5 @@ export function onWrapLet(name: string, draft: Draft<Term>): void {
     term: 'any',
   }
   tm.next = copy
-  addVar(0, tm.next)
+  addVar(0, 1, tm.next)
 }

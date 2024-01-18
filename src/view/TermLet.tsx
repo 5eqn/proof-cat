@@ -18,7 +18,7 @@ export function TermLet(props: TermLetProps): JSX.Element {
       onDelete={() => onChange(mkAction({
         action: 'remove',
         backup: { ...term },
-        len: env.length,
+        envLen: env.length,
       }))}
     >
       {props.body}

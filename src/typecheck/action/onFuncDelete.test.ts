@@ -79,8 +79,7 @@ describe('onFuncDelete function', () => {
 
   test('deleting used param should be forbidden', () => {
     const term = cloneDeep(before)
-    onFuncDelete(1, 0, term)
-    expect(term).toStrictEqual(before)
+    expect(() => onFuncDelete(1, 0, term)).toThrow()
   })
 })
 

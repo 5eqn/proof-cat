@@ -61,7 +61,7 @@ describe('onRevertRemove function', () => {
     const term = cloneDeep(tPiAfter)
     const backup = { ...term }
     onRemove(1, term)
-    onRevertRemove(1, backup, term)
+    onRevertRemove(0, backup, term)
     expect(term).toStrictEqual(tPiAfter)
   })
 
@@ -69,7 +69,7 @@ describe('onRevertRemove function', () => {
     const term = cloneDeep(tLetAfter)
     const backup = { ...term }
     onRemove(1, term)
-    onRevertRemove(1, backup, term)
+    onRevertRemove(0, backup, term)
     expect(term).toStrictEqual(tLetAfter)
   })
 
