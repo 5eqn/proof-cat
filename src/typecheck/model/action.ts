@@ -16,6 +16,12 @@ export type ActionUpdateNum = {
   newNum: number,
 }
 
+export type ActionUpdateType = {
+  action: 'updateType',
+  oldType: string,
+  newType: string,
+}
+
 export type ActionBecomeNum = {
   action: 'becomeNum',
   num: number,
@@ -23,7 +29,7 @@ export type ActionBecomeNum = {
 
 export type ActionBecomeType = {
   action: 'becomeType',
-  type: string,
+  name: string,
 }
 
 export type ActionBecomeU = {
@@ -58,7 +64,7 @@ export type ActionWrapLet = {
 
 export type ActionAddParam = {
   action: 'addParam',
-  name: string,
+  id: string,
   ix: number,
   // Length including env length and param length
   len: number,
@@ -66,6 +72,7 @@ export type ActionAddParam = {
 
 export type Action = ActionUpdateVar
   | ActionUpdateNum
+  | ActionUpdateType
   | ActionBecomeNum
   | ActionBecomeType
   | ActionBecomeU
@@ -80,4 +87,24 @@ export type ActionPack = {
   action: Action,
   lens: (draft: Draft<Term>) => Draft<Term>,
   undo: boolean,
+}
+
+export function mapAction(
+  { action, lens, undo }: ActionPack,
+  f: (draft: Draft<Term>) => Draft<Term>
+) {
+  const newLens = (draft: Draft<Term>) => lens(f(draft))
+  return {
+    action,
+    lens: newLens,
+    undo,
+  }
+}
+
+export function mkAction(action: Action, undo: boolean = false): ActionPack {
+  return {
+    action,
+    lens: (draft: Draft<Term>) => draft,
+    undo,
+  }
 }

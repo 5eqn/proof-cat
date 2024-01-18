@@ -1,9 +1,7 @@
 import { Draft } from "immer";
-import { Term } from "../model/term";
 import { deleteFields } from "./deleteFields";
 
-// Code action: anify
-export function onOverride(draft: Draft<Term>, to: Term): void {
+export function onOverride(draft: Draft<any>, to: any): void {
   deleteFields(draft)
   Object.assign(draft, to)
 }
