@@ -1,7 +1,5 @@
 import { InferRequest, InferResult } from "../model/infer";
 import { TApp, Term } from "../model/term";
-import { message } from "antd";
-import { i18n } from "../../i18n";
 import { evaluate } from "../evaluate";
 import { Val, VPi } from "../model/value";
 import { apply } from "../model/closure";
@@ -9,6 +7,7 @@ import { TermApp } from "../../view/TermApp";
 
 import { infer } from "./index";
 import { inferArg } from "./arg";
+import { ErrorChangeApply } from "../model/error";
 
 export function inferApp(req: InferRequest<TApp>): InferResult {
   // Get type from function's Pi type's destination type
@@ -19,7 +18,7 @@ export function inferApp(req: InferRequest<TApp>): InferResult {
     term: term.func,
     onChange: () => {
       // Applied term should not change
-      message.error(i18n.err.changeApply)
+      throw new ErrorChangeApply()
     }
   })
   const funcType: VPi = funcVal as VPi

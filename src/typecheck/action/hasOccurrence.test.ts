@@ -1,5 +1,5 @@
 import { TLet } from "../model/term"
-import { hasOccurrence } from './hasOccurrence'
+import { assertNotOccur } from './hasOccurrence'
 
 describe('hasOccurrence function', () => {
   // Context: [Z: U, T: U]
@@ -71,10 +71,10 @@ describe('hasOccurrence function', () => {
   })
 
   test('should report occurrence', () => {
-    expect(hasOccurrence(2, 1, term)).toBe(true)
+    expect(assertNotOccur(2, 1, term)).toBe(true)
   })
 
   test('should report absence', () => {
-    expect(hasOccurrence(2, 0, term)).toBe(false)
+    expect(assertNotOccur(2, 0, term)).toBe(false)
   })
 })

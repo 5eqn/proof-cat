@@ -170,13 +170,13 @@ describe('onLetDelete function', () => {
 
   test('deleting unused definition should be OK', () => {
     const term = cloneDeep(beforeUnused)
-    onLetDelete(2, term.next)(term)
+    onLetDelete(2, term)
     expect(term).toStrictEqual(expected)
   })
 
   test('deleting used definition should be forbidden', () => {
     const term = cloneDeep(beforeUsed)
-    onLetDelete(2, term.next)(term)
+    onLetDelete(2, term)
     expect(term).toStrictEqual(beforeUsed)
   })
 })

@@ -1,7 +1,5 @@
 import { InferRequest, InferResult } from "../model/infer";
 import { TFunc, TPi } from "../model/term";
-import { hasOccurrence } from "../action/hasOccurrence";
-import { i18n } from "../../i18n";
 import { TermParam } from "../../view/TermParam";
 
 import { infer } from "./index";
@@ -19,7 +17,6 @@ export function inferParam(req: InferRequest<TFunc | TPi>): JSX.Element[] {
     onChange: mapCallback(
       onChange,
       (draft: Draft<TFunc | TPi>) => draft.param[i],
-      hasOccurrence(len, i, term.body) ? i18n.err.referred : undefined
     )
   }))
   // Construct element for params
