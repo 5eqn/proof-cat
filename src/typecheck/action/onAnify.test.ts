@@ -18,7 +18,7 @@ describe('onAnify function', () => {
   const beforeApp: TApp = {
     term: 'app',
     argID: [],
-    argIX: [],
+    arg: [],
     func: beforeNormal,
   }
 
@@ -41,4 +41,3 @@ describe('onAnify function', () => {
     expect(term).toStrictEqual(expectedApp)
   })
 })
-

@@ -27,7 +27,7 @@ describe('onWrapFunc function', () => {
 
   test('should make term wrapped with function with default param', () => {
     const term = cloneDeep(before)
-    onWrapFunc('1145')(term)
+    onWrapFunc('1145', term)
     expect(term).toStrictEqual(expected)
   })
 })

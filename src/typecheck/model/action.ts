@@ -10,6 +10,12 @@ export type ActionUpdateVar = {
   newIX: number,
 }
 
+export type ActionUpdateNum = {
+  action: 'updateNum',
+  oldNum: number,
+  newNum: number,
+}
+
 export type ActionBecomeNum = {
   action: 'becomeNum',
   num: number,
@@ -26,7 +32,8 @@ export type ActionBecomeU = {
 
 export type ActionBecomeVar = {
   action: 'becomeVar',
-  ns: string[],
+  id: string,
+  ix: number,
 }
 
 export type ActionWrapApp = {
@@ -58,11 +65,10 @@ export type ActionAddParam = {
 }
 
 export type Action = ActionUpdateVar
+  | ActionUpdateNum
   | ActionBecomeNum
   | ActionBecomeType
   | ActionBecomeU
-  | ActionBecomeVar
-  | ActionWrapApp
   | ActionBecomeVar
   | ActionWrapApp
   | ActionWrapFunc

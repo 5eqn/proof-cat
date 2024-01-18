@@ -17,12 +17,24 @@ describe('addVar function', () => {
       term: 'app',
       // x = a
       argID: ['x'],
-      argIX: [0],
+      arg: [
+        {
+          term: 'var',
+          id: 'a',
+          ix: 0,
+        },
+      ],
       func: {
         term: 'app',
         // T = number
         argID: ['T'],
-        argIX: [1],
+        arg: [
+          {
+            term: 'var',
+            id: 'T',
+            ix: 1,
+          }
+        ],
         func: {
           // T: U
           term: 'func',
@@ -68,13 +80,25 @@ describe('addVar function', () => {
       term: 'app',
       // x = a
       argID: ['x'],
-      argIX: [0],
+      arg: [
+        {
+          term: 'var',
+          id: 'a',
+          ix: 0,
+        },
+      ],
       func: {
         term: 'app',
         // T = number
         // Index increases because variable is added inside scope of T
         argID: ['T'],
-        argIX: [2],
+        arg: [
+          {
+            term: 'var',
+            id: 'T',
+            ix: 2,
+          },
+        ],
         func: {
           // T: U
           term: 'func',
@@ -120,13 +144,25 @@ describe('addVar function', () => {
       term: 'app',
       // x = a
       argID: ['x'],
-      argIX: [0],
+      arg: [
+        {
+          term: 'var',
+          id: 'a',
+          ix: 0,
+        }
+      ],
       func: {
         term: 'app',
         // T = number
         // Index stay the same because variable is only added outside scope of T
         argID: ['T'],
-        argIX: [1],
+        arg: [
+          {
+            term: 'var',
+            id: 'T',
+            ix: 1,
+          }
+        ],
         func: {
           // T: U
           term: 'func',

@@ -4,7 +4,7 @@ import { Term, TLet } from "../model/term";
 import { addVar } from "./addVar";
 import { deleteFields } from "./deleteFields";
 
-function _onWrapLet(name: string, draft: Draft<Term>): void {
+export function onWrapLet(name: string, draft: Draft<Term>): void {
   const copy = { ...draft }
   const tm = draft as TLet
   deleteFields(tm)
@@ -16,6 +16,3 @@ function _onWrapLet(name: string, draft: Draft<Term>): void {
   tm.next = copy
   addVar(0, tm.next)
 }
-
-export const onWrapLet = (name: string) => (draft: Draft<Term>) =>
-  _onWrapLet(name, draft)

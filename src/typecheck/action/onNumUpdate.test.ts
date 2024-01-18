@@ -21,7 +21,7 @@ describe('onNumUpdate function', () => {
 
   test('should change num correctly', () => {
     const term = cloneDeep(before)
-    onNumUpdate(514)(term)
+    onNumUpdate(514, term)
     expect(term).toStrictEqual(expected)
   })
 })

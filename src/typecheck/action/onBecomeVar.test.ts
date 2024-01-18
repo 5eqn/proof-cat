@@ -16,23 +16,14 @@ describe('onBecomeVar function', () => {
     ix: 0,
   }
 
-  // Namespace
-  const ns: string[] = ['first', 'second', 'third']
-
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
-  test('should make term the first variable in context if exist', () => {
+  test('should make term a variable', () => {
     const term = cloneDeep(before)
-    onBecomeVar(ns)(term)
+    onBecomeVar('first', 0, term)
     expect(term).toStrictEqual(expected)
-  })
-
-  test('should do nothing if no variable in context', () => {
-    const term = cloneDeep(before)
-    onBecomeVar([])(term)
-    expect(term).toStrictEqual(before)
   })
 })
 

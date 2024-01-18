@@ -33,7 +33,7 @@ function occurInLet(len: number, ix: number, term: TLet): boolean {
 
 function occurInApp(len: number, ix: number, term: TApp): boolean {
   const occurInFunc: boolean = hasOccurrence(len, ix, term.func)
-  const occurInArg: boolean = term.argIX
+  const occurInArg: boolean = term.arg
     .map((x: number) => x === ix)
     .reduce((x: boolean, y: boolean) => x || y, false)
   return occurInFunc || occurInArg

@@ -14,7 +14,7 @@ export interface TermArgProps extends TermPropsBase<TApp> {
   // The argument index in context
   globalIX: number
   // The argument index in local
-  argIX: number
+  arg: number
 }
 
 export function TermArg(props: TermArgProps): JSX.Element {
@@ -37,7 +37,7 @@ export function TermArg(props: TermArgProps): JSX.Element {
       index={invSel[props.globalIX]}
       onChange={(localIX: number) => onChange(onArgUpdate(
         selection[localIX],
-        props.argIX,
+        props.arg,
       ))}
     />
   </Named>

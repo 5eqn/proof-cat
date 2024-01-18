@@ -42,7 +42,7 @@ export const sample: Term = {
                     ix: 0
                 },
             },
-            argIX: [1, 0],
+            arg: [1, 0],
             argID: [
                 'x',
                 'y',

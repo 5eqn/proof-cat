@@ -53,7 +53,7 @@ Visually manipulate the Abstract Syntax Tree of a dependently-typed language wit
   const innerApp: TApp = {
     term: 'app',
     argID: ['a', 'b', 'c'],
-    argIX: [2, 1, 0], 
+    arg: [2, 1, 0], 
     func: varF,
   }
 
@@ -110,12 +110,12 @@ Visually manipulate the Abstract Syntax Tree of a dependently-typed language wit
       term: 'app',
       // x = a
       argID: ['x'],
-      argIX: [0],
+      arg: [0],
       func: {
         term: 'app',
         // T = number
         argID: ['T'],
-        argIX: [1],
+        arg: [1],
         func: {
           // T: U
           term: 'func',
