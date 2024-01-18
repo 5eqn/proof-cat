@@ -73,13 +73,13 @@ describe('onFuncDelete function', () => {
 
   test('deleting unused param should be OK', () => {
     const term = cloneDeep(before)
-    onFuncDelete(0, 0, term.body)(term)
+    onFuncDelete(0, 0, term)
     expect(term).toStrictEqual(expected)
   })
 
   test('deleting used param should be forbidden', () => {
     const term = cloneDeep(before)
-    onFuncDelete(1, 0, term.body)(term)
+    onFuncDelete(1, 0, term)
     expect(term).toStrictEqual(before)
   })
 })

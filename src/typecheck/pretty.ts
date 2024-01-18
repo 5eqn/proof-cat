@@ -36,7 +36,7 @@ function prettyPi(ns: string[], term: TPi): string {
 }
 
 function prettyApp(ns: string[], term: TApp): string {
-  return `${pretty(ns, term.func)}(${term.argIX.map((ix, i) => `${term.argID[i]} = ${ns[ix]}`).join(', ')})`
+  return `${pretty(ns, term.func)}(${term.arg.map((ix, i) => `${term.argID[i]} = ${ns[ix]}`).join(', ')})`
 }
 
 function prettyLet(ns: string[], term: TLet): string {

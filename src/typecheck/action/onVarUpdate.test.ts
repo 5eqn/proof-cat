@@ -23,7 +23,7 @@ describe('onVarUpdate function', () => {
 
   test('should change var correctly', () => {
     const term = cloneDeep(before)
-    onVarUpdate(1, ['before', 'after'])(term)
+    onVarUpdate('after', 1, term)
     expect(term).toStrictEqual(expected)
   })
 })

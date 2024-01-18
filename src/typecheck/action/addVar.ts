@@ -33,7 +33,7 @@ function addVarVar(ix: number, term: Draft<TVar>): void {
 
 function addAppVar(ix: number, term: Draft<TApp>): void {
   addVar(ix, term.func)
-  for (let i = 0; i < term.argIX.length; i++)
-    if (term.argIX[i] >= ix)
-      term.argIX[i]++
+  for (let i = 0; i < term.arg.length; i++)
+    if (term.arg[i] >= ix)
+      term.arg[i]++
 }

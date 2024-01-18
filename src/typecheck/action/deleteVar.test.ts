@@ -17,12 +17,24 @@ describe('deleteVar function', () => {
       term: 'app',
       // x = a
       argID: ['x'],
-      argIX: [0],
+      arg: [
+        {
+          term: 'var',
+          id: 'a',
+          ix: 0,
+        }
+      ],
       func: {
         term: 'app',
         // T = number
         argID: ['T'],
-        argIX: [2],
+        arg: [
+          {
+            term: 'var',
+            id: 'T',
+            ix: 2,
+          }
+        ],
         func: {
           // T: U
           term: 'func',
@@ -68,13 +80,25 @@ describe('deleteVar function', () => {
       term: 'app',
       // x = a
       argID: ['x'],
-      argIX: [0],
+      arg: [
+        {
+          term: 'var',
+          id: 'a',
+          ix: 0,
+        }
+      ],
       func: {
         term: 'app',
         // T = number
         // Index decreases because a variable before T is deleted
         argID: ['T'],
-        argIX: [1],
+        arg: [
+          {
+            term: 'var',
+            id: 'T',
+            ix: 1,
+          }
+        ],
         func: {
           // T: U
           term: 'func',
@@ -120,13 +144,25 @@ describe('deleteVar function', () => {
       term: 'app',
       // x = a
       argID: ['x'],
-      argIX: [0],
+      arg: [
+        {
+          term: 'var',
+          id: 'a',
+          ix: 0,
+        }
+      ],
       func: {
         term: 'app',
         // T = number
         // Index stay the same because only variable outside T is deleted
         argID: ['T'],
-        argIX: [2],
+        arg: [
+          {
+            term: 'var',
+            id: 'T',
+            ix: 2,
+          }
+        ],
         func: {
           // T: U
           term: 'func',
@@ -175,4 +211,3 @@ describe('deleteVar function', () => {
     expect(term).toStrictEqual(expectedDelete2)
   })
 })
-

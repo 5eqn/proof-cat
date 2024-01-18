@@ -21,7 +21,7 @@ describe('onBecomeNum function', () => {
 
   test('should make term a num', () => {
     const term = cloneDeep(before)
-    onBecomeNum(456)(term)
+    onBecomeNum(456, term)
     expect(term).toStrictEqual(expected)
   })
 })

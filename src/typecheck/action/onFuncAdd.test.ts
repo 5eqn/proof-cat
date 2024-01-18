@@ -71,9 +71,9 @@ describe('onFuncAdd function', () => {
     jest.clearAllMocks()
   })
 
-  test('should insert param at index 0', () => {
+  test('should insert param properly', () => {
     const term = cloneDeep(before)
-    onFuncAdd('A')(term)
+    onFuncAdd(0, 'A', term)
     expect(term).toStrictEqual(expected)
   })
 })

@@ -16,12 +16,24 @@ describe('hasOccurrence function', () => {
       term: 'app',
       // x = a
       argID: ['x'],
-      argIX: [0],
+      arg: [
+        {
+          term: 'var',
+          id: 'a',
+          ix: 0,
+        }
+      ],
       func: {
         term: 'app',
         // T = number
         argID: ['T'],
-        argIX: [2],
+        arg: [
+          {
+            term: 'var',
+            id: 'T',
+            ix: 2,
+          }
+        ],
         func: {
           // T: U
           term: 'func',
@@ -66,4 +78,3 @@ describe('hasOccurrence function', () => {
     expect(hasOccurrence(2, 0, term)).toBe(false)
   })
 })
-

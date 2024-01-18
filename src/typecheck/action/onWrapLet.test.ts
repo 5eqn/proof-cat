@@ -10,7 +10,13 @@ describe('onWrapLet function', () => {
     // T = number
     argID: ['T'],
     // Index decreases because `a` is deleted
-    argIX: [1],
+    arg: [
+      {
+        term: 'var',
+        id: 'T',
+        ix: 1,
+      }
+    ],
     func: {
       // T: U
       term: 'func',
@@ -53,7 +59,13 @@ describe('onWrapLet function', () => {
       term: 'app',
       // T = number
       argID: ['T'],
-      argIX: [2],
+      arg: [
+        {
+          term: 'var',
+          id: 'T',
+          ix: 2,
+        }
+      ],
       func: {
         // T: U
         term: 'func',
@@ -91,8 +103,7 @@ describe('onWrapLet function', () => {
 
   test('should add definition and increase env index', () => {
     const term = cloneDeep(before)
-    onWrapLet('a')(term)
+    onWrapLet('a', term)
     expect(term).toStrictEqual(expected)
   })
 })
-

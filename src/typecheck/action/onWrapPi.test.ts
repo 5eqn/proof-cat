@@ -27,7 +27,7 @@ describe('onWrapPi pition', () => {
 
   test('should make term wrapped with pi with default param', () => {
     const term = cloneDeep(before)
-    onWrapPi('1145')(term)
+    onWrapPi('1145', term)
     expect(term).toStrictEqual(expected)
   })
 })

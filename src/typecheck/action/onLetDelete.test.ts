@@ -17,12 +17,24 @@ describe('onLetDelete function', () => {
       term: 'app',
       // x = a
       argID: ['x'],
-      argIX: [0],
+      arg: [
+        {
+          term: 'var',
+          id: 'a',
+          ix: 0,
+        }
+      ],
       func: {
         term: 'app',
         // T = number
         argID: ['T'],
-        argIX: [2],
+        arg: [
+          {
+            term: 'var',
+            id: 'T',
+            ix: 2,
+          }
+        ],
         func: {
           // T: U
           term: 'func',
@@ -69,7 +81,13 @@ describe('onLetDelete function', () => {
       term: 'app',
       // T = number
       argID: ['T'],
-      argIX: [2],
+      arg: [
+        {
+          term: 'var',
+          id: 'T',
+          ix: 2,
+        }
+      ],
       func: {
         // T: U
         term: 'func',
@@ -108,7 +126,13 @@ describe('onLetDelete function', () => {
     // T = number
     argID: ['T'],
     // Index decreases because `a` is deleted
-    argIX: [1],
+    arg: [
+      {
+        term: 'var',
+        id: 'T',
+        ix: 1,
+      }
+    ],
     func: {
       // T: U
       term: 'func',
@@ -156,4 +180,3 @@ describe('onLetDelete function', () => {
     expect(term).toStrictEqual(beforeUsed)
   })
 })
-

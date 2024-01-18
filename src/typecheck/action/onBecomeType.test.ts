@@ -21,7 +21,7 @@ describe('onBecomeType function', () => {
 
   test('should make term a type', () => {
     const term = cloneDeep(before)
-    onBecomeType('456$^')(term)
+    onBecomeType('456$^', term)
     expect(term).toStrictEqual(expected)
   })
 })

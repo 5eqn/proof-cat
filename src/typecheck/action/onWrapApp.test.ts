@@ -65,14 +65,10 @@ describe('onWrapApp function', () => {
     argID: ['ain', 'T'],
     arg: [
       {
-        term: 'var',
-        id: 'a',
-        ix: 1,
+        term: 'any',
       },
       {
-        term: 'var',
-        id: 'A',
-        ix: 0,
+        term: 'any',
       },
     ],
     func: before,
@@ -85,33 +81,20 @@ describe('onWrapApp function', () => {
     ix: 1,
   }
 
-  // Bad function
-  const badFunction: Term = {
-    term: 'var',
-    id: 'bad',
-    ix: 3,
-  }
-
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
-  test('auto find in context and preserve order when applying arguments', () => {
+  test('should apply any to function', () => {
     const term = cloneDeep(before)
-    onWrapApp(ctx[2], ctx)(term)
+    onWrapApp(ctx[2], term)
     expect(term).toStrictEqual(expected)
   })
 
   test('should not apply to non-function', () => {
     const term = cloneDeep(nonFunction)
-    onWrapApp(ctx[1], ctx)(term)
+    onWrapApp(ctx[1], term)
     expect(term).toStrictEqual(nonFunction)
-  })
-
-  test('should not apply argument to function if not found in context', () => {
-    const term = cloneDeep(badFunction)
-    onWrapApp(ctx[3], ctx)(term)
-    expect(term).toStrictEqual(badFunction)
   })
 })
 
