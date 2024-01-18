@@ -17,7 +17,7 @@ export type InferRequest<T> = {
   // Term to be inferred
   term: T,
   // Callback of code actions
-  onChange: Callback<T>,
+  onChange: Callback,
 }
 // Result after inferring the type of a term
 export type InferResult = {

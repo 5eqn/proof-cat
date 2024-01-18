@@ -1,26 +1,26 @@
 import { Popconfirm } from "antd"
 import { HTMLAttributes, useState } from "react"
 import Button from "./Button"
-import Input from "./Input"
+import Select from "./Select"
 
-interface InputButtonProps extends Pick<HTMLAttributes<HTMLElement>, 'children'> {
-  // Placeholder
-  placeholder?: string
+interface SelectButtonProps extends Pick<HTMLAttributes<HTMLElement>, 'children'> {
   // Title
   title?: string
+  // Data
+  data: string[]
   // Called when confirm input value
-  onConfirm: (name: string) => boolean
+  onConfirm: (id: string, ix: number) => boolean
   // Testing
   'data-testid'?: string
 }
 
-export default function InputButton(props: InputButtonProps) {
-  const [name, setName] = useState('')
+export default function SelectButton(props: SelectButtonProps) {
+  const [ix, setIX] = useState(0)
   const [open, setOpen] = useState(false)
-  const form: JSX.Element = <Input
-    placeholder={props.placeholder}
-    value={name}
-    onChange={(e) => setName(e.target.value)}
+  const form: JSX.Element = <Select
+    data={props.data}
+    index={ix}
+    onChange={setIX}
   />
   return <div>
     <Popconfirm
@@ -29,7 +29,7 @@ export default function InputButton(props: InputButtonProps) {
       open={open}
       onCancel={() => setOpen(false)}
       onConfirm={() => {
-        if (props.onConfirm(name)) setOpen(false)
+        if (props.onConfirm(props.data[ix], ix)) setOpen(false)
       }}>
       <Button
         onClick={() => setOpen(!open)}

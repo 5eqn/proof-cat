@@ -35,6 +35,5 @@ function deleteVarVar(ix: number, term: Draft<TVar>): void {
 function deleteAppVar(ix: number, term: Draft<TApp>): void {
   deleteVar(ix, term.func)
   for (let i = 0; i < term.arg.length; i++)
-    if (term.arg[i] > ix)
-      term.arg[i]--
+    deleteVar(ix, term.arg[i])
 }

@@ -10,6 +10,7 @@ import { onFuncAdd } from "./onFuncAdd";
 import { onFuncDelete } from "./onFuncDelete";
 import { onNumUpdate } from "./onNumUpdate";
 import { onOverride } from "./onOverride";
+import { onTypeUpdate } from "./onTypeUpdate";
 import { onVarUpdate } from "./onVarUpdate";
 import { onWrapApp } from "./onWrapApp";
 import { onWrapFunc } from "./onWrapFunc";
@@ -34,6 +35,11 @@ function runUndo({ action, lens }: ActionPack, draft: Draft<Term>): void {
     case 'updateNum':
       return onNumUpdate(
         action.oldNum,
+        term,
+      )
+    case 'updateType':
+      return onTypeUpdate(
+        action.oldType,
         term,
       )
     case 'addParam':
@@ -65,8 +71,13 @@ function runDo({ action, lens }: ActionPack, draft: Draft<Term>): void {
         action.newNum,
         term,
       )
+    case 'updateType':
+      return onTypeUpdate(
+        action.newType,
+        term,
+      )
     case 'addParam':
-      return onFuncAdd(action.ix, action.name, term)
+      return onFuncAdd(action.ix, action.id, term)
     case 'wrapPi':
       return onWrapPi(action.name, term)
     case 'wrapFunc':
@@ -78,7 +89,7 @@ function runDo({ action, lens }: ActionPack, draft: Draft<Term>): void {
     case 'becomeU':
       return onBecomeU(term)
     case 'becomeType':
-      return onBecomeType(action.type, term)
+      return onBecomeType(action.name, term)
     case 'becomeNum':
       return onBecomeNum(action.num, term)
     case 'becomeVar':
