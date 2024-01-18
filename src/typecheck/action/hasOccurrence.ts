@@ -1,40 +1,34 @@
 // Does Var(ix) occur in term? (can only be referred in Var or App)
+import { ErrorReferredRaw } from "../model/error";
 import { TApp, Term, TFunc, TLet, TPi } from "../model/term";
 
-export function hasOccurrence(len: number, ix: number, term: Term): boolean {
+export function assertNotOccur(len: number, ix: number, term: Term): void {
   switch (term.term) {
     case 'func':
     case 'pi':
-      return occurInFunc(len, ix, term)
+      return assertInFunc(len, ix, term)
     case 'let':
-      return occurInLet(len, ix, term)
+      return assertInLet(len, ix, term)
     case 'var':
-      return term.ix === ix
+      if (term.ix === ix) throw new ErrorReferredRaw()
+      break
     case 'app':
-      return occurInApp(len, ix, term)
+      return assertInApp(len, ix, term)
   }
-  return false
 }
 
-function occurInFunc(len: number, ix: number, term: TPi | TFunc): boolean {
-  const occurInParam: boolean = term.param
-    .map((t: Term) => hasOccurrence(len, ix, t))
-    .reduce((x: boolean, y: boolean) => x || y, false)
+function assertInFunc(len: number, ix: number, term: TPi | TFunc): void {
+  term.param.forEach((t: Term) => assertNotOccur(len, ix, t))
   const l: number = term.param.length
-  const occurInFBody: boolean = hasOccurrence(len + l, ix + l, term.body)
-  return occurInParam || occurInFBody
+  assertNotOccur(len + l, ix + l, term.body)
 }
 
-function occurInLet(len: number, ix: number, term: TLet): boolean {
-  const occurInBody: boolean = hasOccurrence(len, ix, term.body)
-  const occurInNext: boolean = hasOccurrence(len + 1, ix + 1, term.next)
-  return occurInBody || occurInNext
+function assertInLet(len: number, ix: number, term: TLet): void {
+  assertNotOccur(len, ix, term.body)
+  assertNotOccur(len + 1, ix + 1, term.next)
 }
 
-function occurInApp(len: number, ix: number, term: TApp): boolean {
-  const occurInFunc: boolean = hasOccurrence(len, ix, term.func)
-  const occurInArg: boolean = term.arg
-    .map((x: number) => x === ix)
-    .reduce((x: boolean, y: boolean) => x || y, false)
-  return occurInFunc || occurInArg
+function assertInApp(len: number, ix: number, term: TApp): void {
+  assertNotOccur(len, ix, term.func)
+  term.arg.forEach((t: Term) => assertNotOccur(len, ix, t))
 }

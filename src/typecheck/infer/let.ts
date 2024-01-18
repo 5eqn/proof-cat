@@ -5,8 +5,6 @@ import { TermLet } from "../../view/TermLet";
 import { infer } from "./index";
 import { mapCallback } from "../model/callback";
 import { Draft } from "immer";
-import { hasOccurrence } from "../action/hasOccurrence";
-import { i18n } from "../../i18n";
 
 export function inferLet(req: InferRequest<TLet>): InferResult {
   const { env, ctx, ns, depth, term, onChange } = req
@@ -19,7 +17,6 @@ export function inferLet(req: InferRequest<TLet>): InferResult {
     onChange: mapCallback(
       onChange,
       (draft: Draft<TLet>) => draft.body,
-      hasOccurrence(env.length + 1, 0, term.next) ? i18n.err.referred : undefined
     )
   })
   const { val: nextVal, element: nextElement } = infer({
