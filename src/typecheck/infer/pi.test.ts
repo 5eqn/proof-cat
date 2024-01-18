@@ -1,6 +1,8 @@
-import { onOverride } from '../action/onOverride'
+import cloneDeep from 'lodash.clonedeep'
+import { runAction } from '../action'
+import { mkAction } from '../model/action'
 import { InferRequest } from "../model/infer"
-import { TAny, Term, TPi, TType, TVar } from "../model/term"
+import { TAny, TPi, TType, TVar } from "../model/term"
 import { VUni } from "../model/value"
 import { inferPi } from "./pi"
 
@@ -65,8 +67,14 @@ describe('inferPi function', () => {
   })
 
   test('change in body should be reflected', () => {
-    const { debug } = inferPi(mockReq)
-    debug.onBodyChange((draft: Term) => onOverride(draft, anyTerm))
-    expect(mockTPi).toStrictEqual(expectedDeleteBody)
+    const req = cloneDeep(mockReq)
+    const { debug } = inferPi(req)
+    debug.onBodyChange(mkAction({
+      action: 'remove',
+    } as any))
+    expect(onChange).toBeCalledTimes(1)
+    const action = onChange.mock.lastCall[0]
+    runAction(action, req.term)
+    expect(req.term).toStrictEqual(expectedDeleteBody)
   })
 })

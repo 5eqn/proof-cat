@@ -1,9 +1,8 @@
 import cloneDeep from 'lodash.clonedeep'
 import { runAction } from '../action'
-import { onOverride } from '../action/onOverride'
 import { mkAction } from '../model/action'
 import { InferRequest } from "../model/infer"
-import { TAny, Term, TFunc, TType, TVar } from "../model/term"
+import { TAny, TFunc, TType, TVar } from "../model/term"
 import { VPi, VType } from "../model/value"
 import { inferFunc } from "./func"
 
@@ -84,13 +83,11 @@ describe('inferFunc function', () => {
     const { debug } = inferFunc(req)
     debug.onBodyChange(mkAction({
       action: 'remove',
-      len: 1,
-      backup: { ...req.term.body },
-    }))
+    } as any))
     expect(onChange).toBeCalledTimes(1)
     const action = onChange.mock.lastCall[0]
     runAction(action, req.term)
-    expect(mockTFunc).toStrictEqual(expectedDeleteBody)
+    expect(req.term).toStrictEqual(expectedDeleteBody)
   })
 })
 
