@@ -21,7 +21,7 @@ describe('onRemove function', () => {
   const tPiAfter: Term = {
     term: 'var',
     id: 'x',
-    ix: 1,
+    ix: 0,
   }
 
   const tAppBefore: Term = {
@@ -71,7 +71,7 @@ describe('onRemove function', () => {
   const tLetAfter: Term = {
     term: 'var',
     id: 'y',
-    ix: 1,
+    ix: 0,
   }
 
   beforeEach(() => {

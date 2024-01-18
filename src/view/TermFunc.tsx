@@ -20,7 +20,7 @@ export function TermFunc(props: TermFuncProps): JSX.Element {
       label={i18n.term.func}
       onAdd={(name: string) => onChange(mkAction({
         action: 'addParam',
-        len: ns.length,
+        envLen: ns.length,
         id: name,
         ix: 0,
       }))}

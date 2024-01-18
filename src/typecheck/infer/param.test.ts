@@ -1,6 +1,8 @@
-import { onOverride } from '../action/onOverride'
+import cloneDeep from 'lodash.clonedeep'
+import { runAction } from '../action'
+import { mkAction } from '../model/action'
 import { InferRequest } from "../model/infer"
-import { TAny, Term, TFunc, TType, TUni, TVar } from "../model/term"
+import { TAny, TFunc, TType, TUni, TVar } from "../model/term"
 import { inferFunc } from "./func"
 
 describe('inferParam function', () => {
@@ -59,9 +61,15 @@ describe('inferParam function', () => {
   })
 
   test('change in param should be reflected', () => {
-    const { debug } = inferFunc(mockReq)
-    debug.onArgChange[1]((term: Term) => onOverride(term, mockTAny))
-    expect(mockTFunc).toStrictEqual(expectedDeleteParam)
+    const req = cloneDeep(mockReq)
+    const { debug } = inferFunc(req)
+    debug.onParamChange[1](mkAction({
+      action: 'remove',
+    } as any))
+    expect(onChange).toBeCalledTimes(1)
+    const action = onChange.mock.lastCall[0]
+    runAction(action, req.term)
+    expect(req.term).toStrictEqual(expectedDeleteParam)
   })
 })
 

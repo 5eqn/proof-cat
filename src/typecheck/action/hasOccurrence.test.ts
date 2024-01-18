@@ -1,7 +1,7 @@
 import { TLet } from "../model/term"
 import { assertNotOccur } from './hasOccurrence'
 
-describe('hasOccurrence function', () => {
+describe('assertNotOccur function', () => {
   // Context: [Z: U, T: U]
   // let a = 1 in ((T: U) => (x: T) => x)(T = T)(x = a)
   const term: TLet = {
@@ -71,10 +71,10 @@ describe('hasOccurrence function', () => {
   })
 
   test('should report occurrence', () => {
-    expect(assertNotOccur(2, 1, term)).toBe(true)
+    expect(() => assertNotOccur(2, 1, term)).toThrow()
   })
 
   test('should report absence', () => {
-    expect(assertNotOccur(2, 0, term)).toBe(false)
+    expect(() => assertNotOccur(2, 0, term)).not.toThrow()
   })
 })
