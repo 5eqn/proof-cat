@@ -1,5 +1,8 @@
+import cloneDeep from "lodash.clonedeep"
+import { runAction } from "../action"
+import { mkAction } from "../model/action"
 import { InferRequest } from "../model/infer"
-import { TApp, Term, TVar } from "../model/term"
+import { TApp, TVar } from "../model/term"
 import { VVar, VPi, VUni } from "../model/value"
 import { inferApp } from "./app"
 
@@ -27,6 +30,13 @@ describe('inferApp function', () => {
   const mockTVarF: TVar = {
     term: 'var',
     id: 'f',
+    ix: 1,
+  }
+
+  // Function var term, another
+  const mockTVarG: TVar = {
+    term: 'var',
+    id: 'g',
     ix: 1,
   }
 
@@ -69,6 +79,14 @@ describe('inferApp function', () => {
     func: mockTVarF,
   }
 
+  // g(T = x)
+  const expectedChangeFunc: TApp = {
+    term: 'app',
+    argID: ['T'],
+    arg: [mockTVarX],
+    func: mockTVarG,
+  }
+
   // Expected result
   const expected: VVar = mockVVarX
 
@@ -92,10 +110,41 @@ describe('inferApp function', () => {
     expect(val).toStrictEqual(expected)
   })
 
-  test('change in function should be forbidden', () => {
-    const { debug } = inferApp(mockReq)
-    expect(() => debug.onFuncChange((draft: Term) => draft)).toThrow()
-    expect(onChange).toBeCalledTimes(0)
+  test('applying non-function should not typecheck', () => {
+    const req = cloneDeep(mockReq)
+    // x(T = x)
+    req.term.func = mockTVarX
+    expect(() => inferApp(req)).toThrow()
+  })
+
+  test('applying function with wrong namespace should not typecheck', () => {
+    const req = cloneDeep(mockReq)
+    // f(114 = x)
+    req.term.argID[0] = '114'
+    expect(() => inferApp(req)).toThrow()
+  })
+
+  test('applying function with wrong value should not typecheck', () => {
+    const req = cloneDeep(mockReq)
+    // f(T = f)
+    req.term.arg[0] = mockTVarF
+    expect(() => inferApp(req)).toThrow()
+  })
+
+  test('change in function should be reflected if well-typed', () => {
+    const req = cloneDeep(mockReq)
+    const { debug } = inferApp(req)
+    debug.onFuncChange(mkAction({
+      action: 'updateVar',
+      oldID: 'f',
+      oldIX: 1,
+      newID: 'g',
+      newIX: 1,
+    }))
+    expect(onChange).toBeCalledTimes(1)
+    const action = onChange.mock.lastCall[0]
+    runAction(action, req.term)
+    expect(req.term).toStrictEqual(expectedChangeFunc)
   })
 })
 

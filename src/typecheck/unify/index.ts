@@ -28,8 +28,7 @@ export function unify(envLen: number, x: Val, y: Val): void {
       case 'type':
         return unifyType(x, y as any)
     }
-  } else {
-    // TODO recursive resolution
+  } else if (x.val !== 'any' && y.val !== 'any') {
     throw new ErrorASTMismatch()
   }
 }

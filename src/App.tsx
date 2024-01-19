@@ -21,12 +21,15 @@ function App() {
     depth: 0,
     term: state,
     onChange: (action) => {
-      try {
-        setState(draft => {
+      let success = true
+      setState(draft => {
+        try {
           // Run action
+          console.log(0)
           runAction(action, draft)
           try {
             // Check if new term is well-typed
+            console.log(1)
             infer({
               env: [],
               ctx: [],
@@ -37,21 +40,23 @@ function App() {
             })
           } catch (e) {
             // If not, revert action and throw error
+            console.log(2)
             runAction(revertAction(action), draft)
             throw e;
           }
-        })
-      } catch (e) {
-        if (e instanceof CodeActionError) {
-          // Handle predefined error
-          message.error(e.toString())
-          return false;
-        } else {
-          // Unexpected error
-          throw e;
+        } catch (e) {
+          success = false
+          console.log(3)
+          if (e instanceof CodeActionError) {
+            // Handle predefined error
+            console.log(4)
+            message.error(e.toString())
+          } else {
+            throw e;
+          }
         }
-      }
-      return true;
+      })
+      return success;
     },
   })
   const tytm = quote(0, val)

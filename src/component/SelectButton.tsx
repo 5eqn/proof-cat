@@ -1,5 +1,6 @@
-import { Popconfirm } from "antd"
+import { message, Popconfirm } from "antd"
 import { HTMLAttributes, useState } from "react"
+import { i18n } from "../i18n"
 import Button from "./Button"
 import Select from "./Select"
 
@@ -32,7 +33,11 @@ export default function SelectButton(props: SelectButtonProps) {
         if (props.onConfirm(props.data[ix], ix)) setOpen(false)
       }}>
       <Button
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          // Prevent selecting from nothing
+          if (props.data.length === 0) message.error(i18n.err.noVariable)
+          else setOpen(!open)
+        }}
         data-testid={props["data-testid"]}
       >
         {props.children}
