@@ -1,8 +1,8 @@
 // Code action: wrap with pi
 import { Draft } from "immer";
 import { Term, TPi } from "../model/term";
-import { deleteFields } from "./deleteFields";
-import { onFuncAdd } from "./onFuncAdd";
+import { deleteFields } from "./helper/deleteFields";
+import { onParamAdd } from "./onParamAdd";
 
 export function onWrapPi(name: string, draft: Draft<Term>): void {
   const copy = { ...draft }
@@ -12,5 +12,5 @@ export function onWrapPi(name: string, draft: Draft<Term>): void {
   tm.param = []
   tm.paramID = []
   tm.body = copy
-  onFuncAdd(0, name, draft as TPi)
+  onParamAdd(0, name, draft as TPi)
 }

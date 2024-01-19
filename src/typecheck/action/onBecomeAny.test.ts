@@ -1,8 +1,8 @@
 import cloneDeep from 'lodash.clonedeep'
 import { TAny, TApp, TNum } from "../model/term"
-import { onAnify } from './onAnify'
+import { onBecomeAny } from './onBecomeAny'
 
-describe('onAnify function', () => {
+describe('onBecomeAny function', () => {
   // Before action
   const beforeNormal: TNum = {
     term: 'num',
@@ -31,13 +31,13 @@ describe('onAnify function', () => {
 
   test('should change non-application to any and clear other fields', () => {
     const term = cloneDeep(beforeNormal)
-    onAnify(term)
+    onBecomeAny(term)
     expect(term).toStrictEqual(expectedNormal)
   })
 
   test('should remove recursively', () => {
     const term = cloneDeep(beforeApp)
-    onAnify(term)
+    onBecomeAny(term)
     expect(term).toStrictEqual(expectedApp)
   })
 })

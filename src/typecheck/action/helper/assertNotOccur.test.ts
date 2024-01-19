@@ -1,5 +1,5 @@
-import { TLet } from "../model/term"
-import { assertNotOccur } from './hasOccurrence'
+import { TLet } from "../../model/term"
+import { assertNotOccur } from './assertNotOccur'
 
 describe('assertNotOccur function', () => {
   // Context: [Z: U, T: U]

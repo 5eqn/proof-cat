@@ -1,18 +1,18 @@
 import { Draft } from "immer";
 import { ActionPack } from "../model/action"
 import { Term } from "../model/term";
-import { onAnify } from "./onAnify";
+import { onBecomeAny } from "./onBecomeAny";
 import { onBecomeNum } from "./onBecomeNum";
 import { onBecomeType } from "./onBecomeType";
 import { onBecomeU } from "./onBecomeU";
 import { onBecomeVar } from "./onBecomeVar";
-import { onFuncAdd } from "./onFuncAdd";
-import { onFuncDelete } from "./onFuncDelete";
-import { onNumUpdate } from "./onNumUpdate";
+import { onParamAdd } from "./onParamAdd";
+import { onParamDelete } from "./onParamDelete";
+import { onUpdateNum } from "./onUpdateNum";
 import { onRemove } from "./onRemove";
 import { onRevertRemove } from "./onRevertRemove";
-import { onTypeUpdate } from "./onTypeUpdate";
-import { onVarUpdate } from "./onVarUpdate";
+import { onUpdateType } from "./onUpdateType";
+import { onUpdateVar } from "./onUpdateVar";
 import { onWrapApp } from "./onWrapApp";
 import { onWrapFunc } from "./onWrapFunc";
 import { onWrapLet } from "./onWrapLet";
@@ -34,20 +34,20 @@ function runUndo(
     case 'remove':
       return onRevertRemove(action.backup, term)
     case 'updateVar':
-      return onVarUpdate(action.oldID, action.oldIX, term)
+      return onUpdateVar(action.oldID, action.oldIX, term)
     case 'updateNum':
-      return onNumUpdate(action.oldNum, term)
+      return onUpdateNum(action.oldNum, term)
     case 'updateType':
-      return onTypeUpdate(action.oldType, term)
+      return onUpdateType(action.oldType, term)
     case 'addParam':
-      return onFuncDelete(action.ix, action.envLen, term)
+      return onParamDelete(action.ix, action.envLen, term)
     case 'wrapPi':
     case 'wrapFunc':
     case 'wrapApp':
     case 'wrapLet':
       return onRemove(action.envLen, term)
     default:
-      return onAnify(term)
+      return onBecomeAny(term)
   }
 }
 
@@ -60,23 +60,13 @@ function runDo(
     case 'remove':
       return onRemove(action.envLen, term)
     case 'updateVar':
-      return onVarUpdate(
-        action.newID,
-        action.newIX,
-        term,
-      )
+      return onUpdateVar(action.newID, action.newIX, term)
     case 'updateNum':
-      return onNumUpdate(
-        action.newNum,
-        term,
-      )
+      return onUpdateNum(action.newNum, term)
     case 'updateType':
-      return onTypeUpdate(
-        action.newType,
-        term,
-      )
+      return onUpdateType(action.newType, term)
     case 'addParam':
-      return onFuncAdd(action.ix, action.id, term)
+      return onParamAdd(action.ix, action.id, term)
     case 'wrapPi':
       return onWrapPi(action.name, term)
     case 'wrapFunc':

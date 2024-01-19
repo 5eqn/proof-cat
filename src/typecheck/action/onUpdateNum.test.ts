@@ -3,7 +3,7 @@ import { runAction } from '.'
 import { mkAction, revertAction } from '../model/action'
 import { Term } from "../model/term"
 
-describe('onNumUpdate function', () => {
+describe('onUpdateNum function', () => {
   // Before action
   const before: Term = {
     term: 'num',

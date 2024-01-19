@@ -1,10 +1,10 @@
 // Code action: delete param
 import { TFunc, TPi } from "../model/term";
-import { assertNotOccur } from "./hasOccurrence";
-import { deleteVar } from "./deleteVar";
+import { assertNotOccur } from "./helper/assertNotOccur";
+import { deleteVar } from "./helper/deleteVar";
 import { Draft } from "immer";
 
-export function onFuncDelete(
+export function onParamDelete(
   ix: number,
   len: number,
   draft: Draft<TFunc | TPi>

@@ -2,7 +2,7 @@ import { Term } from "../model/term";
 import { VPi } from "../model/value";
 import { apply } from "../model/closure";
 import {quote} from "./index";
-import {makeSpineIn} from "../action/makeSpineIn";
+import {makeSpineIn} from "../action/helper/makeSpineIn";
 
 // Quote a value to a term
 export function quotePi(len: number, val: VPi): Term {

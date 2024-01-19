@@ -1,6 +1,6 @@
 // Add Var(ix) in term
 import { Draft } from "immer";
-import { TApp, Term, TFunc, TLet, TPi, TVar } from "../model/term";
+import { TApp, Term, TFunc, TLet, TPi, TVar } from "../../model/term";
 
 // ix: de-Bruijn index of the added variable
 // size: number of added variables

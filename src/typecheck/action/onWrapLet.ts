@@ -1,8 +1,8 @@
 // Code action: wrap with let
 import { Draft } from "immer";
 import { Term, TLet } from "../model/term";
-import { addVar } from "./addVar";
-import { deleteFields } from "./deleteFields";
+import { addVar } from "./helper/addVar";
+import { deleteFields } from "./helper/deleteFields";
 
 export function onWrapLet(name: string, draft: Draft<Term>): void {
   const copy = { ...draft }

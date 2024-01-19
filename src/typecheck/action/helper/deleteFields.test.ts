@@ -1,4 +1,4 @@
-import { TNum } from "../model/term"
+import { TNum } from "../../model/term"
 import { deleteFields } from "./deleteFields"
 
 describe('deleteFields function', () => {

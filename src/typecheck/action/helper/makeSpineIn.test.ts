@@ -1,4 +1,4 @@
-import { VVar } from '../model/value'
+import { VVar } from '../../model/value'
 import { makeSpineIn } from './makeSpineIn'
 
 describe('makeSpineIn function', () => {

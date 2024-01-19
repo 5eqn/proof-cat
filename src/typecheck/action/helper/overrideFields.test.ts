@@ -1,5 +1,5 @@
-import { TAny, TNum } from "../model/term"
-import { onOverride } from "./onOverride"
+import { TAny, TNum } from "../../model/term"
+import { overrideFields } from "./overrideFields"
 
 describe('onOverride function', () => {
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe('onOverride function', () => {
     const obj2 = {
       c: 333,
     }
-    onOverride(obj, obj2)
+    overrideFields(obj, obj2)
     expect(obj).toStrictEqual(obj2)
   })
 
@@ -26,7 +26,7 @@ describe('onOverride function', () => {
     const term2: TAny = {
       term: 'any',
     }
-    onOverride(term, term2)
+    overrideFields(term, term2)
     expect(term).toStrictEqual(term2)
   })
 
@@ -35,7 +35,7 @@ describe('onOverride function', () => {
       term: 'num',
       num: 114,
     }
-    onOverride(term, {})
+    overrideFields(term, {})
     expect(term).toStrictEqual({})
   })
 })

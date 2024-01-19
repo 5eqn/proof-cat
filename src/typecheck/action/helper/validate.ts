@@ -1,5 +1,5 @@
 // Make sure variable name don't duplicate in actions
-import { i18n } from "../../i18n";
+import { i18n } from "../../../i18n";
 
 export function validate(name: string, ns: string[]): string | null {
   if (name === '') return i18n.err.empty

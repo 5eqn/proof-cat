@@ -9,7 +9,7 @@ import { infer } from "./index";
 import { mapCallback } from "../model/callback";
 import { inferParam } from "./param";
 import { quote } from "../quote";
-import { makeSpineIn } from "../action/makeSpineIn";
+import { makeSpineIn } from "../action/helper/makeSpineIn";
 
 export function inferFunc(req: InferRequest<TFunc>): InferResult {
   // Construct element for function body
