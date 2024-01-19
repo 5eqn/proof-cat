@@ -31,8 +31,6 @@ function runUndo(
 ): void {
   const term = lens(draft) as any
   switch (action.action) {
-    case 'identity':
-      return
     case 'remove':
       return onRevertRemove(action.backup, term)
     case 'updateVar':
@@ -59,8 +57,6 @@ function runDo(
 ): void {
   const term = lens(draft) as any
   switch (action.action) {
-    case 'identity':
-      return
     case 'remove':
       return onRemove(action.envLen, term)
     case 'updateVar':
