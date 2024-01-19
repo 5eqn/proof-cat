@@ -28,7 +28,7 @@ function deleteLetVar(ix: number, size: number, term: Draft<TLet>): void {
 }
 
 function deleteVarVar(ix: number, size: number, term: Draft<TVar>): void {
-  if (term.ix > ix) term.ix -= size
+  if (term.ix >= ix) term.ix -= size
 }
 
 function deleteAppVar(ix: number, size: number, term: Draft<TApp>): void {

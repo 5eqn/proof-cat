@@ -34,7 +34,7 @@ function runUndo(
     case 'identity':
       return
     case 'remove':
-      return onRevertRemove(action.envLen, action.backup, term)
+      return onRevertRemove(action.backup, term)
     case 'updateVar':
       return onVarUpdate(action.oldID, action.oldIX, term)
     case 'updateNum':
