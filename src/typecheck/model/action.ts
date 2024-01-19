@@ -73,10 +73,6 @@ export type ActionAddParam = {
   envLen: number,
 }
 
-export type ActionIdentity = {
-  action: 'identity',
-}
-
 export type ActionRemove = {
   action: 'remove',
   envLen: number,
@@ -87,7 +83,6 @@ export type ActionRemove = {
 
 export type Action =
   | ActionRemove
-  | ActionIdentity
   | ActionUpdateVar
   | ActionUpdateNum
   | ActionUpdateType
