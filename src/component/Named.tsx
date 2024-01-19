@@ -14,7 +14,7 @@ export default function Named(props: {
   const content = expanded ?
     props.children :
     <div />
-  const deleteButton = props.onDelete !== null ?
+  const deleteButton = props.onDelete !== undefined ?
     <Button onClick={props.onDelete}> - </Button> :
     <div />
   return <div>
