@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep'
-import { TFunc } from "../model/term"
-import { onFuncAdd } from './onFuncAdd'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
+import { Term, TFunc } from "../model/term"
 
 describe('onFuncAdd function', () => {
   // Context: [T: U, a = 1]
@@ -73,8 +74,26 @@ describe('onFuncAdd function', () => {
 
   test('should insert param properly', () => {
     const term = cloneDeep(before)
-    onFuncAdd(0, 'A', term)
+    runAction(mkAction({
+      action: 'addParam',
+      ix: 0,
+      id: 'A',
+      envLen: 2,
+    }), term)
     expect(term).toStrictEqual(expected)
+  })
+
+  test('revert should work', () => {
+    const term = cloneDeep(before)
+    const action = mkAction<Term>({
+      action: 'addParam',
+      ix: 0,
+      id: 'A',
+      envLen: 2,
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(before)
   })
 })
 

@@ -1,4 +1,6 @@
 import cloneDeep from 'lodash.clonedeep'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
 import { Ctx } from '../model/ctx'
 import { Term } from "../model/term"
 import { onWrapApp } from './onWrapApp'
@@ -87,13 +89,29 @@ describe('onWrapApp function', () => {
 
   test('should apply any to function', () => {
     const term = cloneDeep(before)
-    onWrapApp(ctx[2], term)
+    runAction(mkAction({
+      action: 'wrapApp',
+      funcType: ctx[2],
+      envLen: 4,
+    }), term)
     expect(term).toStrictEqual(expected)
   })
 
   test('should not apply to non-function', () => {
     const term = cloneDeep(nonFunction)
     expect(() => onWrapApp(ctx[1], term)).toThrow()
+  })
+
+  test('revert should work', () => {
+    const term = cloneDeep(before)
+    const action = mkAction<Term>({
+      action: 'wrapApp',
+      funcType: ctx[2],
+      envLen: 4,
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(before)
   })
 })
 

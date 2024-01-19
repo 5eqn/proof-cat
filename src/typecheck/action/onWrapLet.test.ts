@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
 import { Term } from "../model/term"
-import { onWrapLet } from './onWrapLet'
 
 describe('onWrapLet function', () => {
   // Context: [Z: U, T: U]
@@ -103,7 +104,23 @@ describe('onWrapLet function', () => {
 
   test('should add definition and increase env index', () => {
     const term = cloneDeep(before)
-    onWrapLet('a', term)
+    runAction(mkAction({
+      action: 'wrapLet',
+      name: 'a',
+      envLen: 2,
+    }), term)
     expect(term).toStrictEqual(expected)
+  })
+
+  test('revert should work', () => {
+    const term = cloneDeep(before)
+    const action = mkAction<Term>({
+      action: 'wrapLet',
+      name: 'a',
+      envLen: 2,
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(before)
   })
 })

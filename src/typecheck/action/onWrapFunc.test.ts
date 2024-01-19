@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
 import { Term } from "../model/term"
-import { onWrapFunc } from './onWrapFunc'
 
 describe('onWrapFunc function', () => {
   // Before action
@@ -27,8 +28,24 @@ describe('onWrapFunc function', () => {
 
   test('should make term wrapped with function with default param', () => {
     const term = cloneDeep(before)
-    onWrapFunc('1145', term)
+    runAction(mkAction({
+      action: 'wrapFunc',
+      name: '1145',
+      envLen: 0,
+    }), term)
     expect(term).toStrictEqual(expected)
+  })
+
+  test('revert should work', () => {
+    const term = cloneDeep(before)
+    const action = mkAction<Term>({
+      action: 'wrapFunc',
+      name: '1145',
+      envLen: 0,
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(before)
   })
 })
 

@@ -45,21 +45,25 @@ export type ActionBecomeVar = {
 export type ActionWrapApp = {
   action: 'wrapApp',
   funcType: Val,
+  envLen: number,
 }
 
 export type ActionWrapFunc = {
   action: 'wrapFunc',
   name: string,
+  envLen: number,
 }
 
 export type ActionWrapPi = {
   action: 'wrapPi',
   name: string,
+  envLen: number,
 }
 
 export type ActionWrapLet = {
   action: 'wrapLet',
   name: string,
+  envLen: number,
 }
 
 export type ActionAddParam = {

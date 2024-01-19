@@ -1,12 +1,12 @@
 import cloneDeep from 'lodash.clonedeep'
-import { TNum, TType } from "../model/term"
-import { onBecomeNum } from './onBecomeNum'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
+import { TAny, Term, TNum } from "../model/term"
 
 describe('onBecomeNum function', () => {
   // Before action
-  const before: TType = {
-    term: 'type',
-    type: '1145',
+  const before: TAny = {
+    term: 'any',
   }
 
   // After action
@@ -19,10 +19,24 @@ describe('onBecomeNum function', () => {
     jest.clearAllMocks()
   })
 
-  test('should make term a num', () => {
+  test('should make term a number', () => {
     const term = cloneDeep(before)
-    onBecomeNum(456, term)
+    runAction(mkAction({
+      action: 'becomeNum',
+      num: 456,
+    }), term)
     expect(term).toStrictEqual(expected)
+  })
+
+  test('revert should work', () => {
+    const term = cloneDeep(before)
+    const action = mkAction<Term>({
+      action: 'becomeNum',
+      num: 456,
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(before)
   })
 })
 

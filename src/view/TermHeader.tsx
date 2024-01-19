@@ -24,18 +24,22 @@ export function TermHeader(props: TermHeaderProps): JSX.Element {
     onWrapLet={(name: string) => onChange(mkAction({
       action: 'wrapLet',
       name,
+      envLen: ns.length,
     }))}
     onWrapPi={(name: string) => onChange(mkAction({
       action: 'wrapPi',
       name,
+      envLen: ns.length,
     }))}
     onWrapFunc={(name) => onChange(mkAction({
       action: 'wrapFunc',
       name,
+      envLen: ns.length,
     }))}
     onWrapApp={() => onChange(mkAction({
       action: 'wrapApp',
       funcType: props.type,
+      envLen: ns.length,
     }))}
     onAdd={props.onAdd}
   />

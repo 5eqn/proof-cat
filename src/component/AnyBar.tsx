@@ -13,6 +13,7 @@ export default function AnyBar(props: {
   onWrapLet: (name: string) => boolean
   onWrapFunc: (name: string) => boolean
   onWrapPi: (name: string) => boolean
+  onWrapApp: () => boolean
   onBecomeVar: (id: string, ix: number) => boolean
   onBecomeType: (name: string) => boolean
   onBecomeU: () => boolean
@@ -51,6 +52,9 @@ export default function AnyBar(props: {
       <Button
         onClick={props.onBecomeU}
       > {i18n.prompt.becomeU} </Button>
+      <Button
+        onClick={props.onWrapApp}
+      > {i18n.prompt.wrapApp} </Button>
       <InputButton
         title={i18n.prompt.addNum}
         placeholder={i18n.prompt.value}
