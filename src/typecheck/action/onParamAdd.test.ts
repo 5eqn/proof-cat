@@ -1,44 +1,12 @@
 import cloneDeep from 'lodash.clonedeep'
-import { TFunc } from "../model/term"
-import { onFuncDelete } from './onFuncDelete'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
+import { Term, TFunc } from "../model/term"
 
-describe('onFuncDelete function', () => {
-  // Context: []
-  // (A: U, T: U) => (x: T) => x
+describe('onParamAdd function', () => {
+  // Context: [T: U, a = 1]
+  // (T: U) => (x: T) => x
   const before: TFunc = {
-    // T: U
-    term: 'func',
-    paramID: ['A', 'T'],
-    param: [
-      {
-        term: 'uni',
-      },
-      {
-        term: 'uni',
-      }
-    ],
-    body: {
-      // x: T
-      term: 'func',
-      paramID: ['x'],
-      param: [
-        {
-          term: 'var',
-          id: 'T',
-          ix: 1,
-        }
-      ],
-      body: {
-        // x
-        term: 'var',
-        id: 'x',
-        ix: 0,
-      }
-    }
-  }
-
-  // After adding param
-  const expected: TFunc = {
     // T: U
     term: 'func',
     paramID: ['T'],
@@ -67,19 +35,65 @@ describe('onFuncDelete function', () => {
     }
   }
 
+  // After adding param
+  const expected: TFunc = {
+    // T: U
+    term: 'func',
+    paramID: ['A', 'T'],
+    param: [
+      {
+        term: 'any',
+      },
+      {
+        term: 'uni',
+      }
+    ],
+    body: {
+      // x: T
+      term: 'func',
+      paramID: ['x'],
+      param: [
+        {
+          term: 'var',
+          id: 'T',
+          ix: 1,
+        }
+      ],
+      body: {
+        // x
+        term: 'var',
+        id: 'x',
+        ix: 0,
+      }
+    }
+  }
+
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
-  test('deleting unused param should be OK', () => {
+  test('should insert param properly', () => {
     const term = cloneDeep(before)
-    onFuncDelete(0, 0, term)
+    runAction(mkAction({
+      action: 'addParam',
+      ix: 0,
+      id: 'A',
+      envLen: 2,
+    }), term)
     expect(term).toStrictEqual(expected)
   })
 
-  test('deleting used param should be forbidden', () => {
+  test('revert should work', () => {
     const term = cloneDeep(before)
-    expect(() => onFuncDelete(1, 0, term)).toThrow()
+    const action = mkAction<Term>({
+      action: 'addParam',
+      ix: 0,
+      id: 'A',
+      envLen: 2,
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(before)
   })
 })
 

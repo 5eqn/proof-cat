@@ -2,9 +2,9 @@ import cloneDeep from 'lodash.clonedeep'
 import { runAction } from '.'
 import { mkAction, revertAction } from '../model/action'
 import { Term } from "../model/term"
-import { onVarUpdate } from './onVarUpdate'
+import { onUpdateVar } from './onUpdateVar'
 
-describe('onVarUpdate function', () => {
+describe('onUpdateVar function', () => {
   // Before action
   const before: Term = {
     term: 'var',
@@ -25,7 +25,7 @@ describe('onVarUpdate function', () => {
 
   test('should change var correctly', () => {
     const term = cloneDeep(before)
-    onVarUpdate('after', 1, term)
+    onUpdateVar('after', 1, term)
     expect(term).toStrictEqual(expected)
   })
 

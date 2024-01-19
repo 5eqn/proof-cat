@@ -1,6 +1,6 @@
 // Delete Var(ix) in term
 import { Draft } from "immer";
-import { TApp, Term, TFunc, TLet, TPi, TVar } from "../model/term";
+import { TApp, Term, TFunc, TLet, TPi, TVar } from "../../model/term";
 
 export function deleteVar(ix: number, size: number, term: Draft<Term>): void {
   switch (term.term) {

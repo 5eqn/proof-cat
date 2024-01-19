@@ -1,6 +1,6 @@
 // Does Var(ix) occur in term? (can only be referred in Var or App)
-import { ErrorReferredRaw } from "../model/error";
-import { TApp, Term, TFunc, TLet, TPi } from "../model/term";
+import { ErrorReferredRaw } from "../../model/error";
+import { TApp, Term, TFunc, TLet, TPi } from "../../model/term";
 
 export function assertNotOccur(len: number, ix: number, term: Term): void {
   switch (term.term) {
