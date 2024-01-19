@@ -15,7 +15,6 @@ export function inferParam(req: InferRequest<TFunc | TPi>): InferResult[] {
       (draft: Draft<TFunc | TPi>) => draft.param[i],
     )
   }
-  const len: number = term.paramID.length + env.length
   const paramInfers: InferResult[] = term.param.map((t, i) => infer({
     env, ctx, ns,
     depth: depth + 1,
@@ -31,7 +30,6 @@ export function inferParam(req: InferRequest<TFunc | TPi>): InferResult[] {
       paramID: term.paramID[i],
       paramIX: i,
       param: element,
-      len,
     })
   }))
   return paramElements
