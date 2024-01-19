@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
 import { Term } from "../model/term"
-import { onTypeUpdate } from './onTypeUpdate'
 
 describe('onTypeUpdate function', () => {
   // Before action
@@ -21,8 +22,24 @@ describe('onTypeUpdate function', () => {
 
   test('should change type correctly', () => {
     const term = cloneDeep(before)
-    onTypeUpdate('514', term)
+    runAction(mkAction({
+      action: 'updateType',
+      oldType: '114',
+      newType: '514',
+    }), term)
     expect(term).toStrictEqual(expected)
+  })
+
+  test('revert should work', () => {
+    const term = cloneDeep(before)
+    const action = mkAction<Term>({
+      action: 'updateType',
+      oldType: '114',
+      newType: '514',
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(before)
   })
 })
 

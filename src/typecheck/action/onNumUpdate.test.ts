@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
 import { Term } from "../model/term"
-import { onNumUpdate } from './onNumUpdate'
 
 describe('onNumUpdate function', () => {
   // Before action
@@ -21,8 +22,24 @@ describe('onNumUpdate function', () => {
 
   test('should change num correctly', () => {
     const term = cloneDeep(before)
-    onNumUpdate(514, term)
+    runAction(mkAction({
+      action: 'updateNum',
+      oldNum: 114,
+      newNum: 514,
+    }), term)
     expect(term).toStrictEqual(expected)
+  })
+
+  test('revert should work', () => {
+    const term = cloneDeep(before)
+    const action = mkAction<Term>({
+      action: 'updateNum',
+      oldNum: 114,
+      newNum: 514,
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(before)
   })
 })
 

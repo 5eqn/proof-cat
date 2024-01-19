@@ -1,12 +1,12 @@
 import cloneDeep from 'lodash.clonedeep'
-import { TNum, TType } from "../model/term"
-import { onBecomeType } from './onBecomeType'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
+import { TAny, Term, TType } from "../model/term"
 
 describe('onBecomeType function', () => {
   // Before action
-  const before: TNum = {
-    term: 'num',
-    num: 1145,
+  const before: TAny = {
+    term: 'any',
   }
 
   // After action
@@ -21,8 +21,22 @@ describe('onBecomeType function', () => {
 
   test('should make term a type', () => {
     const term = cloneDeep(before)
-    onBecomeType('456$^', term)
+    runAction(mkAction({
+      action: 'becomeType',
+      name: '456$^',
+    }), term)
     expect(term).toStrictEqual(expected)
+  })
+
+  test('revert should work', () => {
+    const term = cloneDeep(before)
+    const action = mkAction<Term>({
+      action: 'becomeType',
+      name: '456$^',
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(before)
   })
 })
 

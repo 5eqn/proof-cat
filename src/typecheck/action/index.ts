@@ -9,7 +9,6 @@ import { onBecomeVar } from "./onBecomeVar";
 import { onFuncAdd } from "./onFuncAdd";
 import { onFuncDelete } from "./onFuncDelete";
 import { onNumUpdate } from "./onNumUpdate";
-import { onOverride } from "./onOverride";
 import { onRemove } from "./onRemove";
 import { onRevertRemove } from "./onRevertRemove";
 import { onTypeUpdate } from "./onTypeUpdate";
@@ -37,31 +36,18 @@ function runUndo(
     case 'remove':
       return onRevertRemove(action.envLen, action.backup, term)
     case 'updateVar':
-      return onVarUpdate(
-        action.oldID,
-        action.oldIX,
-        term,
-      )
+      return onVarUpdate(action.oldID, action.oldIX, term)
     case 'updateNum':
-      return onNumUpdate(
-        action.oldNum,
-        term,
-      )
+      return onNumUpdate(action.oldNum, term)
     case 'updateType':
-      return onTypeUpdate(
-        action.oldType,
-        term,
-      )
+      return onTypeUpdate(action.oldType, term)
     case 'addParam':
       return onFuncDelete(action.ix, action.envLen, term)
     case 'wrapPi':
-      return onOverride(term, term.body)
     case 'wrapFunc':
-      return onOverride(term, term.body)
     case 'wrapApp':
-      return onOverride(term, term.func)
     case 'wrapLet':
-      return onOverride(term, term.next)
+      return onRemove(action.envLen, term)
     default:
       return onAnify(term)
   }

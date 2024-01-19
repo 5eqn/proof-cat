@@ -1,4 +1,6 @@
 import cloneDeep from 'lodash.clonedeep'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
 import { Term } from "../model/term"
 import { onRemove } from './onRemove'
 import { onRevertRemove } from './onRevertRemove'
@@ -60,15 +62,20 @@ describe('onRevertRemove function', () => {
   test('should revert remove pi params', () => {
     const term = cloneDeep(tPiAfter)
     const backup = { ...term }
-    onRemove(1, term)
-    onRevertRemove(0, backup, term)
+    const action = mkAction<Term>({
+      action: 'remove',
+      envLen: 0,
+      backup,
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
     expect(term).toStrictEqual(tPiAfter)
   })
 
   test('should revert remove definition', () => {
     const term = cloneDeep(tLetAfter)
     const backup = { ...term }
-    onRemove(1, term)
+    onRemove(0, term)
     onRevertRemove(0, backup, term)
     expect(term).toStrictEqual(tLetAfter)
   })

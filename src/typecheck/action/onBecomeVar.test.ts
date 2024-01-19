@@ -1,12 +1,12 @@
 import cloneDeep from 'lodash.clonedeep'
-import { TNum, TVar } from "../model/term"
-import { onBecomeVar } from './onBecomeVar'
+import { runAction } from '.'
+import { mkAction, revertAction } from '../model/action'
+import { TAny, Term, TVar } from "../model/term"
 
 describe('onBecomeVar function', () => {
   // Before action
-  const before: TNum = {
-    term: 'num',
-    num: 1145,
+  const before: TAny = {
+    term: 'any',
   }
 
   // After action
@@ -22,8 +22,24 @@ describe('onBecomeVar function', () => {
 
   test('should make term a variable', () => {
     const term = cloneDeep(before)
-    onBecomeVar('first', 0, term)
+    runAction(mkAction({
+      action: 'becomeVar',
+      id: 'first',
+      ix: 0,
+    }), term)
     expect(term).toStrictEqual(expected)
+  })
+
+  test('revert should work', () => {
+    const term = cloneDeep(before)
+    const action = mkAction<Term>({
+      action: 'becomeVar',
+      id: 'first',
+      ix: 0,
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(before)
   })
 })
 

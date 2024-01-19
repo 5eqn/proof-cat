@@ -6,20 +6,20 @@ import { onLetDelete } from "./onLetDelete";
 import { assertNotOccur } from "./hasOccurrence";
 import { deleteVar } from "./deleteVar";
 
-export function onRemove(len: number, draft: Draft<Term>): void {
+export function onRemove(envLen: number, draft: Draft<Term>): void {
   switch (draft.term) {
     case 'func':
     case 'pi':
       const size: number = draft.param.length
       for (let i = 0; i < size; i++)
-        assertNotOccur(len + size, i, draft.body)
+        assertNotOccur(envLen + size, i, draft.body)
       deleteVar(0, size, draft.body)
       onOverride(draft, draft.body)
       return
     case 'app':
       return onOverride(draft, draft.func)
     case 'let':
-      return onLetDelete(len, draft)
+      return onLetDelete(envLen, draft)
     default:
       return onOverride(draft, { term: 'any' })
   }

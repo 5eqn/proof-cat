@@ -14,14 +14,22 @@ export function TermAny(props: TermAnyProps): JSX.Element {
     onWrapLet={(name: string) => onChange(mkAction({
       action: 'wrapLet',
       name,
+      envLen: ns.length,
     }))}
     onWrapPi={(name: string) => onChange(mkAction({
       action: 'wrapPi',
       name,
+      envLen: ns.length,
     }))}
     onWrapFunc={(name: string) => onChange(mkAction({
       action: 'wrapFunc',
       name,
+      envLen: ns.length,
+    }))}
+    onWrapApp={() => onChange(mkAction({
+      action: 'wrapApp',
+      funcType: { val: 'any' },
+      envLen: ns.length,
     }))}
     onBecomeVar={(id: string, ix: number) => onChange(mkAction({
       action: 'becomeVar',
