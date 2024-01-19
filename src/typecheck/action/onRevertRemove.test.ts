@@ -21,6 +21,21 @@ describe('onRevertRemove function', () => {
     }
   }
 
+  const tFuncAfter: Term = {
+    term: 'func',
+    param: [
+      {
+        term: 'uni',
+      },
+    ],
+    paramID: ['T'],
+    body: {
+      term: 'var',
+      id: 'x',
+      ix: 1,
+    }
+  }
+
   const tAppAfter: Term = {
     term: 'app',
     arg: [
@@ -64,7 +79,7 @@ describe('onRevertRemove function', () => {
     const backup = { ...term }
     const action = mkAction<Term>({
       action: 'remove',
-      envLen: 0,
+      envLen: 1,
       backup,
     })
     runAction(action, term)
@@ -72,11 +87,24 @@ describe('onRevertRemove function', () => {
     expect(term).toStrictEqual(tPiAfter)
   })
 
+  test('should revert remove function params', () => {
+    const term = cloneDeep(tFuncAfter)
+    const backup = { ...term }
+    const action = mkAction<Term>({
+      action: 'remove',
+      envLen: 1,
+      backup,
+    })
+    runAction(action, term)
+    runAction(revertAction(action), term)
+    expect(term).toStrictEqual(tFuncAfter)
+  })
+
   test('should revert remove definition', () => {
     const term = cloneDeep(tLetAfter)
     const backup = { ...term }
-    onRemove(0, term)
-    onRevertRemove(0, backup, term)
+    onRemove(1, term)
+    onRevertRemove(backup, term)
     expect(term).toStrictEqual(tLetAfter)
   })
 
@@ -84,15 +112,15 @@ describe('onRevertRemove function', () => {
     const term = cloneDeep(tAppAfter)
     const backup = { ...term }
     onRemove(1, term)
-    onRevertRemove(1, backup, term)
+    onRevertRemove(backup, term)
     expect(term).toStrictEqual(tAppAfter)
   })
 
   test('should make uni any', () => {
     const term = cloneDeep(tUniAfter)
     const backup = { ...term }
-    onRemove(0, term)
-    onRevertRemove(0, backup, term)
+    onRemove(1, term)
+    onRevertRemove(backup, term)
     expect(term).toStrictEqual(tUniAfter)
   })
 })

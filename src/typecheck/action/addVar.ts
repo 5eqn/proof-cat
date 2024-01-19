@@ -2,6 +2,8 @@
 import { Draft } from "immer";
 import { TApp, Term, TFunc, TLet, TPi, TVar } from "../model/term";
 
+// ix: de-Bruijn index of the added variable
+// size: number of added variables
 export function addVar(ix: number, size: number, term: Draft<Term>): void {
   switch (term.term) {
     case 'func':
