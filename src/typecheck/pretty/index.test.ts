@@ -1,5 +1,5 @@
-import { Term } from "./model/term"
-import { pretty } from "./pretty"
+import { Term } from "../model/term"
+import { pretty } from "."
 
 describe('evaluateVar function', () => {
   const func: Term = {
