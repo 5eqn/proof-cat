@@ -1,5 +1,5 @@
 import { message } from "antd"
-import { Updater } from "use-immer"
+import { proxy } from "valtio"
 import { i18n } from "../../i18n"
 import { runAction } from "../action"
 import { infer } from "../infer"
@@ -20,6 +20,9 @@ const actions: ActionTree = { next: [] }
 // Current action, action should be undefined
 let curr: ActionTree = actions
 
+// Current temt
+export const term: Term = proxy({ term: 'any' })
+
 // Store an action
 function storeAction(action: ActionPack<Term, Term>): void {
   curr.action = action
@@ -29,55 +32,52 @@ function storeAction(action: ActionPack<Term, Term>): void {
 }
 
 // Undo an action
-export function onUndo(setState: Updater<Term>): void {
+export function onUndo(): void {
   if (curr.parent === undefined) return message.error(i18n.err.noUndo) as any
-  onUpdate(revertAction(curr.parent.action as any), setState, false)
+  onUpdate(revertAction(curr.parent.action as any), false)
   curr = curr.parent as any
 }
 
 // Redo an action
-export function onRedo(setState: Updater<Term>): void {
+export function onRedo(): void {
   if (curr.next.length === 0) return message.error(i18n.err.noRedo) as any
-  onUpdate(curr.action as any, setState, false)
+  onUpdate(curr.action as any, false)
   curr = curr.next[curr.next.length - 1]
 }
 
 // Dispatch an action
 export function onUpdate(
   action: ActionPack<Term, Term>,
-  setState: Updater<Term>,
   store: boolean = true,
 ): boolean {
   let success = true
-  setState(draft => {
+  try {
+    // Run action
+    runAction(action, term)
     try {
-      // Run action
-      runAction(action, draft)
-      try {
-        // Check if new term is well-typed
-        infer({
-          env: [],
-          ctx: [],
-          ns: [],
-          depth: 0,
-          term: draft,
-          onChange: 0 as any,
-        })
-      } catch (e) {
-        // If not, revert action and throw error
-        runAction(revertAction(action), draft)
-        throw e;
-      }
+      // Check if new term is well-typed
+      infer({
+        env: [],
+        ctx: [],
+        ns: [],
+        depth: 0,
+        term,
+        onChange: 0 as any,
+      })
     } catch (e) {
-      success = false
-      if (e instanceof CodeActionError) {
-        // Handle predefined error
-        message.error(e.toString())
-      } else {
-        throw e;
-      }
+      // If not, revert action and throw error
+      runAction(revertAction(action), term)
+      throw e;
     }
-  })
+  } catch (e) {
+    success = false
+    if (e instanceof CodeActionError) {
+      // Handle predefined error
+      message.error(e.toString())
+    } else {
+      throw e;
+    }
+  }
   if (!success) {
     return false
   }

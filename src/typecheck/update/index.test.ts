@@ -15,8 +15,6 @@ const mockRevertAction = jest.mocked(revertAction)
 const mockInfer = jest.mocked(infer)
 
 describe('onUpdate function', () => {
-  const mockSetState = jest.fn()
-
   beforeEach(() => {
     jest.clearAllMocks()
   })
@@ -25,8 +23,7 @@ describe('onUpdate function', () => {
     mockRunAction.mockImplementationOnce(() => {
       throw new ErrorASTMismatch()
     })
-    mockSetState.mockImplementationOnce((updater: any) => updater('term'))
-    expect(onUpdate('action' as any, mockSetState)).toBe(false)
+    expect(onUpdate('action' as any)).toBe(false)
     expect(mockRevertAction).toBeCalledTimes(0)
     expect(mockError).toBeCalledTimes(1)
   })
@@ -35,8 +32,7 @@ describe('onUpdate function', () => {
     mockInfer.mockImplementationOnce(() => {
       throw new ErrorASTMismatch()
     })
-    mockSetState.mockImplementationOnce((updater: any) => updater('term'))
-    expect(onUpdate('action' as any, mockSetState)).toBe(false)
+    expect(onUpdate('action' as any)).toBe(false)
     expect(mockRevertAction).toBeCalledTimes(1)
     expect(mockError).toBeCalledTimes(1)
   })
@@ -45,13 +41,11 @@ describe('onUpdate function', () => {
     mockInfer.mockImplementationOnce(() => {
       throw new Error()
     })
-    mockSetState.mockImplementationOnce((updater: any) => updater('term'))
-    expect(() => onUpdate('action' as any, mockSetState)).toThrow()
+    expect(() => onUpdate('action' as any)).toThrow()
   })
 
   test('errorless run should return true', () => {
-    mockSetState.mockImplementationOnce((updater: any) => updater('term'))
-    expect(onUpdate('action' as any, mockSetState)).toBe(true)
+    expect(onUpdate('action' as any)).toBe(true)
     expect(mockRevertAction).toBeCalledTimes(0)
     expect(mockError).toBeCalledTimes(0)
   })
