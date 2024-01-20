@@ -1,7 +1,7 @@
 /**************
  PRETTY-PRINT
  **************/
-import { TApp, Term, TFunc, TLet, TPi } from "./model/term";
+import { TApp, Term, TFunc, TLet, TPi } from "../model/term";
 
 // Pretty-print a term
 export function pretty(ns: string[], term: Term, applied: boolean = false): string {

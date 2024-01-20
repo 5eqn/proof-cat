@@ -23,7 +23,7 @@ export function onUpdate(
           ns: [],
           depth: 0,
           term: draft,
-          onChange: (_) => true,
+          onChange: 0 as any,
         })
       } catch (e) {
         // If not, revert action and throw error
