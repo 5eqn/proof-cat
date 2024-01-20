@@ -87,6 +87,8 @@ const source = {
       lengthMismatch: '列表长度不同',
       namespaceMismatch: '命名不同',
       contentMismatch: '列表内容不同',
+      noUndo: '没有操作可以撤销！',
+      noRedo: '没有操作可以重做！',
     },
     prompt: {
       addAnEntry: '增加一个前件',
