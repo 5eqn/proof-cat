@@ -32,5 +32,9 @@ describe('unifyFunc function', () => {
   test('should unify any with anything', () => {
     expect(() => unify(1, a, f)).not.toThrow()
   })
+
+  test('should unify any with any', () => {
+    expect(() => unify(1, a, a)).not.toThrow()
+  })
 })
 
