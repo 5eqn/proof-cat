@@ -29,16 +29,16 @@ function storeAction(action: ActionPack<Term, Term>): void {
 }
 
 // Undo an action
-export function undo(setState: Updater<Term>): void {
+export function onUndo(setState: Updater<Term>): void {
   if (curr.parent === undefined) return message.error(i18n.err.noUndo) as any
-  onUpdate(curr.parent.action as any, setState, false)
+  onUpdate(revertAction(curr.parent.action as any), setState, false)
   curr = curr.parent as any
 }
 
 // Redo an action
-export function redo(setState: Updater<Term>): void {
+export function onRedo(setState: Updater<Term>): void {
   if (curr.next.length === 0) return message.error(i18n.err.noRedo) as any
-  onUpdate(curr.next[curr.next.length - 1].action as any, setState, false)
+  onUpdate(curr.action as any, setState, false)
   curr = curr.next[curr.next.length - 1]
 }
 
