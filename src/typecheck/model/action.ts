@@ -1,4 +1,3 @@
-import { Draft } from "immer"
 import { Term } from "./term"
 import { Val } from "./value"
 
@@ -96,9 +95,13 @@ export type Action =
   | ActionWrapLet
   | ActionAddParam
 
+export type Lens<T, U> = (t: T) => U
+
+export const identityLens = (t: any) => t
+
 export type ActionPack<T, U> = {
   action: Action,
-  lens: (draft: Draft<T>) => Draft<U>,
+  lens: Lens<T, U>,
   undo: boolean,
 }
 
@@ -108,25 +111,14 @@ export function revertAction<T, U>(
   return { action, lens, undo: !undo }
 }
 
-export function mapAction<T, U, V>(
-  { action, lens, undo }: ActionPack<U, V>,
-  f: (draft: Draft<T>) => Draft<U>
-): ActionPack<T, V> {
-  const newLens = (draft: Draft<T>) => lens(f(draft))
-  return {
-    action,
-    lens: newLens,
-    undo,
-  }
-}
-
 export function mkAction<T>(
   action: Action,
-  undo: boolean = false
-): ActionPack<T, T> {
+  lens: Lens<Term, T> = identityLens,
+  undo: boolean = false,
+): ActionPack<Term, T> {
   return {
     action,
-    lens: (draft: Draft<T>) => draft,
+    lens,
     undo,
   }
 }

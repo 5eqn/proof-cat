@@ -3,10 +3,10 @@ import { Env } from "./env";
 import { Ctx } from "./ctx";
 import { Val } from "./value";
 
-import { Callback } from "./callback";
 import { Term } from "./term";
+import { Lens } from "./action";
 
-export type InferRequest<T> = {
+export type InferRequest<T extends Term> = {
   // Current mapping from de-Bruijn index to value
   env: Env,
   // Current mapping from de-Bruijn index to type value
@@ -18,7 +18,7 @@ export type InferRequest<T> = {
   // Term to be inferred
   term: T,
   // Callback of code actions
-  onChange: Callback<T, Term>,
+  lens: Lens<Term, T>,
 }
 
 // Result after inferring the type of a term

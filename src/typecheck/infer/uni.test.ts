@@ -1,3 +1,4 @@
+import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TUni } from "../model/term"
 import { Val } from "../model/value"
@@ -21,7 +22,7 @@ describe('inferUni function', () => {
     ns: [],
     depth: 0,
     term: mockTUni,
-    onChange: jest.fn(),
+    lens: identityLens,
   }
 
   beforeEach(() => {

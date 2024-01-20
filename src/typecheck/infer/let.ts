@@ -1,28 +1,20 @@
 import { InferRequest, InferResult } from "../model/infer";
-import { TLet } from "../model/term";
+import { Term, TLet } from "../model/term";
 import { evaluate } from "../evaluate";
 import { TermLet } from "../../view/TermLet";
 import { infer } from "./index";
-import { mapCallback } from "../model/callback";
-import { Draft } from "immer";
 
 export function inferLet(req: InferRequest<TLet>): InferResult {
-  const { env, ctx, ns, depth, term, onChange } = req
-  const onBodyChange = mapCallback(
-    onChange,
-    (draft: Draft<TLet>) => draft.body,
-  )
-  const onNextChange = mapCallback(
-    onChange,
-    (draft: Draft<TLet>) => draft.next
-  )
+  const { env, ctx, ns, depth, term, lens } = req
+  const getBody = (t: Term) => lens(t).body
+  const getNext = (t: Term) => lens(t).next
   const { val: bodyVal, element: bodyElement } = infer({
     env: env,
     ctx: ctx,
     ns: ns,
     depth: depth + 1,
     term: term.body,
-    onChange: onBodyChange,
+    lens: getBody,
   })
   const { val: nextVal, element: nextElement } = infer({
     env: [evaluate(env, term.body), ...env],
@@ -30,7 +22,7 @@ export function inferLet(req: InferRequest<TLet>): InferResult {
     ns: [term.id, ...ns],
     depth,
     term: term.next,
-    onChange: onNextChange,
+    lens: getNext,
   })
   return {
     val: nextVal,
@@ -41,8 +33,8 @@ export function inferLet(req: InferRequest<TLet>): InferResult {
       next: nextElement,
     }),
     debug: {
-      onBodyChange,
-      onNextChange,
+      getBody,
+      getNext,
     }
   }
 }

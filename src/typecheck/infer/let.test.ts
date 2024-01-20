@@ -1,10 +1,9 @@
 import cloneDeep from 'lodash.clonedeep'
 import { infer } from '.'
-import { runAction } from '../action'
 import { evaluate } from '../evaluate'
-import { mkAction } from '../model/action'
+import { identityLens } from '../model/action'
 import { InferRequest } from "../model/infer"
-import { TAny, TApp, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
+import { TApp, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
 import { inferLet } from "./let"
 
 describe('inferLet function', () => {
@@ -90,36 +89,14 @@ describe('inferLet function', () => {
     next: typeA,
   }
 
-  // any
-  const anyTerm: TAny = {
-    term: 'any',
-  }
-
-  // let x = any in A
-  const unrefDeleteBody: TLet = {
-    term: 'let',
-    id: 'x',
-    body: anyTerm,
-    next: typeA,
-  }
-
-  // let x = 1 in any
-  const unrefDeleteNext: TLet = {
-    term: 'let',
-    id: 'x',
-    body: one,
-    next: anyTerm,
-  }
-
   // Infer request
-  const onChange = jest.fn()
   const mockReq: InferRequest<TLet> = {
     env: [],
     ctx: [],
     ns: [],
     depth: 0,
     term: term,
-    onChange: onChange,
+    lens: identityLens,
   }
 
   // Unref infer request
@@ -129,7 +106,7 @@ describe('inferLet function', () => {
     ns: [],
     depth: 0,
     term: unrefTerm,
-    onChange: onChange,
+    lens: identityLens,
   }
 
   beforeEach(() => {
@@ -144,25 +121,13 @@ describe('inferLet function', () => {
   test('change in body should be reflected', () => {
     const req = cloneDeep(mockReqUnref)
     const { debug } = inferLet(req)
-    debug.onBodyChange(mkAction({
-      action: 'remove',
-    } as any))
-    expect(onChange).toBeCalledTimes(1)
-    const action = onChange.mock.lastCall[0]
-    runAction(action, req.term)
-    expect(req.term).toStrictEqual(unrefDeleteBody)
+    expect(debug.getBody(unrefTerm)).toStrictEqual(unrefTerm.body)
   })
 
   test('change in next should be reflected', () => {
     const req = cloneDeep(mockReqUnref)
     const { debug } = inferLet(req)
-    debug.onNextChange(mkAction({
-      action: 'remove',
-    } as any))
-    expect(onChange).toBeCalledTimes(1)
-    const action = onChange.mock.lastCall[0]
-    runAction(action, req.term)
-    expect(req.term).toStrictEqual(unrefDeleteNext)
+    expect(debug.getNext(unrefTerm)).toStrictEqual(unrefTerm.next)
   })
 })
 

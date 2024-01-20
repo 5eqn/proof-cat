@@ -1,4 +1,5 @@
 import { infer } from "."
+import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TAny } from "../model/term"
 import { Val } from "../model/value"
@@ -21,7 +22,7 @@ describe('inferAny function', () => {
     ns: [],
     depth: 0,
     term: mockTAny,
-    onChange: jest.fn(),
+    lens: identityLens,
   }
 
   beforeEach(() => {

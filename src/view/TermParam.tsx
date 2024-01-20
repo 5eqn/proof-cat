@@ -3,6 +3,7 @@ import { TFunc, TPi } from "../typecheck/model/term";
 import { InferRequest } from "../typecheck/model/infer";
 import { i18n } from "../i18n";
 import { mkAction } from "../typecheck/model/action";
+import { onUpdate } from "../typecheck/update";
 
 export interface TermParamProps {
   // Infer request of the function it belongs to
@@ -21,12 +22,12 @@ export function TermParam(props: TermParamProps): JSX.Element {
     name={props.paramID + ' ' + i18n.term.hasType}
     depth={props.req.depth + 1}
     children={props.param}
-    onDelete={() => props.req.onChange(mkAction({
+    onDelete={() => onUpdate(mkAction({
       // TODO this will create `any` on revert
       action: 'addParam',
       id: props.paramID,
       ix: props.paramIX,
       envLen: props.req.ns.length,
-    }, true))}
+    }, props.req.lens, true))}
   />
 }

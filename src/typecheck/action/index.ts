@@ -1,4 +1,3 @@
-import { Draft } from "immer";
 import { ActionPack } from "../model/action"
 import { Term } from "../model/term";
 import { onBecomeAny } from "./onBecomeAny";
@@ -19,15 +18,18 @@ import { onWrapLet } from "./onWrapLet";
 import { onWrapPi } from "./onWrapPi";
 
 // All actions, if throw error, should not change state
-export function runAction(pack: ActionPack<Term, Term>, draft: Draft<Term>): void {
-  const { undo }: ActionPack<Term, Term> = pack
+export function runAction<T extends Term>(
+  pack: ActionPack<T, Term>,
+  draft: T
+): void {
+  const { undo }: ActionPack<T, Term> = pack
   if (undo) runUndo(pack, draft)
   else runDo(pack, draft)
 }
 
-function runUndo(
-  { action, lens }: ActionPack<Term, Term>,
-  draft: Draft<Term>
+function runUndo<T extends Term>(
+  { action, lens }: ActionPack<T, Term>,
+  draft: T
 ): void {
   const term = lens(draft) as any
   switch (action.action) {
@@ -51,9 +53,9 @@ function runUndo(
   }
 }
 
-function runDo(
-  { action, lens }: ActionPack<Term, Term>,
-  draft: Draft<Term>
+function runDo<T extends Term>(
+  { action, lens }: ActionPack<T, Term>,
+  draft: T
 ): void {
   const term = lens(draft) as any
   switch (action.action) {

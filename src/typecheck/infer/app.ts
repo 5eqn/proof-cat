@@ -10,21 +10,16 @@ import { ErrorCallNonFunc } from "../model/error";
 import { inferArg } from "./arg";
 import { unifyNamespace } from "../unify/namespace";
 import { unifyArray } from "../unify/array";
-import { mapCallback } from "../model/callback";
-import { Draft } from "immer";
 
 export function inferApp(req: InferRequest<TApp>): InferResult {
   // Get function type
-  const { env, ctx, ns, depth, term, onChange }: InferRequest<TApp> = req
-  const onFuncChange = mapCallback(
-    onChange,
-    (draft: Draft<TApp>) => draft.func
-  )
+  const { env, ctx, ns, depth, term, lens }: InferRequest<TApp> = req
+  const getFunc = (t: Term) => lens(t).func
   const { val: funcType, element: funcElement }: InferResult = infer({
     env, ctx, ns,
     depth: depth + 1,
     term: term.func,
-    onChange: onFuncChange
+    lens: getFunc,
   })
   // Make sure function's type is Pi
   if (funcType.val !== 'pi') {
@@ -47,8 +42,8 @@ export function inferApp(req: InferRequest<TApp>): InferResult {
       func: funcElement,
     }),
     debug: {
-      onFuncChange,
-      onArgChange: getDebugs(argInfers),
+      getFunc,
+      getArg: getDebugs(argInfers),
     }
   }
 }
