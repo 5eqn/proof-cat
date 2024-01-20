@@ -4,16 +4,16 @@
 import { TApp, Term, TFunc, TLet, TPi } from "./model/term";
 
 // Pretty-print a term
-export function pretty(ns: string[], term: Term): string {
+export function pretty(ns: string[], term: Term, applied: boolean = false): string {
   switch (term.term) {
     case 'func':
-      return prettyFunc(ns, term)
+      return paren(applied, prettyFunc(ns, term))
     case 'pi':
-      return prettyPi(ns, term)
+      return paren(applied, prettyPi(ns, term))
     case 'app':
       return prettyApp(ns, term)
     case 'let':
-      return prettyLet(ns, term)
+      return paren(applied, prettyLet(ns, term))
     case 'var':
       return `${term.id}`
     case 'num':
@@ -27,8 +27,12 @@ export function pretty(ns: string[], term: Term): string {
   }
 }
 
+function paren(use: boolean, inner: string): string {
+  return use ? `(${inner})` : inner
+}
+
 function prettyFunc(ns: string[], term: TFunc): string {
-  return `((${term.param.map((t, i) => `${term.paramID[i]}: ${pretty(ns, t)}`).join(', ')}) => ${pretty([...term.paramID, ...ns], term.body)})`
+  return `(${term.param.map((t, i) => `${term.paramID[i]}: ${pretty(ns, t)}`).join(', ')}) => ${pretty([...term.paramID, ...ns], term.body)}`
 }
 
 function prettyPi(ns: string[], term: TPi): string {
@@ -36,9 +40,9 @@ function prettyPi(ns: string[], term: TPi): string {
 }
 
 function prettyApp(ns: string[], term: TApp): string {
-  return `${pretty(ns, term.func)}(${term.arg.map((arg, i) => `${term.argID[i]} = ${pretty(ns, arg)}`).join(', ')})`
+  return `${pretty(ns, term.func, true)}(${term.arg.map((arg, i) => `${term.argID[i]} = ${pretty(ns, arg)}`).join(', ')})`
 }
 
 function prettyLet(ns: string[], term: TLet): string {
-  return `${term.id} = ${pretty([term.id, ...ns], term.body)}; ${pretty([term.id, ...ns], term.next)}`
+  return `let ${term.id} = ${pretty([term.id, ...ns], term.body)} in ${pretty([term.id, ...ns], term.next)}`
 }
