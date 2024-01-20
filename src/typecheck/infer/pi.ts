@@ -1,4 +1,4 @@
-import { getDebugs, getElements, InferRequest, InferResult } from "../model/infer";
+import { getDebugs, getElements, getVals, InferRequest, InferResult } from "../model/infer";
 import { TPi } from "../model/term";
 import { Draft } from "immer";
 import { Val } from "../model/value";
@@ -8,6 +8,7 @@ import { mapCallback } from "../model/callback";
 import { inferParam } from "./param";
 import { TermPi } from "../../view/TermPi";
 import { makeSpineIn } from "../action/helper/makeSpineIn";
+import { unify } from "../unify";
 
 
 export function inferPi(req: InferRequest<TPi>): InferResult {
@@ -34,6 +35,8 @@ export function inferPi(req: InferRequest<TPi>): InferResult {
   }
   // Construct element for params
   const paramInfers = inferParam(req)
+  // Make sure params have type U
+  getVals(paramInfers).forEach((ty: Val) => unify(env.length, ty, { val: 'uni' }))
   return {
     val: val,
     element: TermPi({
