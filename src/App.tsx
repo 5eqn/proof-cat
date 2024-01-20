@@ -1,24 +1,21 @@
-import { useImmer } from "use-immer";
 import Center from "./component/Center";
 import Text from "./component/Text";
-import { Term } from "./typecheck/model/term";
 import { pretty } from "./typecheck/pretty";
 import { infer } from "./typecheck/infer";
 import { quote } from "./typecheck/quote";
-import { onRedo, onUndo, onUpdate } from "./typecheck/update";
+import { onRedo, onUndo, onUpdate, term } from "./typecheck/update";
 import { KeyListener } from "./component/KeyListener";
+import { useSnapshot } from "valtio";
 
 function App() {
-  const [state, setState] = useImmer<Term>({
-    term: 'any'
-  })
+  const snap = useSnapshot(term)
   const { val, element } = infer({
     env: [],
     ctx: [],
     ns: [],
     depth: 0,
-    term: state,
-    onChange: (action) => onUpdate(action, setState)
+    term: snap as any,
+    onChange: onUpdate
   })
   const tytm = quote(0, val)
   return <div>
@@ -47,12 +44,12 @@ function App() {
       {
         key: 'z',
         requireCtrl: true,
-        callback: () => onUndo(setState)
+        callback: onUndo,
       },
       {
         key: 'y',
         requireCtrl: true,
-        callback: () => onRedo(setState)
+        callback: onRedo,
       },
     ]} />
   </div>
