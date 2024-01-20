@@ -5,11 +5,12 @@ import { TermHeader } from "./TermHeader";
 import { TermPropsBase } from "../typecheck/model/props";
 import { InferRequest } from "../typecheck/model/infer";
 import { mkAction } from "../typecheck/model/action";
+import { onUpdate } from "../typecheck/update";
 
 export interface TermVarProps extends TermPropsBase<TVar> { }
 
 export function TermVar(props: TermVarProps): JSX.Element {
-  const { term, ns, depth, onChange }: InferRequest<TVar> = props.req
+  const { term, ns, depth, lens }: InferRequest<TVar> = props.req
   return <div>
     <TermHeader
       req={props.req}
@@ -21,13 +22,13 @@ export function TermVar(props: TermVarProps): JSX.Element {
       depth={depth}
       data={ns}
       index={term.ix}
-      onChange={(ix) => onChange(mkAction({
+      onChange={(ix) => onUpdate(mkAction({
         action: 'updateVar',
         oldID: term.id,
         oldIX: term.ix,
         newID: ns[ix],
         newIX: ix,
-      }))}
+      }, lens))}
     />
   </div>
 }

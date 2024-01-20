@@ -5,11 +5,12 @@ import { TermHeader } from "./TermHeader";
 import { TermPropsBase } from "../typecheck/model/props";
 import { InferRequest } from "../typecheck/model/infer";
 import { mkAction } from "../typecheck/model/action";
+import { onUpdate } from "../typecheck/update";
 
 export interface TermNumProps extends TermPropsBase<TNum> { }
 
 export function TermNum(props: TermNumProps): JSX.Element {
-  const { term, depth, onChange }: InferRequest<TNum> = props.req
+  const { term, depth, lens }: InferRequest<TNum> = props.req
   return <div>
     <TermHeader
       req={props.req}
@@ -20,11 +21,11 @@ export function TermNum(props: TermNumProps): JSX.Element {
       depth={depth}
       label={i18n.term.val}
       value={term.num.toString()}
-      onChange={(str: string) => onChange(mkAction({
+      onChange={(str: string) => onUpdate(mkAction({
         action: 'updateNum',
         oldNum: term.num,
         newNum: +str,
-      }))}
+      }, lens))}
     />
   </div>
 }

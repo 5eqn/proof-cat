@@ -5,6 +5,7 @@ import { TermHeader } from "./TermHeader";
 import { TermPropsBase } from "../typecheck/model/props";
 import { InferRequest } from "../typecheck/model/infer";
 import { mkAction } from "../typecheck/model/action";
+import { onUpdate } from "../typecheck/update";
 
 export interface TermPiProps extends TermPropsBase<TPi> {
   params: JSX.Element[]
@@ -12,18 +13,18 @@ export interface TermPiProps extends TermPropsBase<TPi> {
 }
 
 export function TermPi(props: TermPiProps): JSX.Element {
-  const { ns, depth, onChange }: InferRequest<TPi> = props.req
+  const { ns, depth, lens }: InferRequest<TPi> = props.req
   return <div>
     <TermHeader
       req={props.req}
       type={props.type}
       label={i18n.term.pi}
-      onAdd={(name: string) => onChange(mkAction({
+      onAdd={(name: string) => onUpdate(mkAction({
         action: 'addParam',
         id: name,
         ix: 0,
         envLen: ns.length,
-      }))}
+      }, lens))}
     />
     {props.params}
     <Labeled

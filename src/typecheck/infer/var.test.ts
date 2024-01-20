@@ -1,3 +1,4 @@
+import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TVar } from "../model/term"
 import { Val, VType, VVar } from "../model/value"
@@ -37,7 +38,7 @@ describe('inferVar function', () => {
     ns: ['x'],
     depth: 0,
     term: mockTVar,
-    onChange: jest.fn(),
+    lens: identityLens,
   }
 
   beforeEach(() => {

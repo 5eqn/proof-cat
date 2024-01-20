@@ -8,24 +8,24 @@ import { CodeActionError } from "../model/error"
 import { Term } from "../model/term"
 
 // Action tree
-export type ActionTree = {
-  action?: ActionPack<Term, Term>
-  next: ActionTree[]
-  parent?: ActionTree
+export type ActionTree<T extends Term> = {
+  action?: ActionPack<T, Term>
+  next: ActionTree<T>[]
+  parent?: ActionTree<T>
 }
 
 // All actions
-const actions: ActionTree = { next: [] }
+const actions: ActionTree<Term> = { next: [] }
 
 // Current action, action should be undefined
-let curr: ActionTree = actions
+let curr: ActionTree<Term> = actions
 
-// Current temt
+// Current term
 export const term: Term = proxy({ term: 'any' })
 
 // Store an action
-function storeAction(action: ActionPack<Term, Term>): void {
-  curr.action = action
+function storeAction<T extends Term>(action: ActionPack<T, Term>): void {
+  curr.action = action as any
   const nextAction = { next: [], parent: curr }
   curr.next.push(nextAction)
   curr = nextAction
@@ -46,14 +46,14 @@ export function onRedo(): void {
 }
 
 // Dispatch an action
-export function onUpdate(
-  action: ActionPack<Term, Term>,
+export function onUpdate<T extends Term>(
+  action: ActionPack<T, Term>,
   store: boolean = true,
 ): boolean {
   let success = true
   try {
     // Run action
-    runAction(action, term)
+    runAction(action, term as T)
     try {
       // Check if new term is well-typed
       infer({
@@ -62,11 +62,11 @@ export function onUpdate(
         ns: [],
         depth: 0,
         term,
-        onChange: 0 as any,
+        lens: 0 as any,
       })
     } catch (e) {
       // If not, revert action and throw error
-      runAction(revertAction(action), term)
+      runAction(revertAction(action), term as T)
       throw e;
     }
   } catch (e) {

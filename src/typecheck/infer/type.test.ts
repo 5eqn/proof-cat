@@ -1,3 +1,4 @@
+import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TType } from "../model/term"
 import { Val } from "../model/value"
@@ -22,7 +23,7 @@ describe('inferType function', () => {
     ns: [],
     depth: 0,
     term: mockTType,
-    onChange: jest.fn(),
+    lens: identityLens,
   }
 
   beforeEach(() => {

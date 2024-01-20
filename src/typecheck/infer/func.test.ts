@@ -1,8 +1,7 @@
 import cloneDeep from 'lodash.clonedeep'
-import { runAction } from '../action'
-import { mkAction } from '../model/action'
+import { identityLens } from '../model/action'
 import { InferRequest } from "../model/infer"
-import { TAny, TFunc, TNum, TType, TVar } from "../model/term"
+import { TFunc, TNum, TType, TVar } from "../model/term"
 import { VPi, VType } from "../model/value"
 import { inferFunc } from "./func"
 
@@ -59,28 +58,14 @@ describe('inferFunc function', () => {
     }
   }
 
-  // any
-  const anyTerm: TAny = {
-    term: 'any',
-  }
-
-  // Expected term after deleting body
-  const expectedDeleteBody: TFunc = {
-    term: 'func',
-    param: [mockTType],
-    paramID: ['a'],
-    body: anyTerm,
-  }
-
   // Infer request
-  const onChange = jest.fn()
   const mockReq: InferRequest<TFunc> = {
     env: [],
     ctx: [],
     ns: [],
     depth: 0,
     term: mockTFunc,
-    onChange: onChange,
+    lens: identityLens,
   }
 
   beforeEach(() => {
@@ -101,13 +86,7 @@ describe('inferFunc function', () => {
   test('change in body should be reflected', () => {
     const req = cloneDeep(mockReq)
     const { debug } = inferFunc(req)
-    debug.onBodyChange(mkAction({
-      action: 'remove',
-    } as any))
-    expect(onChange).toBeCalledTimes(1)
-    const action = onChange.mock.lastCall[0]
-    runAction(action, req.term)
-    expect(req.term).toStrictEqual(expectedDeleteBody)
+    expect(debug.getBody(mockTFunc)).toStrictEqual(mockTFunc.body)
   })
 })
 

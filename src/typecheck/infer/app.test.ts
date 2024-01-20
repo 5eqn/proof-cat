@@ -1,6 +1,5 @@
 import cloneDeep from "lodash.clonedeep"
-import { runAction } from "../action"
-import { mkAction } from "../model/action"
+import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TApp, TVar } from "../model/term"
 import { VVar, VPi, VUni } from "../model/value"
@@ -30,13 +29,6 @@ describe('inferApp function', () => {
   const mockTVarF: TVar = {
     term: 'var',
     id: 'f',
-    ix: 1,
-  }
-
-  // Function var term, another
-  const mockTVarG: TVar = {
-    term: 'var',
-    id: 'g',
     ix: 1,
   }
 
@@ -79,26 +71,17 @@ describe('inferApp function', () => {
     func: mockTVarF,
   }
 
-  // g(T = x)
-  const expectedChangeFunc: TApp = {
-    term: 'app',
-    argID: ['T'],
-    arg: [mockTVarX],
-    func: mockTVarG,
-  }
-
   // Expected result
   const expected: VVar = mockVVarX
 
   // Infer request
-  const onChange = jest.fn()
   const mockReq: InferRequest<TApp> = {
     env: [mockVVarX, mockVVarF],
     ctx: [mockVUni, mockVPi],
     ns: ['x', 'f'],
     depth: 0,
     term: mockTApp,
-    onChange: onChange,
+    lens: identityLens,
   }
 
   beforeEach(() => {
@@ -134,17 +117,7 @@ describe('inferApp function', () => {
   test('change in function should be reflected if well-typed', () => {
     const req = cloneDeep(mockReq)
     const { debug } = inferApp(req)
-    debug.onFuncChange(mkAction({
-      action: 'updateVar',
-      oldID: 'f',
-      oldIX: 1,
-      newID: 'g',
-      newIX: 1,
-    }))
-    expect(onChange).toBeCalledTimes(1)
-    const action = onChange.mock.lastCall[0]
-    runAction(action, req.term)
-    expect(req.term).toStrictEqual(expectedChangeFunc)
+    expect(debug.getFunc(mockTApp)).toStrictEqual(mockTApp.func)
   })
 })
 

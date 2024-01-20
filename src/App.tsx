@@ -3,9 +3,10 @@ import Text from "./component/Text";
 import { pretty } from "./typecheck/pretty";
 import { infer } from "./typecheck/infer";
 import { quote } from "./typecheck/quote";
-import { onRedo, onUndo, onUpdate, term } from "./typecheck/update";
+import { onRedo, onUndo, term } from "./typecheck/update";
 import { KeyListener } from "./component/KeyListener";
 import { useSnapshot } from "valtio";
+import { identityLens } from "./typecheck/model/action";
 
 function App() {
   const snap = useSnapshot(term)
@@ -15,7 +16,7 @@ function App() {
     ns: [],
     depth: 0,
     term: snap as any,
-    onChange: onUpdate
+    lens: identityLens,
   })
   const tytm = quote(0, val)
   return <div>

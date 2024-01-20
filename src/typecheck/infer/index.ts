@@ -10,7 +10,7 @@ import { inferType } from "./type";
 import { inferPi } from "./pi";
 import { inferFunc } from "./func";
 
-export function infer(req: InferRequest<Term>): InferResult {
+export function infer<T extends Term>(req: InferRequest<T>): InferResult {
   switch (req.term.term) {
     case 'uni':
       return inferUni(req as any)

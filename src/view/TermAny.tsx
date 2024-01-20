@@ -3,48 +3,49 @@ import { TAny } from "../typecheck/model/term";
 import { TermPropsBase } from "../typecheck/model/props";
 import { InferRequest } from "../typecheck/model/infer";
 import { mkAction } from "../typecheck/model/action";
+import { onUpdate } from "../typecheck/update";
 
 export interface TermAnyProps extends TermPropsBase<TAny> { }
 
 export function TermAny(props: TermAnyProps): JSX.Element {
-  const { ns, depth, onChange }: InferRequest<TAny> = props.req
+  const { ns, depth, lens }: InferRequest<TAny> = props.req
   return <AnyBar
     depth={depth}
     ns={ns}
-    onWrapLet={(name: string) => onChange(mkAction({
+    onWrapLet={(name: string) => onUpdate(mkAction({
       action: 'wrapLet',
       name,
       envLen: ns.length,
-    }))}
-    onWrapPi={(name: string) => onChange(mkAction({
+    }, lens))}
+    onWrapPi={(name: string) => onUpdate(mkAction({
       action: 'wrapPi',
       name,
       envLen: ns.length,
-    }))}
-    onWrapFunc={(name: string) => onChange(mkAction({
+    }, lens))}
+    onWrapFunc={(name: string) => onUpdate(mkAction({
       action: 'wrapFunc',
       name,
       envLen: ns.length,
-    }))}
-    onWrapApp={() => onChange(mkAction({
+    }, lens))}
+    onWrapApp={() => onUpdate(mkAction({
       action: 'wrapApp',
       funcType: { val: 'any' },
       envLen: ns.length,
-    }))}
-    onBecomeVar={(id: string, ix: number) => onChange(mkAction({
+    }, lens))}
+    onBecomeVar={(id: string, ix: number) => onUpdate(mkAction({
       action: 'becomeVar',
       id, ix,
-    }))}
-    onBecomeU={() => onChange(mkAction({
+    }, lens))}
+    onBecomeU={() => onUpdate(mkAction({
       action: 'becomeU',
-    }))}
-    onBecomeType={(name: string) => onChange(mkAction({
+    }, lens))}
+    onBecomeType={(name: string) => onUpdate(mkAction({
       action: 'becomeType',
       name,
-    }))}
-    onBecomeNum={(num: string) => onChange(mkAction({
+    }, lens))}
+    onBecomeNum={(num: string) => onUpdate(mkAction({
       action: 'becomeNum',
       num: +num,
-    }))}
+    }, lens))}
   />
 }

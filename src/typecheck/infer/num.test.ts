@@ -1,3 +1,4 @@
+import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TNum } from "../model/term"
 import { Val } from "../model/value"
@@ -23,7 +24,7 @@ describe('inferNum function', () => {
     ns: [],
     depth: 0,
     term: mockTNum,
-    onChange: jest.fn(),
+    lens: identityLens,
   }
 
   beforeEach(() => {
