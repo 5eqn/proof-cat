@@ -5,7 +5,8 @@ import { Term } from "./typecheck/model/term";
 import { pretty } from "./typecheck/pretty";
 import { infer } from "./typecheck/infer";
 import { quote } from "./typecheck/quote";
-import { onUpdate } from "./typecheck/update";
+import { onRedo, onUndo, onUpdate } from "./typecheck/update";
+import { KeyListener } from "./component/KeyListener";
 
 function App() {
   const [state, setState] = useImmer<Term>({
@@ -42,6 +43,18 @@ function App() {
     }}>
       {element}
     </div>
+    <KeyListener callbacks={[
+      {
+        key: 'z',
+        requireCtrl: true,
+        callback: () => onUndo(setState)
+      },
+      {
+        key: 'y',
+        requireCtrl: true,
+        callback: () => onRedo(setState)
+      },
+    ]} />
   </div>
 }
 
