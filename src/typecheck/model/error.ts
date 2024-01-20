@@ -59,13 +59,3 @@ export class ErrorReferredRaw extends CodeActionError {
     return i18n.err.referred
   }
 }
-
-export class ErrorChangeApply extends CodeActionError {
-  toString(): string {
-    return i18n.err.changeApply
-  }
-}
-
-export abstract class TypecheckError {
-  abstract toString(): string
-}
