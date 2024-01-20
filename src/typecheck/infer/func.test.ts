@@ -2,7 +2,7 @@ import cloneDeep from 'lodash.clonedeep'
 import { runAction } from '../action'
 import { mkAction } from '../model/action'
 import { InferRequest } from "../model/infer"
-import { TAny, TFunc, TType, TVar } from "../model/term"
+import { TAny, TFunc, TNum, TType, TVar } from "../model/term"
 import { VPi, VType } from "../model/value"
 import { inferFunc } from "./func"
 
@@ -18,6 +18,20 @@ describe('inferFunc function', () => {
   const mockTType: TType = {
     term: 'type',
     type: 'A',
+  }
+
+  // Number
+  const mockTNum: TNum = {
+    term: 'num',
+    num: 51121,
+  }
+
+  // Bad pi term
+  const mockTFuncBad: TFunc = {
+    term: 'func',
+    param: [mockTNum],
+    paramID: ['a'],
+    body: mockTVar,
   }
 
   // Function term
@@ -76,6 +90,12 @@ describe('inferFunc function', () => {
   test('type of function should be inferred correctly', () => {
     const { val } = inferFunc(mockReq)
     expect(val).toStrictEqual(expected)
+  })
+
+  test('non-type param should not typecheck', () => {
+    const req = cloneDeep(mockReq)
+    req.term = mockTFuncBad
+    expect(() => inferFunc(req)).toThrow()
   })
 
   test('change in body should be reflected', () => {

@@ -1,5 +1,5 @@
 import { Draft } from "immer";
-import { getDebugs, getElements, InferRequest, InferResult } from "../model/infer";
+import { getDebugs, getElements, getVals, InferRequest, InferResult } from "../model/infer";
 import { Term, TFunc } from "../model/term";
 import { Val } from "../model/value";
 import { evalIn } from "../evaluate";
@@ -10,6 +10,7 @@ import { mapCallback } from "../model/callback";
 import { inferParam } from "./param";
 import { quote } from "../quote";
 import { makeSpineIn } from "../action/helper/makeSpineIn";
+import { unify } from "../unify";
 
 export function inferFunc(req: InferRequest<TFunc>): InferResult {
   // Construct element for function body
@@ -41,6 +42,8 @@ export function inferFunc(req: InferRequest<TFunc>): InferResult {
   }
   // Construct element for params
   const paramInfers = inferParam(req)
+  // Make sure params have type U
+  getVals(paramInfers).forEach((ty: Val) => unify(env.length, ty, { val: 'uni' }))
   return {
     val: val,
     element: TermFunc({

@@ -1,7 +1,7 @@
 import { InferRequest, InferResult, getElements, getDebugs, getVals } from "../model/infer";
 import { TApp, Term } from "../model/term";
 import { evaluate } from "../evaluate";
-import { Val, VPi } from "../model/value";
+import { Val } from "../model/value";
 import { apply } from "../model/closure";
 import { TermApp } from "../../view/TermApp";
 
@@ -20,13 +20,12 @@ export function inferApp(req: InferRequest<TApp>): InferResult {
     onChange,
     (draft: Draft<TApp>) => draft.func
   )
-  const { val: funcVal, element: funcElement }: InferResult = infer({
+  const { val: funcType, element: funcElement }: InferResult = infer({
     env, ctx, ns,
     depth: depth + 1,
     term: term.func,
     onChange: onFuncChange
   })
-  const funcType: VPi = funcVal as VPi
   // Make sure function's type is Pi
   if (funcType.val !== 'pi') {
     throw new ErrorCallNonFunc(funcType)
