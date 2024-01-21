@@ -3,7 +3,7 @@ import { Term } from "../typecheck/model/term"
 import { Val } from "../typecheck/model/value"
 import { InferRequest } from "../typecheck/model/infer";
 import { mkAction } from "../typecheck/model/action";
-import { onUpdate } from "../typecheck/update";
+import { onUpdate } from "../state";
 
 export interface TermHeaderProps<T extends Term> {
   req: InferRequest<T>
