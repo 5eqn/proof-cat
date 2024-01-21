@@ -2,6 +2,7 @@ import { message } from "antd"
 import { proxy } from "valtio"
 import { i18n } from "../i18n"
 import { runAction } from "../typecheck/action"
+import { overrideFields } from "../typecheck/action/helper/overrideFields"
 import { infer } from "../typecheck/infer"
 import { ActionPack, revertAction } from "../typecheck/model/action"
 import { CodeActionError } from "../typecheck/model/error"
@@ -15,13 +16,19 @@ export type ActionTree<T extends Term> = {
 }
 
 // All actions
-const actions: ActionTree<Term> = { next: [] }
+const actions: ActionTree<Term> = proxy({ next: [] })
 
 // Current action, action should be undefined
-let curr: ActionTree<Term> = actions
+let curr: ActionTree<Term> = proxy(actions)
 
 // Current term
 export const term: Term = proxy({ term: 'any' })
+
+// Init state
+export function initState(): void {
+  overrideFields(actions, { next: [] })
+  curr = actions
+}
 
 // Store an action
 function storeAction<T extends Term>(action: ActionPack<T, Term>): void {

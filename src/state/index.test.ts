@@ -1,5 +1,5 @@
 import { message } from 'antd'
-import { onUpdate } from './index'
+import { initState, onRedo, onUndo, onUpdate } from './index'
 import { runAction } from '../typecheck/action'
 import { infer } from '../typecheck/infer'
 import { revertAction } from '../typecheck/model/action'
@@ -51,3 +51,43 @@ describe('onUpdate function', () => {
   })
 })
 
+describe('onUndo function', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    initState()
+  })
+
+  test('should report error if nothing to undo', () => {
+    onUndo()
+    expect(mockError).toBeCalledTimes(1)
+    expect(mockRevertAction).toBeCalledTimes(0)
+  })
+
+  test('should call revertAction if exist action to undo', () => {
+    onUpdate('action' as any)
+    onUndo()
+    expect(mockError).toBeCalledTimes(0)
+    expect(mockRevertAction).toBeCalledTimes(1)
+  })
+})
+
+describe('onRedo function', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    initState()
+  })
+
+  test('should report error if nothing to redo', () => {
+    onRedo()
+    expect(mockError).toBeCalledTimes(1)
+    expect(mockRunAction).toBeCalledTimes(0)
+  })
+
+  test('should call runAction if exist action to redo', () => {
+    onUpdate('action' as any)
+    onUndo()
+    onRedo()
+    expect(mockError).toBeCalledTimes(0)
+    expect(mockRunAction).toBeCalledTimes(3)
+  })
+})
