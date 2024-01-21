@@ -5,7 +5,7 @@ import { TermHeader } from "./TermHeader";
 import { TermPropsBase } from "../typecheck/model/props";
 import { InferRequest } from "../typecheck/model/infer";
 import { mkAction } from "../typecheck/model/action";
-import { onUpdate } from "../typecheck/update";
+import { onUpdate } from "../state";
 
 export interface TermTypeProps extends TermPropsBase<TType> { }
 

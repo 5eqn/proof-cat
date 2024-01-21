@@ -3,7 +3,7 @@ import Text from "./component/Text";
 import { pretty } from "./typecheck/pretty";
 import { infer } from "./typecheck/infer";
 import { quote } from "./typecheck/quote";
-import { onRedo, onUndo, term } from "./typecheck/update";
+import { onRedo, onUndo, term } from "./state";
 import { KeyListener } from "./component/KeyListener";
 import { useSnapshot } from "valtio";
 import { identityLens } from "./typecheck/model/action";

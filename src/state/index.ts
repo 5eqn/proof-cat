@@ -1,11 +1,11 @@
 import { message } from "antd"
 import { proxy } from "valtio"
-import { i18n } from "../../i18n"
-import { runAction } from "../action"
-import { infer } from "../infer"
-import { ActionPack, revertAction } from "../model/action"
-import { CodeActionError } from "../model/error"
-import { Term } from "../model/term"
+import { i18n } from "../i18n"
+import { runAction } from "../typecheck/action"
+import { infer } from "../typecheck/infer"
+import { ActionPack, revertAction } from "../typecheck/model/action"
+import { CodeActionError } from "../typecheck/model/error"
+import { Term } from "../typecheck/model/term"
 
 // Action tree
 export type ActionTree<T extends Term> = {

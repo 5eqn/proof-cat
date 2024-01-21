@@ -1,14 +1,14 @@
 import { message } from 'antd'
-import { onUpdate } from '.'
-import { runAction } from '../action'
-import { infer } from '../infer'
-import { revertAction } from '../model/action'
-import { ErrorASTMismatch } from '../model/error'
+import { onUpdate } from './index'
+import { runAction } from '../typecheck/action'
+import { infer } from '../typecheck/infer'
+import { revertAction } from '../typecheck/model/action'
+import { ErrorASTMismatch } from '../typecheck/model/error'
 
 jest.mock('antd')
-jest.mock('../action')
-jest.mock('../model/action')
-jest.mock('../infer')
+jest.mock('../typecheck/action')
+jest.mock('../typecheck/model/action')
+jest.mock('../typecheck/infer')
 const mockError = jest.mocked(message.error)
 const mockRunAction = jest.mocked(runAction)
 const mockRevertAction = jest.mocked(revertAction)

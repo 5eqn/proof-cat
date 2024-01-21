@@ -3,7 +3,7 @@ import { TFunc, TPi } from "../typecheck/model/term";
 import { InferRequest } from "../typecheck/model/infer";
 import { i18n } from "../i18n";
 import { mkAction } from "../typecheck/model/action";
-import { onUpdate } from "../typecheck/update";
+import { onUpdate } from "../state";
 
 export interface TermParamProps {
   // Infer request of the function it belongs to
