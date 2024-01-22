@@ -7,6 +7,7 @@ import { onRedo, onUndo, term } from "./state";
 import { KeyListener } from "./component/KeyListener";
 import { useSnapshot } from "valtio";
 import { identityLens } from "./typecheck/model/action";
+import { DndTest } from "./component/DndTest";
 
 function App() {
   const snap = useSnapshot(term)
@@ -34,6 +35,7 @@ function App() {
         <Text text="You have proven: " />
         <div style={{ height: '16px' }} />
         <Text text={pretty([], tytm)} />
+        <DndTest />
       </Center>
     </div>
     <div style={{
