@@ -1,5 +1,4 @@
 import cloneDeep from "lodash.clonedeep"
-import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TApp, TVar } from "../model/term"
 import { VVar, VPi, VUni } from "../model/value"
@@ -79,9 +78,7 @@ describe('inferApp function', () => {
     env: [mockVVarX, mockVVarF],
     ctx: [mockVUni, mockVPi],
     ns: ['x', 'f'],
-    depth: 0,
-    term: mockTApp,
-    lens: identityLens,
+    tm: mockTApp,
   }
 
   beforeEach(() => {
@@ -89,35 +86,29 @@ describe('inferApp function', () => {
   })
 
   test('type of dependent app should be calculated correctly', () => {
-    const { val } = inferApp(mockReq)
+    const { type: val } = inferApp(mockReq)
     expect(val).toStrictEqual(expected)
   })
 
   test('applying non-function should not typecheck', () => {
     const req = cloneDeep(mockReq)
     // x(T = x)
-    req.term.func = mockTVarX
+    req.tm.func = mockTVarX
     expect(() => inferApp(req)).toThrow()
   })
 
   test('applying function with wrong namespace should not typecheck', () => {
     const req = cloneDeep(mockReq)
     // f(114 = x)
-    req.term.argID[0] = '114'
+    req.tm.argID[0] = '114'
     expect(() => inferApp(req)).toThrow()
   })
 
   test('applying function with wrong value should not typecheck', () => {
     const req = cloneDeep(mockReq)
     // f(T = f)
-    req.term.arg[0] = mockTVarF
+    req.tm.arg[0] = mockTVarF
     expect(() => inferApp(req)).toThrow()
-  })
-
-  test('change in function should be reflected if well-typed', () => {
-    const req = cloneDeep(mockReq)
-    const { debug } = inferApp(req)
-    expect(debug.getFunc(mockTApp)).toStrictEqual(mockTApp.func)
   })
 })
 

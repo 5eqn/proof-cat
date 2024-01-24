@@ -1,46 +1,36 @@
 import { ActionPack } from "../model/action"
 import { Term } from "../model/term";
-import { onBecomeAny } from "./onBecomeAny";
-import { onBecomeNum } from "./onBecomeNum";
-import { onBecomeType } from "./onBecomeType";
-import { onBecomeU } from "./onBecomeU";
-import { onBecomeVar } from "./onBecomeVar";
 import { onParamAdd } from "./onParamAdd";
 import { onParamDelete } from "./onParamDelete";
-import { onUpdateNum } from "./onUpdateNum";
 import { onRemove } from "./onRemove";
 import { onRevertRemove } from "./onRevertRemove";
-import { onUpdateType } from "./onUpdateType";
-import { onUpdateVar } from "./onUpdateVar";
 import { onWrapApp } from "./onWrapApp";
 import { onWrapFunc } from "./onWrapFunc";
 import { onWrapLet } from "./onWrapLet";
 import { onWrapPi } from "./onWrapPi";
+import { overrideFields } from "./helper/overrideFields";
+import { applyLens } from "../model/rec";
 
 // All actions, if throw error, should not change state
-export function runAction<T extends Term>(
-  pack: ActionPack<T, Term>,
-  draft: T
+export function runAction(
+  pack: ActionPack,
+  draft: Term
 ): void {
-  const { undo }: ActionPack<T, Term> = pack
+  const { undo }: ActionPack = pack
   if (undo) runUndo(pack, draft)
   else runDo(pack, draft)
 }
 
-function runUndo<T extends Term>(
-  { action, lens }: ActionPack<T, Term>,
-  draft: T
+function runUndo(
+  { action, lens }: ActionPack,
+  draft: Term
 ): void {
-  const term = lens(draft) as any
+  const term = applyLens(draft, lens) as any
   switch (action.action) {
     case 'remove':
       return onRevertRemove(action.backup, term)
-    case 'updateVar':
-      return onUpdateVar(action.oldID, action.oldIX, term)
-    case 'updateNum':
-      return onUpdateNum(action.oldNum, term)
-    case 'updateType':
-      return onUpdateType(action.oldType, term)
+    case 'override':
+      return overrideFields(term, action.backup)
     case 'addParam':
       return onParamDelete(action.ix, action.envLen, term)
     case 'wrapPi':
@@ -48,25 +38,19 @@ function runUndo<T extends Term>(
     case 'wrapApp':
     case 'wrapLet':
       return onRemove(action.envLen, term)
-    default:
-      return onBecomeAny(term)
   }
 }
 
-function runDo<T extends Term>(
-  { action, lens }: ActionPack<T, Term>,
-  draft: T
+function runDo(
+  { action, lens }: ActionPack,
+  draft: Term
 ): void {
-  const term = lens(draft) as any
+  const term = applyLens(draft, lens) as any
   switch (action.action) {
     case 'remove':
       return onRemove(action.envLen, term)
-    case 'updateVar':
-      return onUpdateVar(action.newID, action.newIX, term)
-    case 'updateNum':
-      return onUpdateNum(action.newNum, term)
-    case 'updateType':
-      return onUpdateType(action.newType, term)
+    case 'override':
+      return overrideFields(term, action.term)
     case 'addParam':
       return onParamAdd(action.ix, action.id, term)
     case 'wrapPi':
@@ -77,13 +61,5 @@ function runDo<T extends Term>(
       return onWrapApp(action.funcType, term)
     case 'wrapLet':
       return onWrapLet(action.name, term)
-    case 'becomeU':
-      return onBecomeU(term)
-    case 'becomeType':
-      return onBecomeType(action.name, term)
-    case 'becomeNum':
-      return onBecomeNum(action.num, term)
-    case 'becomeVar':
-      return onBecomeVar(action.id, action.ix, term)
   }
 }

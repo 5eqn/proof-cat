@@ -6,74 +6,79 @@ import { overrideFields } from "../typecheck/action/helper/overrideFields"
 import { infer } from "../typecheck/infer"
 import { ActionPack, revertAction } from "../typecheck/model/action"
 import { CodeActionError } from "../typecheck/model/error"
+import { InferResult } from "../typecheck/model/infer"
 import { Term } from "../typecheck/model/term"
 
 // Action tree
-export type ActionTree<T extends Term> = {
-  action?: ActionPack<T, Term>
-  next: ActionTree<T>[]
-  parent?: ActionTree<T>
+export type ActionTree = {
+  action?: ActionPack
+  next: ActionTree[]
+  parent?: ActionTree
 }
 
-// All actions
-const actions: ActionTree<Term> = proxy({ next: [] })
-
-// Current action, action should be undefined
-let curr: ActionTree<Term> = proxy(actions)
-
-// Current term
-export const term: Term = proxy({ term: 'any' })
+// Store
+const tempActions: ActionTree = { next: [] }
+export const state = proxy({
+  actions: tempActions,
+  curr: tempActions,
+  term: { term: 'any' } as Term,
+  inferResult: {
+    type: { val: 'any' },
+    env: [],
+    ctx: [],
+    ns: [],
+    term: 'any'
+  } as InferResult,
+})
 
 // Init state
 export function initState(): void {
-  overrideFields(actions, { next: [] })
-  curr = actions
+  overrideFields(state.actions, { next: [] })
+  state.curr = state.actions
 }
 
 // Store an action
-function storeAction<T extends Term>(action: ActionPack<T, Term>): void {
-  curr.action = action as any
-  const nextAction = { next: [], parent: curr }
-  curr.next.push(nextAction)
-  curr = nextAction
+function storeAction(action: ActionPack): void {
+  state.curr.action = action as any
+  const nextAction = { next: [], parent: state.curr }
+  state.curr.next.push(nextAction)
+  state.curr = nextAction
 }
 
 // Undo an action
 export function onUndo(): void {
-  if (curr.parent === undefined) return message.error(i18n.err.noUndo) as any
-  onUpdate(revertAction(curr.parent.action as any), false)
-  curr = curr.parent as any
+  if (state.curr.parent === undefined) return message.error(i18n.err.noUndo) as any
+  onUpdate(revertAction(state.curr.parent.action as any), false)
+  state.curr = state.curr.parent as any
 }
 
 // Redo an action
 export function onRedo(): void {
-  if (curr.next.length === 0) return message.error(i18n.err.noRedo) as any
-  onUpdate(curr.action as any, false)
-  curr = curr.next[curr.next.length - 1]
+  if (state.curr.next.length === 0) return message.error(i18n.err.noRedo) as any
+  onUpdate(state.curr.action as any, false)
+  state.curr = state.curr.next[state.curr.next.length - 1]
 }
 
 // Dispatch an action
-export function onUpdate<T extends Term>(
-  action: ActionPack<T, Term>,
-  store: boolean = true,
+export function onUpdate(
+  action: ActionPack,
+  storeResult: boolean = true,
 ): boolean {
   let success = true
   try {
     // Run action
-    runAction(action, term as T)
+    runAction(action, state.term)
     try {
       // Check if new term is well-typed
-      infer({
+      state.inferResult = infer({
         env: [],
         ctx: [],
         ns: [],
-        depth: 0,
-        term,
-        lens: 0 as any,
+        tm: state.term,
       })
     } catch (e) {
       // If not, revert action and throw error
-      runAction(revertAction(action), term as T)
+      runAction(revertAction(action), state.term)
       throw e;
     }
   } catch (e) {
@@ -88,6 +93,6 @@ export function onUpdate<T extends Term>(
   if (!success) {
     return false
   }
-  if (store) storeAction(action)
+  if (storeResult) storeAction(action)
   return true;
 }

@@ -1,29 +1,25 @@
-import Labeled from "../component/Labeled";
-import { i18n } from "../i18n";
 import { TApp } from "../typecheck/model/term";
-import { TermHeader } from "./TermHeader";
-import { TermPropsBase } from "../typecheck/model/props";
-import { InferRequest } from "../typecheck/model/infer";
+import { TermProps } from "../typecheck/model/props";
+import { Block } from "../component/Block";
+import { TermGeneral } from "./TermGeneral";
+import Text from "../component/Text";
+import Row from "../component/Row";
+import Column from "../component/Column";
 
-export interface TermAppProps extends TermPropsBase<TApp> {
-  args: JSX.Element[]
-  func: JSX.Element
-}
-
-export function TermApp(props: TermAppProps): JSX.Element {
-  const { depth }: InferRequest<TApp> = props.req
-  return <div>
-    <TermHeader
-      req={props.req}
-      type={props.type}
-      label={i18n.term.apply}
-    />
-    {props.args}
-    <Labeled
-      depth={depth}
-      label={i18n.term.target}
-      children={props.func}
-    />
-  </div>
+export function TermApp({ term, lens }: TermProps<TApp>): JSX.Element {
+  const args = term.arg.map((t, i) => <div>
+    <Row>
+      <Text text={term.argID[i]} />
+      <TermGeneral term={t} lens={[...lens, 'arg', i.toString()]} />
+    </Row>
+  </div>)
+  return <Block>
+    <Column>
+      <TermGeneral term={term.func} lens={[...lens, 'func']} />
+      <Column>
+        {args}
+      </Column>
+    </Column>
+  </Block>
 }
 

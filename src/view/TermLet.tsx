@@ -1,30 +1,17 @@
-import Named from "../component/Named";
 import { TLet } from "../typecheck/model/term";
-import { TermPropsBase } from "../typecheck/model/props";
-import { InferRequest } from "../typecheck/model/infer";
-import { mkAction } from "../typecheck/model/action";
-import { onUpdate } from "../state";
+import { TermProps } from "../typecheck/model/props";
+import { TermGeneral } from "./TermGeneral";
+import Text from "../component/Text";
+import Row from "../component/Row";
+import Column from "../component/Column";
 
-export interface TermLetProps extends TermPropsBase<TLet> {
-  body: JSX.Element
-  next: JSX.Element
-}
-
-export function TermLet(props: TermLetProps): JSX.Element {
-  const { env, term, depth, lens }: InferRequest<TLet> = props.req
-  return <div>
-    <Named
-      depth={depth}
-      name={term.id}
-      onDelete={() => onUpdate(mkAction({
-        action: 'remove',
-        backup: { ...term },
-        envLen: env.length,
-      }, lens))}
-    >
-      {props.body}
-    </Named>
-    {props.next}
-  </div>
+export function TermLet({ term, lens }: TermProps<TLet>): JSX.Element {
+  return <Column>
+    <Row>
+      <Text text={term.id} />
+      <TermGeneral term={term.body} lens={[...lens, 'body']} />
+    </Row>
+    <TermGeneral term={term.next} lens={[...lens, 'next']} />
+  </Column>
 }
 

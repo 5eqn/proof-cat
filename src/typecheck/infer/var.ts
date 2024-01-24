@@ -1,16 +1,13 @@
 import { InferRequest, InferResult } from "../model/infer";
 import { TVar } from "../model/term";
-import { TermVar } from "../../view/TermVar";
 
 export function inferVar(req: InferRequest<TVar>): InferResult {
   // Infer type for variable
-  const { ctx, term } = req
-  const val = ctx[term.ix]
+  const { ctx, tm } = req
+  const type = ctx[tm.ix]
   return {
-    val: val,
-    element: TermVar({
-      req,
-      type: val,
-    })
+    ...req,
+    type,
+    term: 'var',
   }
 }

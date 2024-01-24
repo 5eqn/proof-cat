@@ -1,32 +1,19 @@
-import InputBar from "../component/InputBar";
-import { i18n } from "../i18n";
+
 import { TType } from "../typecheck/model/term";
-import { TermHeader } from "./TermHeader";
-import { TermPropsBase } from "../typecheck/model/props";
-import { InferRequest } from "../typecheck/model/infer";
+import { TermProps } from "../typecheck/model/props";
 import { mkAction } from "../typecheck/model/action";
 import { onUpdate } from "../state";
+import { Block } from "../component/Block";
+import Input from "../component/Input";
 
-export interface TermTypeProps extends TermPropsBase<TType> { }
-
-export function TermType(props: TermTypeProps): JSX.Element {
-  const { term, depth, lens }: InferRequest<TType> = props.req
-  return <div>
-    <TermHeader
-      req={props.req}
-      type={props.type}
-      label={i18n.term.type}
-    />
-    <InputBar
-      label={i18n.term.val}
-      depth={depth}
-      value={term.type}
-      onChange={(value: string) => onUpdate(mkAction({
-        action: 'updateType',
-        oldType: term.type,
-        newType: value,
-      }, lens))}
-    />
-  </div>
+export function TermType({ term, lens }: TermProps<TType>): JSX.Element {
+  return <Block>
+    <Input value={term.type} onChange={v => onUpdate(mkAction({
+      action: 'override',
+      backup: { ...term },
+      term: { term: 'type', type: v },
+    }, lens))} />
+  </Block>
 }
+
 

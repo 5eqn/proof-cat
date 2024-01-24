@@ -77,7 +77,7 @@ describe('onRevertRemove function', () => {
   test('should revert remove pi params', () => {
     const term = cloneDeep(tPiAfter)
     const backup = { ...term }
-    const action = mkAction<Term>({
+    const action = mkAction({
       action: 'remove',
       envLen: 1,
       backup,
@@ -90,7 +90,7 @@ describe('onRevertRemove function', () => {
   test('should revert remove function params', () => {
     const term = cloneDeep(tFuncAfter)
     const backup = { ...term }
-    const action = mkAction<Term>({
+    const action = mkAction({
       action: 'remove',
       envLen: 1,
       backup,

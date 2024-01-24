@@ -1,46 +1,6 @@
 import { Term } from "./term"
 import { Val } from "./value"
 
-export type ActionUpdateVar = {
-  action: 'updateVar',
-  oldID: string,
-  oldIX: number,
-  newID: string,
-  newIX: number,
-}
-
-export type ActionUpdateNum = {
-  action: 'updateNum',
-  oldNum: number,
-  newNum: number,
-}
-
-export type ActionUpdateType = {
-  action: 'updateType',
-  oldType: string,
-  newType: string,
-}
-
-export type ActionBecomeNum = {
-  action: 'becomeNum',
-  num: number,
-}
-
-export type ActionBecomeType = {
-  action: 'becomeType',
-  name: string,
-}
-
-export type ActionBecomeU = {
-  action: 'becomeU',
-}
-
-export type ActionBecomeVar = {
-  action: 'becomeVar',
-  id: string,
-  ix: number,
-}
-
 export type ActionWrapApp = {
   action: 'wrapApp',
   funcType: Val,
@@ -80,42 +40,41 @@ export type ActionRemove = {
   backup: Term,
 }
 
+export type ActionOverride = {
+  action: 'override',
+  term: Term,
+  backup: Term,
+}
+
 export type Action =
+  | ActionOverride
+  | ActionAddParam
   | ActionRemove
-  | ActionUpdateVar
-  | ActionUpdateNum
-  | ActionUpdateType
-  | ActionBecomeNum
-  | ActionBecomeType
-  | ActionBecomeU
-  | ActionBecomeVar
   | ActionWrapApp
   | ActionWrapFunc
   | ActionWrapPi
   | ActionWrapLet
-  | ActionAddParam
 
-export type Lens<T, U> = (t: T) => U
+// TODO move to rec folder
+export type Lens = string[]
 
-export const identityLens = (t: any) => t
-
-export type ActionPack<T, U> = {
+export type ActionPack = {
   action: Action,
-  lens: Lens<T, U>,
+  lens: Lens,
   undo: boolean,
 }
 
-export function revertAction<T, U>(
-  { action, lens, undo }: ActionPack<T, U>
-): ActionPack<T, U> {
+export function revertAction(
+  { action, lens, undo }: ActionPack
+): ActionPack {
   return { action, lens, undo: !undo }
 }
 
-export function mkAction<T>(
+export function mkAction(
   action: Action,
-  lens: Lens<Term, T> = identityLens,
+  lens: Lens = [],
   undo: boolean = false,
-): ActionPack<Term, T> {
+): ActionPack {
   return {
     action,
     lens,

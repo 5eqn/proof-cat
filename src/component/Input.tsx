@@ -1,8 +1,8 @@
-import { InputHTMLAttributes } from "react"
-
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps {
   placeholder?: string
   'data-testid'?: string
+  value: string
+  onChange: (value: string) => void
 }
 
 export default function Input(props: InputProps) {
@@ -11,7 +11,7 @@ export default function Input(props: InputProps) {
       width: '144px',
       fontFamily: 'monospace',
     }}
-    onChange={props.onChange}
+    onChange={e => props.onChange(e.target.value)}
     value={props.value}
     data-testid={props["data-testid"]}
     placeholder={props.placeholder}

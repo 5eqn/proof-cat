@@ -1,4 +1,3 @@
-import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TNum } from "../model/term"
 import { Val } from "../model/value"
@@ -22,9 +21,7 @@ describe('inferNum function', () => {
     env: [],
     ctx: [],
     ns: [],
-    depth: 0,
-    term: mockTNum,
-    lens: identityLens,
+    tm: mockTNum,
   }
 
   beforeEach(() => {
@@ -32,7 +29,7 @@ describe('inferNum function', () => {
   })
 
   test('type of num should be number', () => {
-    const { val } = inferNum(mockReq)
+    const { type: val } = inferNum(mockReq)
     expect(val).toStrictEqual(expected)
   })
 })

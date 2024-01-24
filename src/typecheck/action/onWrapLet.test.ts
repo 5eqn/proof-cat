@@ -114,7 +114,7 @@ describe('onWrapLet function', () => {
 
   test('revert should work', () => {
     const term = cloneDeep(before)
-    const action = mkAction<Term>({
+    const action = mkAction({
       action: 'wrapLet',
       name: 'a',
       envLen: 2,

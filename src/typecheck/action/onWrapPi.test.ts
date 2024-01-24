@@ -38,7 +38,7 @@ describe('onWrapPi pition', () => {
 
   test('revert should work', () => {
     const term = cloneDeep(before)
-    const action = mkAction<Term>({
+    const action = mkAction({
       action: 'wrapPi',
       name: '1145',
       envLen: 0,

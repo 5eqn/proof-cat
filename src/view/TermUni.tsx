@@ -1,14 +1,12 @@
-import { i18n } from "../i18n";
 import { TUni } from "../typecheck/model/term";
-import { TermHeader } from "./TermHeader";
-import { TermPropsBase } from "../typecheck/model/props";
+import { TermProps } from "../typecheck/model/props";
+import { Block } from "../component/Block";
+import Text from "../component/Text";
+import { i18n } from "../i18n";
 
-export interface TermUniProps extends TermPropsBase<TUni> { }
-
-export function TermUni(props: TermUniProps): JSX.Element {
-  return <TermHeader
-    req={props.req}
-    type={props.type}
-    label={i18n.term.uni}
-  />
+export function TermUni(_: TermProps<TUni>): JSX.Element {
+  return <Block>
+    <Text text={i18n.term.uni} />
+  </Block>
 }
+
