@@ -1,9 +1,7 @@
-import { InferRequest } from "./infer";
+import { Lens } from "./action";
 import { Term } from "./term";
-import { Val } from "./value";
 
-// Props of a rendered component
-export interface TermPropsBase<T extends Term> {
-  req: InferRequest<T>
-  type: Val,
+export interface TermProps<T extends Term> {
+  term: T,
+  lens: Lens
 }

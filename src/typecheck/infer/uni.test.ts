@@ -1,4 +1,3 @@
-import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TUni } from "../model/term"
 import { Val } from "../model/value"
@@ -20,9 +19,7 @@ describe('inferUni function', () => {
     env: [],
     ctx: [],
     ns: [],
-    depth: 0,
-    term: mockTUni,
-    lens: identityLens,
+    tm: mockTUni,
   }
 
   beforeEach(() => {
@@ -30,7 +27,7 @@ describe('inferUni function', () => {
   })
 
   test('type of uni should be universe', () => {
-    const { val } = inferUni(mockReq)
+    const { type: val } = inferUni(mockReq)
     expect(val).toStrictEqual(expected)
   })
 })

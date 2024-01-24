@@ -1,5 +1,4 @@
 import { infer } from "."
-import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TAny } from "../model/term"
 import { Val } from "../model/value"
@@ -20,9 +19,7 @@ describe('inferAny function', () => {
     env: [],
     ctx: [],
     ns: [],
-    depth: 0,
-    term: mockTAny,
-    lens: identityLens,
+    tm: mockTAny,
   }
 
   beforeEach(() => {
@@ -30,7 +27,7 @@ describe('inferAny function', () => {
   })
 
   test('type of any should be any', () => {
-    const { val } = infer(mockReq)
+    const { type: val } = infer(mockReq)
     expect(val).toStrictEqual(expected)
   })
 })

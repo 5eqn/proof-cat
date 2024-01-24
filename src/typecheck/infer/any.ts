@@ -1,7 +1,6 @@
 import { InferRequest, InferResult } from "../model/infer";
 import { TAny } from "../model/term";
 import { Val } from "../model/value";
-import { TermAny } from "../../view/TermAny";
 
 export function inferAny(req: InferRequest<TAny>): InferResult {
   // Any term has type any
@@ -9,10 +8,8 @@ export function inferAny(req: InferRequest<TAny>): InferResult {
     val: 'any',
   }
   return {
-    val: val,
-    element: TermAny({
-      req,
-      type: val,
-    })
+    ...req,
+    type: val,
+    term: 'any',
   }
 }

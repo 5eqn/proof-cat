@@ -107,7 +107,7 @@ const source = {
       becomeType: '命题',
       becomeNum: '别点',
       becomeVar: '应用公理',
-      becomeU: '宇宙',
+      becomeUni: '宇宙',
     }
   }
 }

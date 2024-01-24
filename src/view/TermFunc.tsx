@@ -1,37 +1,32 @@
-import Labeled from "../component/Labeled";
-import { i18n } from "../i18n";
 import { TFunc } from "../typecheck/model/term";
-import { TermHeader } from "./TermHeader";
-import { TermPropsBase } from "../typecheck/model/props";
-import { InferRequest } from "../typecheck/model/infer";
-import { mkAction } from "../typecheck/model/action";
-import { onUpdate } from "../state";
+import { TermProps } from "../typecheck/model/props";
+import { Block } from "../component/Block";
+import { TermGeneral } from "./TermGeneral";
+import Text from "../component/Text";
+import { Draggable } from "../component/Draggable";
+import { joinLens } from "../typecheck/model/rec";
+import Row from "../component/Row";
+import Column from "../component/Column";
 
-export interface TermFuncProps extends TermPropsBase<TFunc> {
-  params: JSX.Element[]
-  body: JSX.Element
-}
-
-export function TermFunc(props: TermFuncProps): JSX.Element {
-  const { ns, depth, lens }: InferRequest<TFunc> = props.req
-  return <div>
-    <TermHeader
-      req={props.req}
-      type={props.type}
-      label={i18n.term.func}
-      onAdd={(name: string) => onUpdate(mkAction({
-        action: 'addParam',
-        envLen: ns.length,
-        id: name,
-        ix: 0,
-      }, lens))}
-    />
-    {props.params}
-    <Labeled
-      depth={depth}
-      label={i18n.term.body}
-      children={props.body}
-    />
-  </div>
+export function TermFunc({ term, lens }: TermProps<TFunc>): JSX.Element {
+  const params = term.param.map((t, i) => {
+    const paramLens = [...lens, 'param', i.toString()]
+    return <Row>
+      <Draggable id={joinLens(paramLens)}>
+        <Block>
+          <Text text={term.paramID[i]} />
+        </Block>
+      </Draggable>
+      <TermGeneral term={t} lens={paramLens} />
+    </Row>
+  })
+  return <Block>
+    <Column>
+      <Column>
+        {params}
+      </Column>
+      <TermGeneral term={term.body} lens={[...lens, 'body']} />
+    </Column>
+  </Block>
 }
 

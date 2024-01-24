@@ -104,7 +104,7 @@ describe('onWrapApp function', () => {
 
   test('revert should work', () => {
     const term = cloneDeep(before)
-    const action = mkAction<Term>({
+    const action = mkAction({
       action: 'wrapApp',
       funcType: ctx[2],
       envLen: 4,

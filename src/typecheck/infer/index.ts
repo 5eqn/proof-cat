@@ -11,7 +11,7 @@ import { inferPi } from "./pi";
 import { inferFunc } from "./func";
 
 export function infer<T extends Term>(req: InferRequest<T>): InferResult {
-  switch (req.term.term) {
+  switch (req.tm.term) {
     case 'uni':
       return inferUni(req as any)
     case 'var':

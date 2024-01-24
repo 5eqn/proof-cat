@@ -1,10 +1,7 @@
-import cloneDeep from 'lodash.clonedeep'
 import { infer } from '.'
 import { evaluate } from '../evaluate'
-import { identityLens } from '../model/action'
 import { InferRequest } from "../model/infer"
 import { TApp, TFunc, TLet, TNum, TPi, TType, TVar } from "../model/term"
-import { inferLet } from "./let"
 
 describe('inferLet function', () => {
   // number
@@ -81,32 +78,12 @@ describe('inferLet function', () => {
   // Expected result: (f: (n: number) -> A) -> A
   const expected = evaluate([evaluate([], one)], largePi)
 
-  // let x = 1 in A
-  const unrefTerm: TLet = {
-    term: 'let',
-    id: 'x',
-    body: one,
-    next: typeA,
-  }
-
   // Infer request
   const mockReq: InferRequest<TLet> = {
     env: [],
     ctx: [],
     ns: [],
-    depth: 0,
-    term: term,
-    lens: identityLens,
-  }
-
-  // Unref infer request
-  const mockReqUnref: InferRequest<TLet> = {
-    env: [],
-    ctx: [],
-    ns: [],
-    depth: 0,
-    term: unrefTerm,
-    lens: identityLens,
+    tm: term,
   }
 
   beforeEach(() => {
@@ -114,20 +91,8 @@ describe('inferLet function', () => {
   })
 
   test('type of dependent let should be calculated correctly', () => {
-    const { val } = infer(mockReq)
+    const { type: val } = infer(mockReq)
     expect(val).toStrictEqual(expected)
-  })
-
-  test('change in body should be reflected', () => {
-    const req = cloneDeep(mockReqUnref)
-    const { debug } = inferLet(req)
-    expect(debug.getBody(unrefTerm)).toStrictEqual(unrefTerm.body)
-  })
-
-  test('change in next should be reflected', () => {
-    const req = cloneDeep(mockReqUnref)
-    const { debug } = inferLet(req)
-    expect(debug.getNext(unrefTerm)).toStrictEqual(unrefTerm.next)
   })
 })
 

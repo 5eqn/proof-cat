@@ -1,4 +1,3 @@
-import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TType } from "../model/term"
 import { Val } from "../model/value"
@@ -21,9 +20,7 @@ describe('inferType function', () => {
     env: [],
     ctx: [],
     ns: [],
-    depth: 0,
-    term: mockTType,
-    lens: identityLens,
+    tm: mockTType,
   }
 
   beforeEach(() => {
@@ -31,7 +28,7 @@ describe('inferType function', () => {
   })
 
   test('type of type should be universe', () => {
-    const { val } = inferType(mockReq)
+    const { type: val } = inferType(mockReq)
     expect(val).toStrictEqual(expected)
   })
 })

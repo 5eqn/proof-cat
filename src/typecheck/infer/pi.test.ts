@@ -1,5 +1,4 @@
 import cloneDeep from 'lodash.clonedeep'
-import { identityLens } from '../model/action'
 import { InferRequest } from "../model/infer"
 import { TNum, TPi, TType, TVar } from "../model/term"
 import { VUni } from "../model/value"
@@ -51,9 +50,7 @@ describe('inferPi function', () => {
     env: [],
     ctx: [],
     ns: [],
-    depth: 0,
-    term: mockTPi,
-    lens: identityLens,
+    tm: mockTPi,
   }
 
   beforeEach(() => {
@@ -61,19 +58,13 @@ describe('inferPi function', () => {
   })
 
   test('type of pi should be inferred correctly', () => {
-    const { val } = inferPi(mockReq)
+    const { type: val } = inferPi(mockReq)
     expect(val).toStrictEqual(expected)
   })
 
   test('non-type param should not typecheck', () => {
     const req = cloneDeep(mockReq)
-    req.term = mockTPiBad
+    req.tm = mockTPiBad
     expect(() => inferPi(req)).toThrow()
-  })
-
-  test('change in body should be reflected', () => {
-    const req = cloneDeep(mockReq)
-    const { debug } = inferPi(req)
-    expect(debug.getBody(req.term)).toStrictEqual(req.term.body)
   })
 })

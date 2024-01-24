@@ -59,3 +59,9 @@ export class ErrorReferredRaw extends CodeActionError {
     return i18n.err.referred
   }
 }
+
+export class ErrorInvalidLens {
+  toString(): string {
+    return "Lens is invalid"
+  }
+}

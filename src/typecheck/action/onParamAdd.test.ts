@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash.clonedeep'
 import { runAction } from '.'
 import { mkAction, revertAction } from '../model/action'
-import { Term, TFunc } from "../model/term"
+import { TFunc } from "../model/term"
 
 describe('onParamAdd function', () => {
   // Context: [T: U, a = 1]
@@ -85,7 +85,7 @@ describe('onParamAdd function', () => {
 
   test('revert should work', () => {
     const term = cloneDeep(before)
-    const action = mkAction<Term>({
+    const action = mkAction({
       action: 'addParam',
       ix: 0,
       id: 'A',

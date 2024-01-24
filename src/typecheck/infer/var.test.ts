@@ -1,4 +1,3 @@
-import { identityLens } from "../model/action"
 import { InferRequest } from "../model/infer"
 import { TVar } from "../model/term"
 import { Val, VType, VVar } from "../model/value"
@@ -36,9 +35,7 @@ describe('inferVar function', () => {
     env: [mockVVar],
     ctx: [mockVType],
     ns: ['x'],
-    depth: 0,
-    term: mockTVar,
-    lens: identityLens,
+    tm: mockTVar,
   }
 
   beforeEach(() => {
@@ -46,7 +43,7 @@ describe('inferVar function', () => {
   })
 
   test('type of var should be from context', () => {
-    const { val } = inferVar(mockReq)
+    const { type: val } = inferVar(mockReq)
     expect(val).toStrictEqual(expected)
   })
 })
