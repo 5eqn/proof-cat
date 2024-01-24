@@ -46,8 +46,10 @@ function App() {
     </div>
     <div style={{
       position: "fixed",
-      left: "20%",
+      left: "0%",
       width: "20%",
+      padding: '16px',
+      zIndex: 100,
     }}>
       <Column gap="16px">
         <DummyFunc />
@@ -60,9 +62,14 @@ function App() {
       </Column>
     </div>
     <div style={{
+      position: "fixed",
+      left: "20%",
       width: "20%",
+      padding: '16px',
     }}>
-      <TermGeneral term={termSnap} lens={[]} />
+      <Column>
+        <TermGeneral term={termSnap} lens={[]} />
+      </Column>
     </div>
     <KeyListener callbacks={[
       {
@@ -96,12 +103,13 @@ function handleDragEnd(e: DragEndEvent) {
     if (!isPrefix(bodyLens, overLens)) return message.error(i18n.err.noVariable)
     const funcEnvLen = applyLens(state.inferResult, funcLens).env.length
     const funcTerm = applyLens(state.term, funcLens) as TFunc
-    const funcParamLen = funcTerm.param.length
-    const activeIX = +activeLens[activeLens.length - 1]
-    const varIX = overEnvLen - funcEnvLen - funcParamLen + activeIX
+    const paramLen = funcTerm.param.length
+    const paramIX = +activeLens[activeLens.length - 1]
+    const paramID = funcTerm.paramID[paramIX]
+    const varIX = overEnvLen - funcEnvLen - paramLen + paramIX
     onUpdate(mkAction({
       action: 'override',
-      term: { term: 'var', id: 'mmsd', ix: varIX },
+      term: { term: 'var', id: paramID, ix: varIX },
       backup: { ...overTerm },
     }, overLens))
   }

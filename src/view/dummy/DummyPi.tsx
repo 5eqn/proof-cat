@@ -13,9 +13,9 @@ export function DummyPi(): JSX.Element {
           <Block>
             <Text text={i18n.prompt.wrapPi} />
           </Block>
-          <Block />
+          <Block inset />
         </Row>
-        <Block />
+        <Block inset />
       </Column>
     </Block>
   </Draggable>

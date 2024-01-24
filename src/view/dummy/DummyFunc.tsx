@@ -13,9 +13,9 @@ export function DummyFunc(): JSX.Element {
           <Block>
             <Text text={i18n.prompt.wrapFunc} />
           </Block>
-          <Block />
+          <Block inset />
         </Row>
-        <Block />
+        <Block inset />
       </Column>
     </Block>
   </Draggable>
