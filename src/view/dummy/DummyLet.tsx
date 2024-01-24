@@ -12,9 +12,9 @@ export function DummyLet(): JSX.Element {
         <Block>
           <Text text={i18n.prompt.wrapLet} />
         </Block>
-        <Block />
+        <Block inset />
       </Row>
-      <Block />
+      <Block inset />
     </Column>
   </Draggable>
 }

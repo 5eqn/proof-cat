@@ -10,7 +10,7 @@ export function Droppable(props: DroppableProps) {
     id: props.id,
   });
   const style: React.CSSProperties = {
-    backgroundColor: isOver ? 'pink' : undefined,
+    border: isOver ? 'solid #ffcccc' : undefined,
   };
 
   return <div ref={setNodeRef} style={style}>

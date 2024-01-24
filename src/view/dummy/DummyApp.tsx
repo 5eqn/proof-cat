@@ -9,10 +9,10 @@ export function DummyApp(): JSX.Element {
   return <Draggable id="AWrapApp">
     <Block>
       <Column>
-        <Block />
+        <Block inset />
         <Row>
           <Text text={i18n.prompt.wrapApp} />
-          <Block />
+          <Block inset />
         </Row>
       </Column>
     </Block>

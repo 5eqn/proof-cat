@@ -6,6 +6,6 @@ import { Block } from "../component/Block";
 
 export function TermAny(props: TermProps<TAny>): JSX.Element {
   return <Droppable id={joinLens(props.lens)}>
-    <Block />
+    <Block inset />
   </Droppable>
 }
