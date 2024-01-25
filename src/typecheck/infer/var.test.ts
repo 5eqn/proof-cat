@@ -7,14 +7,12 @@ describe('inferVar function', () => {
   // Most recent var
   const mockTVar: TVar = {
     term: 'var',
-    id: 'x',
     ix: 0,
   }
 
   // Variable in environment
   const mockVVar: VVar = {
     val: 'var',
-    id: 'x',
     lvl: 0,
   }
 

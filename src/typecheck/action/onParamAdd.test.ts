@@ -22,14 +22,12 @@ describe('onParamAdd function', () => {
       param: [
         {
           term: 'var',
-          id: 'T',
           ix: 0,
         }
       ],
       body: {
         // x
         term: 'var',
-        id: 'x',
         ix: 0,
       }
     }
@@ -55,14 +53,12 @@ describe('onParamAdd function', () => {
       param: [
         {
           term: 'var',
-          id: 'T',
           ix: 1,
         }
       ],
       body: {
         // x
         term: 'var',
-        id: 'x',
         ix: 0,
       }
     }

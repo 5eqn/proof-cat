@@ -12,7 +12,6 @@ describe('evaluateVar function', () => {
     paramID: ['a'],
     body: {
       term: 'var',
-      id: 'a',
       ix: 0,
     }
   }
@@ -27,7 +26,6 @@ describe('evaluateVar function', () => {
     paramID: ['A'],
     body: {
       term: 'var',
-      id: 'A',
       ix: 0,
     }
   }
@@ -53,7 +51,6 @@ describe('evaluateVar function', () => {
     },
     next: {
       term: 'var',
-      id: 'n',
       ix: 0,
     }
   }

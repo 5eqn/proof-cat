@@ -6,7 +6,6 @@ export type TType = {
 // Atom variable, `x`
 export type TVar = {
   term: 'var'
-  id: string
   ix: number, // de-Bruijn index, 0 is the most recent variable
 }
 // Arbitrary value or type, `any`

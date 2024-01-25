@@ -16,7 +16,6 @@ describe('evaluateLet function', () => {
   // nearest var x
   const mockTVar: Term = {
     term: 'var',
-    id: 'x',
     ix: 0,
   }
 

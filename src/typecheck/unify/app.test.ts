@@ -13,7 +13,6 @@ describe('unifyApp function', () => {
     argID: ['a'],
     func: {
       val: 'var',
-      id: 'f',
       lvl: 0,
     }
   }
@@ -29,7 +28,6 @@ describe('unifyApp function', () => {
     argID: ['a'],
     func: {
       val: 'var',
-      id: 'f',
       lvl: 0,
     }
   }
@@ -45,7 +43,6 @@ describe('unifyApp function', () => {
     argID: ['b'],
     func: {
       val: 'var',
-      id: 'f',
       lvl: 0,
     }
   }
@@ -61,7 +58,6 @@ describe('unifyApp function', () => {
     argID: ['a'],
     func: {
       val: 'var',
-      id: 'g',
       lvl: 1,
     }
   }

@@ -8,14 +8,12 @@ describe('inferApp function', () => {
   // Most recent var
   const mockTVarX: TVar = {
     term: 'var',
-    id: 'x',
     ix: 0,
   }
 
   // Variable in environment
   const mockVVarX: VVar = {
     val: 'var',
-    id: 'x',
     lvl: 1,
   }
 
@@ -27,14 +25,12 @@ describe('inferApp function', () => {
   // Function var term
   const mockTVarF: TVar = {
     term: 'var',
-    id: 'f',
     ix: 1,
   }
 
   // Function var value
   const mockVVarF: VVar = {
     val: 'var',
-    id: 'f',
     lvl: 0,
   }
 
@@ -46,7 +42,6 @@ describe('inferApp function', () => {
   // Reference to the nearest variable with name T
   const mockVVarT: TVar = {
     term: 'var',
-    id: 'T',
     ix: 0,
   }
 

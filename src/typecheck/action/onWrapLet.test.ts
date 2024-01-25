@@ -14,7 +14,6 @@ describe('onWrapLet function', () => {
     arg: [
       {
         term: 'var',
-        id: 'T',
         ix: 1,
       }
     ],
@@ -34,14 +33,12 @@ describe('onWrapLet function', () => {
         param: [
           {
             term: 'var',
-            id: 'T',
             ix: 0,
           }
         ],
         body: {
           // x
           term: 'var',
-          id: 'x',
           ix: 0,
         }
       }
@@ -63,7 +60,6 @@ describe('onWrapLet function', () => {
       arg: [
         {
           term: 'var',
-          id: 'T',
           ix: 2,
         }
       ],
@@ -83,14 +79,12 @@ describe('onWrapLet function', () => {
           param: [
             {
               term: 'var',
-              id: 'T',
               ix: 0,
             }
           ],
           body: {
             // x
             term: 'var',
-            id: 'x',
             ix: 0,
           }
         }

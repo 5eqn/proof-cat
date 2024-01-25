@@ -15,7 +15,6 @@ describe('unifyArray function', () => {
       env: [],
       body: {
         term: 'var',
-        id: 'a',
         ix: 0,
       },
     }
@@ -34,7 +33,6 @@ describe('unifyArray function', () => {
       env: [],
       body: {
         term: 'var',
-        id: 'a',
         ix: 0,
       },
     }
@@ -57,7 +55,6 @@ describe('unifyArray function', () => {
       env: [],
       body: {
         term: 'var',
-        id: 'a',
         ix: 0,
       },
     }

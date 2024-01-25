@@ -27,7 +27,6 @@ describe('inferLet function', () => {
   // f
   const varF: TVar = {
     term: 'var',
-    id: 'f',
     ix: 0,
   }
 
@@ -38,7 +37,6 @@ describe('inferLet function', () => {
     arg: [
       {
         term: 'var',
-        id: 'x',
         ix: 1,
       }
     ],

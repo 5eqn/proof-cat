@@ -5,7 +5,6 @@ import { VApp, VNum, VVar } from "../model/value"
 describe('quoteApp function', () => {
   const varD: VVar = {
     val: 'var',
-    id: 'd',
     lvl: 3,
   }
   const varNum: VNum = {
@@ -14,17 +13,14 @@ describe('quoteApp function', () => {
   }
   const varB: VVar = {
     val: 'var',
-    id: 'b',
     lvl: 2,
   }
   const varA: VVar = {
     val: 'var',
-    id: 'a',
     lvl: 1,
   }
   const varF: VVar = {
     val: 'var',
-    id: 'f',
     lvl: 0,
   }
   const valApp: VApp = {
@@ -37,7 +33,6 @@ describe('quoteApp function', () => {
   // f
   const termF: TVar = {
     term: 'var',
-    id: 'f',
     ix: 3,
   }
 
@@ -47,12 +42,10 @@ describe('quoteApp function', () => {
     arg: [
       {
         term: 'var',
-        id: 'd',
         ix: 0,
       },
       {
         term: 'var',
-        id: 'a',
         ix: 2,
       },
       {
@@ -61,7 +54,6 @@ describe('quoteApp function', () => {
       },
       {
         term: 'var',
-        id: 'b',
         ix: 1,
       }
     ],

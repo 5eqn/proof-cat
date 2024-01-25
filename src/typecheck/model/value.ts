@@ -39,7 +39,6 @@ export type VAny = {
 // Variable
 export type VVar = {
   val: 'var',
-  id: string,
   lvl: number, // de-Bruijn level, 0 is the outermost variable
 }
 // Universe type, `U`

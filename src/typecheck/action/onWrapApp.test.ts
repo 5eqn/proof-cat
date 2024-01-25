@@ -57,7 +57,6 @@ describe('onWrapApp function', () => {
   // Before action
   const before: Term = {
     term: 'var',
-    id: 'func',
     ix: 2,
   }
 
@@ -79,7 +78,6 @@ describe('onWrapApp function', () => {
   // Non-function
   const nonFunction: Term = {
     term: 'var',
-    id: 'func',
     ix: 1,
   }
 

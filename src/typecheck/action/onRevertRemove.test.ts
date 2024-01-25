@@ -16,7 +16,6 @@ describe('onRevertRemove function', () => {
     paramID: ['T'],
     body: {
       term: 'var',
-      id: 'x',
       ix: 1,
     }
   }
@@ -31,7 +30,6 @@ describe('onRevertRemove function', () => {
     paramID: ['T'],
     body: {
       term: 'var',
-      id: 'x',
       ix: 1,
     }
   }
@@ -47,7 +45,6 @@ describe('onRevertRemove function', () => {
     argID: ['T'],
     func: {
       term: 'var',
-      id: 'f',
       ix: 0,
     }
   }
@@ -65,7 +62,6 @@ describe('onRevertRemove function', () => {
     },
     next: {
       term: 'var',
-      id: 'y',
       ix: 1,
     }
   }

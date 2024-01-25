@@ -8,14 +8,12 @@ describe('evaluateApp function', () => {
   // Term of variable `x`
   const mockTVar: Term = {
     term: 'var',
-    id: 'x',
     ix: 0,
   }
 
   // Value of variable `x`
   const mockVVar: Val = {
     val: 'var',
-    id: 'x',
     lvl: 0,
   }
 
@@ -34,7 +32,6 @@ describe('evaluateApp function', () => {
     paramID: ['a'],
     body: {
       term: 'var',
-      id: 'a',
       ix: 0,
     }
   }
@@ -50,7 +47,6 @@ describe('evaluateApp function', () => {
   // Expected result of mockAppFunc
   const mockVAppFunc: Val = {
     val: 'var',
-    id: 'x',
     lvl: 0,
   }
 
