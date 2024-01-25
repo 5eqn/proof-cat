@@ -15,7 +15,7 @@ export function pretty(ns: string[], term: Term, applied: boolean = false): stri
     case 'let':
       return paren(applied, prettyLet(ns, term))
     case 'var':
-      return `${term.id}`
+      return `${ns[term.ix]}`
     case 'num':
       return term.num.toString()
     case 'type':

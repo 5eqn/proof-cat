@@ -19,7 +19,6 @@ describe('assertNotOccur function', () => {
       arg: [
         {
           term: 'var',
-          id: 'a',
           ix: 0,
         }
       ],
@@ -30,7 +29,6 @@ describe('assertNotOccur function', () => {
         arg: [
           {
             term: 'var',
-            id: 'T',
             ix: 2,
           }
         ],
@@ -50,14 +48,12 @@ describe('assertNotOccur function', () => {
             param: [
               {
                 term: 'var',
-                id: 'T',
                 ix: 0,
               }
             ],
             body: {
               // x
               term: 'var',
-              id: 'x',
               ix: 0,
             }
           }

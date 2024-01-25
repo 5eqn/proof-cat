@@ -8,7 +8,6 @@ describe('inferFunc function', () => {
   // Most recent var term
   const mockTVar: TVar = {
     term: 'var',
-    id: 'x',
     ix: 0,
   }
 

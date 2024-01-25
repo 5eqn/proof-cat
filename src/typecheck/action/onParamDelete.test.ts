@@ -24,14 +24,12 @@ describe('onParamDelete function', () => {
       param: [
         {
           term: 'var',
-          id: 'T',
           ix: 1,
         }
       ],
       body: {
         // x
         term: 'var',
-        id: 'x',
         ix: 0,
       }
     }
@@ -54,14 +52,12 @@ describe('onParamDelete function', () => {
       param: [
         {
           term: 'var',
-          id: 'T',
           ix: 0,
         }
       ],
       body: {
         // x
         term: 'var',
-        id: 'x',
         ix: 0,
       }
     }

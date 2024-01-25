@@ -6,17 +6,14 @@ describe('makeSpineIn function', () => {
   const vars: VVar[] = [
     {
       val: 'var',
-      id: 'a',
       lvl: 4,
     },
     {
       val: 'var',
-      id: 'b',
       lvl: 3,
     },
     {
       val: 'var',
-      id: 'c',
       lvl: 2,
     },
   ]

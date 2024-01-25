@@ -4,13 +4,11 @@ import { unify } from "."
 describe('unifyVar function', () => {
   const a: Val = {
     val: 'var',
-    id: 'a',
     lvl: 0,
   }
 
   const b: Val = {
     val: 'var',
-    id: 'a',
     lvl: 1,
   }
 

@@ -7,21 +7,18 @@ describe('quoteVar function', () => {
   // Term of variable `x`
   const mockTVar: Term = {
     term: 'var',
-    id: 'I_AM_OUTSIDE',
     ix: 1,
   }
 
   // Value of variable `x` in env
   const mockVVarEnv: Val = {
     val: 'var',
-    id: 'I_AM_IN_ENVIRONMENT',
     lvl: 0,
   }
 
   // Value of variable `x` to quote
   const mockVVar: Val = {
     val: 'var',
-    id: 'I_AM_OUTSIDE',
     lvl: 0,
   }
 

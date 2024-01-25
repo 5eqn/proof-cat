@@ -1,8 +1,7 @@
 // Make spine
-import {Val} from "../../model/value";
+import { Val } from "../../model/value";
 
-export const makeSpineIn = (len: number) => (id: string, ix: number) => ({
-    val: 'var',
-    id,
-    lvl: len - ix - 1,
+export const makeSpineIn = (len: number) => (_: string, ix: number) => ({
+  val: 'var',
+  lvl: len - ix - 1,
 } as Val)

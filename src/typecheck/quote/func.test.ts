@@ -19,7 +19,6 @@ describe('quoteFunc function', () => {
     paramID: ['a'],
     body: {
       term: 'var',
-      id: 'a',
       ix: 0,
     }
   }

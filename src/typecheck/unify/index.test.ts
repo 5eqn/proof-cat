@@ -19,7 +19,6 @@ describe('unifyFunc function', () => {
       env: [],
       body: {
         term: 'var',
-        id: 'a',
         ix: 0,
       },
     }

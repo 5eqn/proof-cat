@@ -13,14 +13,12 @@ describe('onRemove function', () => {
     paramID: ['T'],
     body: {
       term: 'var',
-      id: 'x',
       ix: 1,
     }
   }
 
   const tPiAfter: Term = {
     term: 'var',
-    id: 'x',
     ix: 0,
   }
 
@@ -35,14 +33,12 @@ describe('onRemove function', () => {
     argID: ['T'],
     func: {
       term: 'var',
-      id: 'f',
       ix: 0,
     }
   }
 
   const tAppAfter: Term = {
     term: 'var',
-    id: 'f',
     ix: 0,
   }
 
@@ -63,14 +59,12 @@ describe('onRemove function', () => {
     },
     next: {
       term: 'var',
-      id: 'y',
       ix: 1,
     }
   }
 
   const tLetAfter: Term = {
     term: 'var',
-    id: 'y',
     ix: 0,
   }
 

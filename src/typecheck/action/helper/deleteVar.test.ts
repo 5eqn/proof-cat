@@ -20,7 +20,6 @@ describe('deleteVar function', () => {
       arg: [
         {
           term: 'var',
-          id: 'a',
           ix: 0,
         }
       ],
@@ -31,7 +30,6 @@ describe('deleteVar function', () => {
         arg: [
           {
             term: 'var',
-            id: 'T',
             ix: 2,
           }
         ],
@@ -51,14 +49,12 @@ describe('deleteVar function', () => {
             param: [
               {
                 term: 'var',
-                id: 'T',
                 ix: 0,
               }
             ],
             body: {
               // x
               term: 'var',
-              id: 'x',
               ix: 0,
             }
           }
@@ -83,7 +79,6 @@ describe('deleteVar function', () => {
       arg: [
         {
           term: 'var',
-          id: 'a',
           ix: 0,
         }
       ],
@@ -95,7 +90,6 @@ describe('deleteVar function', () => {
         arg: [
           {
             term: 'var',
-            id: 'T',
             ix: 1,
           }
         ],
@@ -115,14 +109,12 @@ describe('deleteVar function', () => {
             param: [
               {
                 term: 'var',
-                id: 'T',
                 ix: 0,
               }
             ],
             body: {
               // x
               term: 'var',
-              id: 'x',
               ix: 0,
             }
           }
@@ -147,7 +139,6 @@ describe('deleteVar function', () => {
       arg: [
         {
           term: 'var',
-          id: 'a',
           ix: 0,
         }
       ],
@@ -159,7 +150,6 @@ describe('deleteVar function', () => {
         arg: [
           {
             term: 'var',
-            id: 'T',
             ix: 2,
           }
         ],
@@ -179,14 +169,12 @@ describe('deleteVar function', () => {
             param: [
               {
                 term: 'var',
-                id: 'T',
                 ix: 0,
               }
             ],
             body: {
               // x
               term: 'var',
-              id: 'x',
               ix: 0,
             }
           }

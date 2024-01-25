@@ -7,14 +7,12 @@ describe('evaluateVar function', () => {
   // Term of variable `x`
   const mockTVar: Term = {
     term: 'var',
-    id: 'I_AM_IN_TERM',
     ix: 1,
   }
 
   // Value of variable `x`
   const mockVVar: Val = {
     val: 'var',
-    id: 'I_AM_IN_ENVIRONMENT',
     lvl: 0,
   }
 

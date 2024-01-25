@@ -105,11 +105,10 @@ function handleDragEnd(e: DragEndEvent) {
     const funcTerm = applyLens(state.term, funcLens) as TFunc
     const paramLen = funcTerm.param.length
     const paramIX = +activeLens[activeLens.length - 1]
-    const paramID = funcTerm.paramID[paramIX]
     const varIX = overEnvLen - funcEnvLen - paramLen + paramIX
     onUpdate(mkAction({
       action: 'override',
-      term: { term: 'var', id: paramID, ix: varIX },
+      term: { term: 'var', ix: varIX },
       backup: { ...overTerm },
     }, overLens))
   }
