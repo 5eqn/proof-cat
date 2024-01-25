@@ -128,12 +128,12 @@ function handleDragEnd(e: DragEndEvent) {
     switch (activeID) {
       case 'AWrapFunc': return onUpdate(mkAction({
         action: 'wrapFunc',
-        name: 'mmsd',
+        name: 'x',
         envLen: overEnvLen,
       }, overLens))
       case 'AWrapPi': return onUpdate(mkAction({
         action: 'wrapPi',
-        name: 'mmsd',
+        name: 'x',
         envLen: overEnvLen,
       }, overLens))
       case 'AWrapApp': return onUpdate(mkAction({
@@ -143,7 +143,7 @@ function handleDragEnd(e: DragEndEvent) {
       }, overLens))
       case 'AWrapLet': return onUpdate(mkAction({
         action: 'wrapLet',
-        name: 'mmsd',
+        name: 'x',
         envLen: overEnvLen,
       }, overLens))
       case 'ABecomeNum': return onUpdate(mkAction({
@@ -153,7 +153,7 @@ function handleDragEnd(e: DragEndEvent) {
       }, overLens))
       case 'ABecomeType': return onUpdate(mkAction({
         action: 'override',
-        term: { term: 'type', type: 'EggyParty' },
+        term: { term: 'type', type: 'A' },
         backup: { ...overTerm },
       }, overLens))
       case 'ABecomeUni': return onUpdate(mkAction({

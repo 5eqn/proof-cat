@@ -5,6 +5,7 @@ import { TermGeneral } from "./TermGeneral";
 import Text from "../component/Text";
 import Row from "../component/Row";
 import Column from "../component/Column";
+import { palette } from "./color";
 
 export function TermApp({ term, lens }: TermProps<TApp>): JSX.Element {
   const args = term.arg.map((t, i) => <div>
@@ -13,7 +14,7 @@ export function TermApp({ term, lens }: TermProps<TApp>): JSX.Element {
       <TermGeneral term={t} lens={[...lens, 'arg', i.toString()]} />
     </Row>
   </div>)
-  return <Block>
+  return <Block color={palette.app} >
     <Column>
       <TermGeneral term={term.func} lens={[...lens, 'func']} />
       <Column>

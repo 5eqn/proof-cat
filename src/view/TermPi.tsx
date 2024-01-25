@@ -9,6 +9,7 @@ import Column from "../component/Column";
 import Input from "../component/Input";
 import { onUpdate } from "../state";
 import { mkAction } from "../typecheck/model/action";
+import { palette } from "./color";
 
 export function TermPi({ term, lens }: TermProps<TPi>): JSX.Element {
   const params = term.param.map((t, i) => {
@@ -27,7 +28,7 @@ export function TermPi({ term, lens }: TermProps<TPi>): JSX.Element {
       <TermGeneral term={t} lens={paramLens} />
     </Row>
   })
-  return <Block>
+  return <Block color={palette.pi} >
     <Column>
       <Column>
         {params}

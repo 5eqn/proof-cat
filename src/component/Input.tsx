@@ -8,7 +8,7 @@ interface InputProps {
 export default function Input(props: InputProps) {
   return <input
     style={{
-      width: '144px',
+      width: '48px',
       fontFamily: 'monospace',
       border: 'none',
       backgroundColor: 'transparent',

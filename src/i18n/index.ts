@@ -105,7 +105,7 @@ const source = {
       wrapPi: '蕴含',
       wrapApp: '蕴含消除',
       becomeType: '命题',
-      becomeNum: '别点',
+      becomeNum: '数字',
       becomeVar: '应用公理',
       becomeUni: '宇宙',
     }

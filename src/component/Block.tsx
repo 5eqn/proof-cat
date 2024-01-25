@@ -1,9 +1,13 @@
+import { palette } from "../view/color"
+
 export function Block(props: {
   children?: JSX.Element[] | JSX.Element,
+  color?: string,
   inset?: boolean
 }) {
   const insetFlag = props.inset ? 'inset ' : ''
-  const color = props.inset ? '#ffffff' : '#f0f4ff'
+  const originalColor = props.color ? props.color : palette.neutral
+  const color = props.inset ? palette.background : originalColor
   return <div style={{
     padding: '8px',
     minWidth: '24px',

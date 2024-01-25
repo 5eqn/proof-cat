@@ -6,6 +6,6 @@ export default function Text(props: {
     fontFamily: 'monospace',
     fontWeight: "normal",
     color: "#444",
-    marginRight: "16px",
+    margin: "0px 4px",
   }}> {props.text} </div>
 }
