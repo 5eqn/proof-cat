@@ -25,20 +25,6 @@ export type ActionWrapLet = {
   envLen: number,
 }
 
-export type ActionAddParam = {
-  action: 'addParam',
-  id: string,
-  ix: number,
-  envLen: number,
-}
-
-export type ActionRenameParam = {
-  action: 'renameParam',
-  ix: number,
-  oldID: string,
-  newID: string,
-}
-
 export type ActionRemove = {
   action: 'remove',
   envLen: number,
@@ -55,8 +41,6 @@ export type ActionOverride = {
 
 export type Action =
   | ActionOverride
-  | ActionAddParam
-  | ActionRenameParam
   | ActionRemove
   | ActionWrapApp
   | ActionWrapFunc

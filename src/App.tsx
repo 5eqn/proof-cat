@@ -5,7 +5,7 @@ import { quote } from "./typecheck/quote";
 import { onRedo, onUndo, onUpdate, state } from "./state";
 import { KeyListener } from "./component/KeyListener";
 import { useSnapshot } from "valtio";
-import { Term, TFunc } from "./typecheck/model/term";
+import { Term } from "./typecheck/model/term";
 import { InferResult } from "./typecheck/model/infer";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { TermGeneral } from "./view/TermGeneral";
@@ -97,13 +97,10 @@ function handleDragEnd(e: DragEndEvent) {
   // Handle variable assignment (function)
   if (activeID[0] === 'F') {
     const activeLens = splitLens(activeID.substring(1))
-    const funcLens = activeLens.slice(0, -2)
+    const funcLens = activeLens.slice(0, -1)
     if (!isPrefix(funcLens, overLens)) return message.error(i18n.err.noVariable)
     const funcEnvLen = applyLens(state.inferResult, funcLens).env.length
-    const funcTerm = applyLens(state.term, funcLens) as TFunc
-    const paramLen = funcTerm.param.length
-    const paramIX = +activeLens[activeLens.length - 1]
-    const varIX = overEnvLen - funcEnvLen - paramLen + paramIX
+    const varIX = overEnvLen - funcEnvLen - 1
     onUpdate(mkAction({
       action: 'override',
       term: { term: 'var', ix: varIX },

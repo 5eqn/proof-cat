@@ -9,22 +9,21 @@ export type VType = {
 // Function value, `\x => x`
 export type VFunc = {
   val: 'func',
-  param: Val[],
-  paramID: string[],
+  param: Val,
+  paramID: string,
   func: Closure
 }
 // Normalized application, `f(x)`
 export type VApp = {
   val: 'app',
   func: Val,
-  arg: Val[],
-  argID: string[],
+  arg: Val,
 }
 // Function type, `(x: X) -> Y`
 export type VPi = {
   val: 'pi',
-  param: Val[],
-  paramID: string[],
+  param: Val,
+  paramID: string,
   func: Closure,
 }
 // Editable number

@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash.clonedeep'
 import { InferRequest } from "../model/infer"
-import { TNum, TPi, TType, TVar } from "../model/term"
+import { TPi, TNum, TType, TVar } from "../model/term"
 import { VUni } from "../model/value"
 import { inferPi } from "./pi"
 
@@ -23,19 +23,19 @@ describe('inferPi function', () => {
     num: 51121,
   }
 
-  // Pi term
-  const mockTPi: TPi = {
-    term: 'pi',
-    param: [mockTType],
-    paramID: ['a'],
-    body: mockTVar,
-  }
-
   // Bad pi term
   const mockTPiBad: TPi = {
     term: 'pi',
-    param: [mockTNum],
-    paramID: ['a'],
+    param: mockTNum,
+    paramID: 'a',
+    body: mockTVar,
+  }
+
+  // Pition term
+  const mockTPi: TPi = {
+    term: 'pi',
+    param: mockTType,
+    paramID: 'a',
     body: mockTVar,
   }
 
@@ -56,7 +56,7 @@ describe('inferPi function', () => {
     jest.clearAllMocks()
   })
 
-  test('type of pi should be inferred correctly', () => {
+  test('type of Pi should be inferred correctly', () => {
     const { type: val } = inferPi(mockReq)
     expect(val).toStrictEqual(expected)
   })

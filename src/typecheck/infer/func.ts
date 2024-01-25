@@ -1,45 +1,43 @@
-import { getVals, InferRequest, InferResult } from "../model/infer";
+import { InferRequest, InferResult } from "../model/infer";
 import { TFunc } from "../model/term";
 import { Val } from "../model/value";
-import { evalIn } from "../evaluate";
+import { evaluate } from "../evaluate";
 
 import { infer } from "./index";
-import { inferParam } from "./param";
 import { quote } from "../quote";
-import { makeSpineIn } from "../action/helper/makeSpineIn";
 import { unify } from "../unify";
 
 export function inferFunc(req: InferRequest<TFunc>): InferResult {
   // Construct element for function body
   const { env, ctx, ns, tm }: InferRequest<TFunc> = req
-  const len: number = tm.paramID.length + env.length
-  const paramVars: Val[] = tm.paramID.map(makeSpineIn(len))
-  const paramVals: Val[] = tm.param.map(evalIn(env))
+  const paramVar: Val = { val: 'var', lvl: env.length }
+  const paramVal: Val = evaluate(env, tm.param)
+  const paramInfer: InferResult = infer({
+    env, ctx, ns, tm: tm.param,
+  })
   const bodyInfer: InferResult = infer({
-    env: [...paramVars, ...env],
-    ctx: [...paramVals, ...ctx],
-    ns: [...tm.paramID, ...ns],
+    env: [paramVar, ...env],
+    ctx: [paramVal, ...ctx],
+    ns: [tm.paramID, ...ns],
     tm: tm.body,
   })
+  // Make sure param has type U
+  unify(env.length, paramInfer.type, { val: 'uni' })
   // Construct type for func, which is Pi
   const type: Val = {
     val: 'pi',
-    param: paramVals,
+    param: paramVal,
     paramID: tm.paramID,
     func: {
       env,
-      body: quote(len, bodyInfer.type),
+      body: quote(env.length + 1, bodyInfer.type),
     }
   }
-  // Construct element for params
-  const paramInfers = inferParam(req)
-  // Make sure params have type U
-  getVals(paramInfers).forEach((ty: Val) => unify(env.length, ty, { val: 'uni' }))
   return {
     ...req,
     type,
     term: 'func',
-    param: paramInfers,
+    param: paramInfer,
     body: bodyInfer,
   }
 }

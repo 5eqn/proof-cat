@@ -17,9 +17,8 @@ export function deleteVar(ix: number, size: number, term: Draft<Term>): void {
 }
 
 function deleteFuncVar(ix: number, size: number, term: Draft<TFunc | TPi>): void {
-  for (let i = 0; i < term.param.length; i++)
-    deleteVar(ix, size, term.param[i])
-  deleteVar(ix + term.param.length, size, term.body)
+  deleteVar(ix, size, term.param)
+  deleteVar(ix + 1, size, term.body)
 }
 
 function deleteLetVar(ix: number, size: number, term: Draft<TLet>): void {
@@ -33,7 +32,6 @@ function deleteVarVar(ix: number, size: number, term: Draft<TVar>): void {
 
 function deleteAppVar(ix: number, size: number, term: Draft<TApp>): void {
   deleteVar(ix, size, term.func)
-  for (let i = 0; i < term.arg.length; i++)
-    deleteVar(ix, size, term.arg[i])
+  deleteVar(ix, size, term.arg)
 }
 

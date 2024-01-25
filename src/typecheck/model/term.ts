@@ -15,16 +15,15 @@ export type TAny = {
 // Function intro, `\x => y`
 export type TFunc = {
   term: 'func'
-  param: Term[]
-  paramID: string[]
+  param: Term
+  paramID: string
   body: Term
 }
 // Function elim, `(\x => x)(x)`
 export type TApp = {
   term: 'app'
   func: Term
-  arg: Term[]
-  argID: string[]
+  arg: Term
 }
 // Let bind, `let id = body in next`
 export type TLet = {
@@ -36,8 +35,8 @@ export type TLet = {
 // Dependent function type, `(x: X) -> Y`
 export type TPi = {
   term: 'pi',
-  param: Term[]
-  paramID: string[]
+  param: Term
+  paramID: string
   body: Term
 }
 // Universe type, `U`

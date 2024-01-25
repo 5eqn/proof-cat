@@ -2,7 +2,7 @@ import { TLet } from "../../model/term"
 import { assertNotOccur } from './assertNotOccur'
 
 describe('assertNotOccur function', () => {
-  // Context: [Z: U, T: U]
+  // Context: Z: U, T: U
   // let a = 1 in ((T: U) => (x: T) => x)(T = T)(x = a)
   const term: TLet = {
     // let a = 1
@@ -15,42 +15,40 @@ describe('assertNotOccur function', () => {
     next: {
       term: 'app',
       // x = a
-      argID: ['x'],
-      arg: [
-        {
-          term: 'var',
-          ix: 0,
-        }
-      ],
+      arg:
+      {
+        term: 'var',
+        ix: 0,
+      }
+      ,
       func: {
         term: 'app',
         // T = number
-        argID: ['T'],
-        arg: [
-          {
-            term: 'var',
-            ix: 2,
-          }
-        ],
+        arg:
+        {
+          term: 'var',
+          ix: 2,
+        }
+        ,
         func: {
           // T: U
           term: 'func',
-          paramID: ['T'],
-          param: [
-            {
-              term: 'uni',
-            }
-          ],
+          paramID: 'T',
+          param:
+          {
+            term: 'uni',
+          }
+          ,
           body: {
             // x: T
             term: 'func',
-            paramID: ['x'],
-            param: [
-              {
-                term: 'var',
-                ix: 0,
-              }
-            ],
+            paramID: 'x',
+            param:
+            {
+              term: 'var',
+              ix: 0,
+            }
+            ,
             body: {
               // x
               term: 'var',

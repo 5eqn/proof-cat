@@ -23,13 +23,13 @@ describe('evaluateApp function', () => {
   // Identity function `(a: A) => a`
   const mockTFunc: Term = {
     term: 'func',
-    param: [
-      {
-        term: 'type',
-        type: 'A',
-      }
-    ],
-    paramID: ['a'],
+    param:
+    {
+      term: 'type',
+      type: 'A',
+    }
+    ,
+    paramID: 'a',
     body: {
       term: 'var',
       ix: 0,
@@ -39,8 +39,7 @@ describe('evaluateApp function', () => {
   // Assign `x` as argument `a` of mockFunc
   const mockTAppFunc: Term = {
     term: 'app',
-    argID: ['a'],
-    arg: [mockTVar],
+    arg: mockTVar,
     func: mockTFunc,
   }
 
@@ -53,16 +52,14 @@ describe('evaluateApp function', () => {
   // Assign `x` as argument `a` of `x`
   const mockTAppVar: Term = {
     term: 'app',
-    argID: ['a'],
-    arg: [mockTVar],
+    arg: mockTVar,
     func: mockTVar,
   }
 
   // Expected result of mockAppSelf
   const mockVAppVar: Val = {
     val: 'app',
-    argID: ['a'],
-    arg: [mockVVar],
+    arg: mockVVar,
     func: mockVVar,
   }
 

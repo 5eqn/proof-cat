@@ -26,16 +26,16 @@ describe('inferFunc function', () => {
   // Bad pi term
   const mockTFuncBad: TFunc = {
     term: 'func',
-    param: [mockTNum],
-    paramID: ['a'],
+    param: mockTNum,
+    paramID: 'a',
     body: mockTVar,
   }
 
   // Function term
   const mockTFunc: TFunc = {
     term: 'func',
-    param: [mockTType],
-    paramID: ['a'],
+    param: mockTType,
+    paramID: 'a',
     body: mockTVar,
   }
 
@@ -48,8 +48,8 @@ describe('inferFunc function', () => {
   // Expected type
   const expected: VPi = {
     val: 'pi',
-    param: [mockVType],
-    paramID: ['a'],
+    param: mockVType,
+    paramID: 'a',
     func: {
       env: [],
       body: mockTType,

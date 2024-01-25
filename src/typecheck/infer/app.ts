@@ -1,14 +1,12 @@
-import { InferRequest, InferResult, getVals } from "../model/infer";
-import { TApp, Term } from "../model/term";
+import { InferRequest, InferResult } from "../model/infer";
+import { TApp } from "../model/term";
 import { evaluate } from "../evaluate";
 import { Val } from "../model/value";
 import { apply } from "../model/closure";
 
 import { infer } from "./index";
 import { ErrorCallNonFunc } from "../model/error";
-import { inferArg } from "./arg";
-import { unifyNamespace } from "../unify/namespace";
-import { unifyArray } from "../unify/array";
+import { unify } from "../unify";
 
 export function inferApp(req: InferRequest<TApp>): InferResult {
   // Get function type
@@ -17,23 +15,33 @@ export function inferApp(req: InferRequest<TApp>): InferResult {
     env, ctx, ns, tm: tm.func,
   })
   const funcType = funcInfer.type
+  const argInfer: InferResult = infer({
+    env, ctx, ns, tm: tm.arg,
+  })
+  // If function is any, return any
+  if (funcType.val === 'any') {
+    return {
+      ...req,
+      type: { val: 'any' },
+      term: 'app',
+      arg: argInfer,
+      func: funcInfer,
+    }
+  }
   // Make sure function's type is Pi
   if (funcType.val !== 'pi') {
     throw new ErrorCallNonFunc(funcType)
   }
-  // Make sure application namespace match
-  unifyNamespace(tm.argID, funcType.paramID)
-  // Make sure arguments' type match
-  const argInfers = inferArg(req)
-  unifyArray(env.length, getVals(argInfers), funcType.param)
+  // Make sure argument's type match
+  unify(env.length, argInfer.type, funcType.param)
   // Apply arguments to function type to get applied type
-  const argVals: Val[] = tm.arg.map((v: Term) => evaluate(env, v))
-  const type: Val = apply(funcType.func, argVals)
+  const argVal: Val = evaluate(env, tm.arg)
+  const type: Val = apply(funcType.func, argVal)
   return {
     ...req,
     type,
     term: 'app',
-    arg: argInfers,
+    arg: argInfer,
     func: funcInfer,
   }
 }

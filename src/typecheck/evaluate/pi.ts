@@ -7,7 +7,7 @@ import { evaluate } from "./index";
 export function evaluatePi(env: Env, term: TPi): Val {
   return {
     val: 'pi',
-    param: term.param.map((t) => evaluate(env, t)),
+    param: evaluate(env, term.param),
     paramID: term.paramID,
     func: {
       env,

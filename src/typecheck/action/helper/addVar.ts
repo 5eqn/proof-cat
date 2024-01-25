@@ -19,9 +19,8 @@ export function addVar(ix: number, size: number, term: Draft<Term>): void {
 }
 
 function addFuncVar(ix: number, size: number, term: Draft<TFunc | TPi>): void {
-  for (let i = 0; i < term.param.length; i++)
-    addVar(ix, size, term.param[i])
-  addVar(ix + term.param.length, size, term.body)
+  addVar(ix, size, term.param)
+  addVar(ix + 1, size, term.body)
 }
 
 function addLetVar(ix: number, size: number, term: Draft<TLet>): void {
@@ -35,6 +34,5 @@ function addVarVar(ix: number, size: number, term: Draft<TVar>): void {
 
 function addAppVar(ix: number, size: number, term: Draft<TApp>): void {
   addVar(ix, size, term.func)
-  for (let i = 0; i < term.arg.length; i++)
-    addVar(ix, size, term.arg[i])
+  addVar(ix, size, term.arg)
 }

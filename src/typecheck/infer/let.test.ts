@@ -19,8 +19,8 @@ describe('inferLet function', () => {
   // number -> A
   const typeFunc: TPi = {
     term: 'pi',
-    param: [typeNum],
-    paramID: ['n'],
+    param: typeNum,
+    paramID: 'n',
     body: typeA
   }
 
@@ -33,21 +33,20 @@ describe('inferLet function', () => {
   // f(n = x)
   const app: TApp = {
     term: 'app',
-    argID: ['n'],
-    arg: [
-      {
-        term: 'var',
-        ix: 1,
-      }
-    ],
+    arg:
+    {
+      term: 'var',
+      ix: 1,
+    }
+    ,
     func: varF,
   }
 
   // (f: (n: number) -> A) => f(n = x)
   const func: TFunc = {
     term: 'func',
-    param: [typeFunc],
-    paramID: ['f'],
+    param: typeFunc,
+    paramID: 'f',
     body: app,
   }
 
@@ -68,8 +67,8 @@ describe('inferLet function', () => {
   // (f: (n: number) -> A) -> A
   const largePi: TPi = {
     term: 'pi',
-    param: [typeFunc],
-    paramID: ['f'],
+    param: typeFunc,
+    paramID: 'f',
     body: typeA,
   }
 

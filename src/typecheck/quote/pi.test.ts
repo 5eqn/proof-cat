@@ -10,12 +10,12 @@ describe('quotePi function', () => {
   // (A: U) -> A
   const mockTPi: Term = {
     term: 'pi',
-    param: [
-      {
-        term: 'uni',
-      }
-    ],
-    paramID: ['A'],
+    param:
+    {
+      term: 'uni',
+    }
+    ,
+    paramID: 'A',
     body: {
       term: 'var',
       ix: 0,
@@ -25,12 +25,12 @@ describe('quotePi function', () => {
   // Expected result
   const mockVPi: Val = {
     val: 'pi',
-    param: [
-      {
-        val: 'uni',
-      }
-    ],
-    paramID: ['A'],
+    param:
+    {
+      val: 'uni',
+    }
+    ,
+    paramID: 'A',
     func: {
       env: mockEnv,
       body: mockTPi.body,

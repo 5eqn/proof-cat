@@ -4,13 +4,12 @@ import { unify } from "."
 describe('unifyApp function', () => {
   const f: Val = {
     val: 'app',
-    arg: [
-      {
-        val: 'type',
-        type: 'A',
-      }
-    ],
-    argID: ['a'],
+    arg:
+    {
+      val: 'type',
+      type: 'A',
+    }
+    ,
     func: {
       val: 'var',
       lvl: 0,
@@ -19,28 +18,12 @@ describe('unifyApp function', () => {
 
   const g: Val = {
     val: 'app',
-    arg: [
-      {
-        val: 'type',
-        type: 'B',
-      }
-    ],
-    argID: ['a'],
-    func: {
-      val: 'var',
-      lvl: 0,
+    arg:
+    {
+      val: 'type',
+      type: 'B',
     }
-  }
-
-  const h: Val = {
-    val: 'app',
-    arg: [
-      {
-        val: 'type',
-        type: 'A',
-      }
-    ],
-    argID: ['b'],
+    ,
     func: {
       val: 'var',
       lvl: 0,
@@ -49,13 +32,12 @@ describe('unifyApp function', () => {
 
   const k: Val = {
     val: 'app',
-    arg: [
-      {
-        val: 'type',
-        type: 'A',
-      }
-    ],
-    argID: ['a'],
+    arg:
+    {
+      val: 'type',
+      type: 'A',
+    }
+    ,
     func: {
       val: 'var',
       lvl: 1,
@@ -72,10 +54,6 @@ describe('unifyApp function', () => {
 
   test('should not unify if arg differs', () => {
     expect(() => unify(1, f, g)).toThrow()
-  })
-
-  test('should not unify if arg ID differs', () => {
-    expect(() => unify(1, f, h)).toThrow()
   })
 
   test('should not unify if func differs', () => {

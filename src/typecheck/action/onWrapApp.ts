@@ -7,18 +7,14 @@ import { ErrorCallNonFunc } from "../model/error";
 
 export function onWrapApp(ty: Val, draft: Draft<Term>): void {
   // Make sure the applied term is a function
-  if (ty.val !== 'pi') {
+  if (ty.val !== 'pi' && ty.val !== 'any') {
     throw new ErrorCallNonFunc(ty)
   }
-  // Generate anies for argument
-  const argID: string[] = ty.paramID
-  const arg: Term[] = ty.paramID.map(() => ({ term: 'any' }))
   // Update term
   const copy: Term = { ...draft }
   const tm = draft as TApp
   deleteFields(tm)
   tm.term = 'app'
   tm.func = copy
-  tm.arg = arg
-  tm.argID = argID
+  tm.arg = { term: 'any' }
 }

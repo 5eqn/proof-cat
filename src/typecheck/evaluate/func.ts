@@ -7,7 +7,7 @@ import { evaluate } from "./index";
 export function evaluateFunc(env: Env, term: TFunc): Val {
   return {
     val: 'func',
-    param: term.param.map((t) => evaluate(env, t)),
+    param: evaluate(env, term.param),
     paramID: term.paramID,
     func: {
       env,

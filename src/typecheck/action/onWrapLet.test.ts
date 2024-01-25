@@ -4,38 +4,37 @@ import { mkAction, revertAction } from '../model/action'
 import { Term } from "../model/term"
 
 describe('onWrapLet function', () => {
-  // Context: [Z: U, T: U]
+  // Context: Z: U, T: U
   // After adding param
   const before: Term = {
     term: 'app',
     // T = number
-    argID: ['T'],
     // Index decreases because `a` is deleted
-    arg: [
-      {
-        term: 'var',
-        ix: 1,
-      }
-    ],
+    arg:
+    {
+      term: 'var',
+      ix: 1,
+    }
+    ,
     func: {
       // T: U
       term: 'func',
-      paramID: ['T'],
-      param: [
-        {
-          term: 'uni',
-        }
-      ],
+      paramID: 'T',
+      param:
+      {
+        term: 'uni',
+      }
+      ,
       body: {
         // x: T
         term: 'func',
-        paramID: ['x'],
-        param: [
-          {
-            term: 'var',
-            ix: 0,
-          }
-        ],
+        paramID: 'x',
+        param:
+        {
+          term: 'var',
+          ix: 0,
+        }
+        ,
         body: {
           // x
           term: 'var',
@@ -56,32 +55,31 @@ describe('onWrapLet function', () => {
     next: {
       term: 'app',
       // T = number
-      argID: ['T'],
-      arg: [
-        {
-          term: 'var',
-          ix: 2,
-        }
-      ],
+      arg:
+      {
+        term: 'var',
+        ix: 2,
+      }
+      ,
       func: {
         // T: U
         term: 'func',
-        paramID: ['T'],
-        param: [
-          {
-            term: 'uni',
-          }
-        ],
+        paramID: 'T',
+        param:
+        {
+          term: 'uni',
+        }
+        ,
         body: {
           // x: T
           term: 'func',
-          paramID: ['x'],
-          param: [
-            {
-              term: 'var',
-              ix: 0,
-            }
-          ],
+          paramID: 'x',
+          param:
+          {
+            term: 'var',
+            ix: 0,
+          }
+          ,
           body: {
             // x
             term: 'var',
