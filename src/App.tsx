@@ -90,22 +90,33 @@ function handleDragEnd(e: DragEndEvent) {
   if (!e.active || !e.over) return
   const activeID = e.active.id.toString()
   const overLens = splitLens(e.over.id.toString())
-  console.log(overLens)
   const overInfer = applyLens(state.inferResult, overLens)
   const overEnvLen = overInfer.env.length
   const overType = overInfer.type
   const overTerm = applyLens(state.term, overLens)
-  // Handle variable assignment
-  if (activeID[0] === 'L') {
-    const activeLens = splitLens(activeID)
+  // Handle variable assignment (function)
+  if (activeID[0] === 'F') {
+    const activeLens = splitLens(activeID.substring(1))
     const funcLens = activeLens.slice(0, -2)
-    const bodyLens = [...funcLens, 'body']
-    if (!isPrefix(bodyLens, overLens)) return message.error(i18n.err.noVariable)
+    if (!isPrefix(funcLens, overLens)) return message.error(i18n.err.noVariable)
     const funcEnvLen = applyLens(state.inferResult, funcLens).env.length
     const funcTerm = applyLens(state.term, funcLens) as TFunc
     const paramLen = funcTerm.param.length
     const paramIX = +activeLens[activeLens.length - 1]
     const varIX = overEnvLen - funcEnvLen - paramLen + paramIX
+    onUpdate(mkAction({
+      action: 'override',
+      term: { term: 'var', ix: varIX },
+      backup: { ...overTerm },
+    }, overLens))
+  }
+  // Handle variable assignment (let definition)
+  if (activeID[0] === 'L') {
+    const activeLens = splitLens(activeID.substring(1))
+    const letLens = activeLens.slice(0, -1)
+    if (!isPrefix(letLens, overLens)) return message.error(i18n.err.noVariable)
+    const letEnvLen = applyLens(state.inferResult, letLens).env.length
+    const varIX = overEnvLen - letEnvLen - 1
     onUpdate(mkAction({
       action: 'override',
       term: { term: 'var', ix: varIX },

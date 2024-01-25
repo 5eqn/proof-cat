@@ -56,11 +56,11 @@ export function applyLens<T extends Rec>(rec: T, lens: Lens, ptr: number = 0): T
 }
 
 export function joinLens(lens: Lens): string {
-  return 'L' + lens.join('.')
+  return lens.join('.')
 }
 
 export function splitLens(joined: string): Lens {
-  const lens: Lens = joined.substring(1).split('.')
+  const lens: Lens = joined.split('.')
   if (lens.length === 1 && lens[0] === '') return []
   else return lens
 }
