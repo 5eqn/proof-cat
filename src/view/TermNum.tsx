@@ -4,9 +4,10 @@ import { mkAction } from "../typecheck/model/action";
 import { onUpdate } from "../state";
 import { Block } from "../component/Block";
 import Input from "../component/Input";
+import { palette } from "./color";
 
 export function TermNum({ term, lens }: TermProps<TNum>): JSX.Element {
-  return <Block>
+  return <Block color={palette.num} >
     <Input value={term.num.toString()} onChange={v => onUpdate(mkAction({
       action: 'override',
       backup: { ...term },

@@ -4,10 +4,11 @@ import { Draggable } from "../../component/Draggable";
 import Row from "../../component/Row";
 import Text from "../../component/Text";
 import { i18n } from "../../i18n";
+import { palette } from "../color";
 
 export function DummyApp(): JSX.Element {
   return <Draggable id="AWrapApp">
-    <Block>
+    <Block color={palette.app} >
       <Column>
         <Block inset />
         <Row>
