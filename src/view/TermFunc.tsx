@@ -2,11 +2,13 @@ import { TFunc } from "../typecheck/model/term";
 import { TermProps } from "../typecheck/model/props";
 import { Block } from "../component/Block";
 import { TermGeneral } from "./TermGeneral";
-import Text from "../component/Text";
 import { Draggable } from "../component/Draggable";
 import { joinLens } from "../typecheck/model/rec";
 import Row from "../component/Row";
 import Column from "../component/Column";
+import Input from "../component/Input";
+import { onUpdate } from "../state";
+import { mkAction } from "../typecheck/model/action";
 
 export function TermFunc({ term, lens }: TermProps<TFunc>): JSX.Element {
   const params = term.param.map((t, i) => {
@@ -14,7 +16,12 @@ export function TermFunc({ term, lens }: TermProps<TFunc>): JSX.Element {
     return <Row>
       <Draggable id={joinLens(paramLens)}>
         <Block>
-          <Text text={term.paramID[i]} />
+          <Input value={term.paramID[i]} onChange={v => onUpdate(mkAction({
+            action: 'renameParam',
+            ix: i,
+            oldID: term.paramID[i],
+            newID: v,
+          }, lens))} />
         </Block>
       </Draggable>
       <TermGeneral term={t} lens={paramLens} />
