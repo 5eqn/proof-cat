@@ -10,13 +10,13 @@ describe('quoteFunc function', () => {
   // Identity function `(a: A) => a`
   const mockTFunc: Term = {
     term: 'func',
-    param: [
-      {
-        term: 'type',
-        type: 'A',
-      }
-    ],
-    paramID: ['a'],
+    param:
+    {
+      term: 'type',
+      type: 'A',
+    }
+    ,
+    paramID: 'a',
     body: {
       term: 'var',
       ix: 0,
@@ -26,13 +26,13 @@ describe('quoteFunc function', () => {
   // Expected result
   const mockVFunc: Val = {
     val: 'func',
-    param: [
-      {
-        val: 'type',
-        type: 'A',
-      }
-    ],
-    paramID: ['a'],
+    param:
+    {
+      val: 'type',
+      type: 'A',
+    }
+    ,
+    paramID: 'a',
     func: {
       env: mockEnv,
       body: mockTFunc.body,

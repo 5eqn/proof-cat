@@ -13,12 +13,12 @@ describe('onWrapFunc function', () => {
   // After action
   const expected: Term = {
     term: 'func',
-    param: [
-      {
-        term: 'any',
-      }
-    ],
-    paramID: ['1145'],
+    param:
+    {
+      term: 'any',
+    }
+    ,
+    paramID: '1145',
     body: before,
   }
 

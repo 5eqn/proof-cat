@@ -8,8 +8,8 @@ describe('Input component', () => {
     const onChange = jest.fn();
 
     // Act
-    const { getByTestId } = render(<Input 
-      value={value} 
+    const { getByTestId } = render(<Input
+      value={value}
       onChange={onChange}
       data-testid="input"
     />);
@@ -23,8 +23,7 @@ describe('Input component', () => {
   test('calls onChange handler when input value changes', () => {
     // Arrange
     const value = 'Hello';
-    const receiver = jest.fn();
-    const onChange = jest.fn((e) => receiver(e.target.value));
+    const onChange = jest.fn();
 
     // Act
     const { getByTestId } = render(<Input
@@ -36,8 +35,8 @@ describe('Input component', () => {
     fireEvent.change(inputElement, { target: { value: 'World' } });
 
     // Assert
-    expect(receiver).toHaveBeenCalledTimes(1);
-    expect(receiver).toHaveBeenCalledWith('World');
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith('World');
   });
 });
 

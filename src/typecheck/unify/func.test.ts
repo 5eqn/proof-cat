@@ -4,13 +4,13 @@ import { unify } from "."
 describe('unifyFunc function', () => {
   const f: Val = {
     val: 'func',
-    param: [
-      {
-        val: 'type',
-        type: 'A',
-      }
-    ],
-    paramID: ['a'],
+    param:
+    {
+      val: 'type',
+      type: 'A',
+    }
+    ,
+    paramID: 'a',
     func: {
       env: [],
       body: {
@@ -22,13 +22,13 @@ describe('unifyFunc function', () => {
 
   const g: Val = {
     val: 'func',
-    param: [
-      {
-        val: 'type',
-        type: 'B',
-      }
-    ],
-    paramID: ['a'],
+    param:
+    {
+      val: 'type',
+      type: 'B',
+    }
+    ,
+    paramID: 'a',
     func: {
       env: [],
       body: {
@@ -40,13 +40,13 @@ describe('unifyFunc function', () => {
 
   const h: Val = {
     val: 'func',
-    param: [
-      {
-        val: 'type',
-        type: 'A',
-      }
-    ],
-    paramID: ['b'],
+    param:
+    {
+      val: 'type',
+      type: 'A',
+    }
+    ,
+    paramID: 'b',
     func: {
       env: [],
       body: {
@@ -58,13 +58,13 @@ describe('unifyFunc function', () => {
 
   const k: Val = {
     val: 'func',
-    param: [
-      {
-        val: 'type',
-        type: 'A',
-      }
-    ],
-    paramID: ['a'],
+    param:
+    {
+      val: 'type',
+      type: 'A',
+    }
+    ,
+    paramID: 'a',
     func: {
       env: [],
       body: {

@@ -16,42 +16,35 @@ describe('addVar function', () => {
     next: {
       term: 'app',
       // x = a
-      argID: ['x'],
-      arg: [
-        {
-          term: 'var',
-          ix: 0,
-        },
-      ],
+      arg: {
+        term: 'var',
+        ix: 0,
+      },
       func: {
         term: 'app',
         // T = number
-        argID: ['T'],
-        arg: [
-          {
-            term: 'var',
-            ix: 1,
-          }
-        ],
+        arg:
+        {
+          term: 'var',
+          ix: 1,
+        },
         func: {
           // T: U
           term: 'func',
-          paramID: ['T'],
-          param: [
-            {
-              term: 'uni',
-            }
-          ],
+          paramID: 'T',
+          param:
+          {
+            term: 'uni',
+          },
           body: {
             // x: T
             term: 'func',
-            paramID: ['x'],
-            param: [
-              {
-                term: 'var',
-                ix: 0,
-              }
-            ],
+            paramID: 'x',
+            param:
+            {
+              term: 'var',
+              ix: 0,
+            },
             body: {
               // x
               term: 'var',
@@ -75,43 +68,39 @@ describe('addVar function', () => {
     next: {
       term: 'app',
       // x = a
-      argID: ['x'],
-      arg: [
-        {
-          term: 'var',
-          ix: 0,
-        },
-      ],
+      arg:
+      {
+        term: 'var',
+        ix: 0,
+      },
       func: {
         term: 'app',
         // T = number
         // Index increases because variable is added inside scope of T
-        argID: ['T'],
-        arg: [
-          {
-            term: 'var',
-            ix: 2,
-          },
-        ],
+        arg:
+        {
+          term: 'var',
+          ix: 2,
+        },
         func: {
           // T: U
           term: 'func',
-          paramID: ['T'],
-          param: [
-            {
-              term: 'uni',
-            }
-          ],
+          paramID: 'T',
+          param:
+          {
+            term: 'uni',
+          }
+          ,
           body: {
             // x: T
             term: 'func',
-            paramID: ['x'],
-            param: [
-              {
-                term: 'var',
-                ix: 0,
-              }
-            ],
+            paramID: 'x',
+            param:
+            {
+              term: 'var',
+              ix: 0,
+            }
+            ,
             body: {
               // x
               term: 'var',
@@ -135,43 +124,41 @@ describe('addVar function', () => {
     next: {
       term: 'app',
       // x = a
-      argID: ['x'],
-      arg: [
-        {
-          term: 'var',
-          ix: 0,
-        }
-      ],
+      arg:
+      {
+        term: 'var',
+        ix: 0,
+      }
+      ,
       func: {
         term: 'app',
         // T = number
         // Index stay the same because variable is only added outside scope of T
-        argID: ['T'],
-        arg: [
-          {
-            term: 'var',
-            ix: 1,
-          }
-        ],
+        arg:
+        {
+          term: 'var',
+          ix: 1,
+        }
+        ,
         func: {
           // T: U
           term: 'func',
-          paramID: ['T'],
-          param: [
-            {
-              term: 'uni',
-            }
-          ],
+          paramID: 'T',
+          param:
+          {
+            term: 'uni',
+          }
+          ,
           body: {
             // x: T
             term: 'func',
-            paramID: ['x'],
-            param: [
-              {
-                term: 'var',
-                ix: 0,
-              }
-            ],
+            paramID: 'x',
+            param:
+            {
+              term: 'var',
+              ix: 0,
+            }
+            ,
             body: {
               // x
               term: 'var',

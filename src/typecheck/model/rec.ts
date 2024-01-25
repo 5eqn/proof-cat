@@ -4,19 +4,19 @@ import { ErrorInvalidLens } from "./error"
 
 export type RPi = {
   term: 'pi',
-  param: Rec[],
+  param: Rec,
   body: Rec,
 }
 
 export type RFunc = {
   term: 'func',
-  param: Rec[],
+  param: Rec,
   body: Rec,
 }
 
 export type RApp = {
   term: 'app',
-  arg: Rec[],
+  arg: Rec,
   func: Rec,
 }
 
@@ -35,15 +35,14 @@ export type Rec = RFunc | RPi | RApp | RLet | ROther
 export function applyLens<T extends Rec>(rec: T, lens: Lens, ptr: number = 0): T {
   if (lens.length === ptr) return rec
   const fst = lens[ptr]
-  const snd = +lens[ptr + 1]
   switch (rec.term) {
     case 'func':
     case 'pi':
-      if (fst === 'param') return applyLens(rec.param[snd], lens, ptr + 2) as T
+      if (fst === 'param') return applyLens(rec.param, lens, ptr + 1) as T
       if (fst === 'body') return applyLens(rec.body, lens, ptr + 1) as T
       throw new ErrorInvalidLens()
     case 'app':
-      if (fst === 'arg') return applyLens(rec.arg[snd], lens, ptr + 2) as T
+      if (fst === 'arg') return applyLens(rec.arg, lens, ptr + 1) as T
       if (fst === 'func') return applyLens(rec.func, lens, ptr + 1) as T
       throw new ErrorInvalidLens()
     case 'let':

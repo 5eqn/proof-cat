@@ -48,8 +48,8 @@ describe('inferApp function', () => {
   // Function type in context
   const mockVPi: VPi = {
     val: 'pi',
-    param: [mockVType],
-    paramID: ['T'],
+    param: mockVType,
+    paramID: 'T',
     func: {
       // Pi has no env because its instance `f` is defined first
       env: [],
@@ -60,8 +60,7 @@ describe('inferApp function', () => {
   // f(T = x)
   const mockTApp: TApp = {
     term: 'app',
-    argID: ['T'],
-    arg: [mockTVarX],
+    arg: mockTVarX,
     func: mockTVarF,
   }
 
@@ -92,17 +91,10 @@ describe('inferApp function', () => {
     expect(() => inferApp(req)).toThrow()
   })
 
-  test('applying function with wrong namespace should not typecheck', () => {
-    const req = cloneDeep(mockReq)
-    // f(114 = x)
-    req.tm.argID[0] = '114'
-    expect(() => inferApp(req)).toThrow()
-  })
-
   test('applying function with wrong value should not typecheck', () => {
     const req = cloneDeep(mockReq)
     // f(T = f)
-    req.tm.arg[0] = mockTVarF
+    req.tm.arg = mockTVarF
     expect(() => inferApp(req)).toThrow()
   })
 })

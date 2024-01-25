@@ -8,8 +8,7 @@ export function onRevertRemove(old: Term, draft: Draft<Term>): void {
   switch (old.term) {
     case 'func':
     case 'pi':
-      const size: number = old.param.length
-      addVar(0, size, old.body)
+      addVar(0, 1, old.body)
       overrideFields(draft, old)
       return
     case 'let':

@@ -4,12 +4,11 @@ import { pretty } from "."
 describe('evaluateVar function', () => {
   const func: Term = {
     term: 'func',
-    param: [
-      {
-        term: 'any',
-      },
-    ],
-    paramID: ['a'],
+    param:
+    {
+      term: 'any',
+    },
+    paramID: 'a',
     body: {
       term: 'var',
       ix: 0,
@@ -18,12 +17,11 @@ describe('evaluateVar function', () => {
 
   const pi: Term = {
     term: 'pi',
-    param: [
-      {
-        term: 'uni',
-      },
-    ],
-    paramID: ['A'],
+    param:
+    {
+      term: 'uni',
+    },
+    paramID: 'A',
     body: {
       term: 'var',
       ix: 0,
@@ -32,13 +30,11 @@ describe('evaluateVar function', () => {
 
   const app: Term = {
     term: 'app',
-    arg: [
-      {
-        term: 'type',
-        type: 'A',
-      },
-    ],
-    argID: ['a'],
+    arg:
+    {
+      term: 'type',
+      type: 'A',
+    },
     func,
   }
 
@@ -68,7 +64,7 @@ describe('evaluateVar function', () => {
   })
 
   test('should pretty app', () => {
-    expect(pretty([], app)).toBe('((a: *) => a)(a = A)')
+    expect(pretty([], app)).toBe('((a: *) => a)(A)')
   })
 
   test('should pretty let', () => {

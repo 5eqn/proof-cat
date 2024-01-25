@@ -32,15 +32,15 @@ function paren(use: boolean, inner: string): string {
 }
 
 function prettyFunc(ns: string[], term: TFunc): string {
-  return `(${term.param.map((t, i) => `${term.paramID[i]}: ${pretty(ns, t)}`).join(', ')}) => ${pretty([...term.paramID, ...ns], term.body)}`
+  return `(${term.paramID}: ${pretty(ns, term.param)}) => ${pretty([term.paramID, ...ns], term.body)}`
 }
 
 function prettyPi(ns: string[], term: TPi): string {
-  return `(${term.param.map((t, i) => `${term.paramID[i]}: ${pretty(ns, t)}`).join(', ')}) -> ${pretty([...term.paramID, ...ns], term.body)}`
+  return `(${term.paramID}: ${pretty(ns, term.param)}) -> ${pretty([term.paramID, ...ns], term.body)}`
 }
 
 function prettyApp(ns: string[], term: TApp): string {
-  return `${pretty(ns, term.func, true)}(${term.arg.map((arg, i) => `${term.argID[i]} = ${pretty(ns, arg)}`).join(', ')})`
+  return `${pretty(ns, term.func, true)}(${pretty(ns, term.arg)})`
 }
 
 function prettyLet(ns: string[], term: TLet): string {

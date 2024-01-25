@@ -18,10 +18,8 @@ export function assertNotOccur(len: number, ix: number, term: Term): void {
 }
 
 function assertInFunc(len: number, ix: number, term: TPi | TFunc): void {
-  for (let i = 0; i < term.param.length; i++)
-    assertNotOccur(len, ix, term.param[i])
-  const l: number = term.param.length
-  assertNotOccur(len + l, ix + l, term.body)
+  assertNotOccur(len, ix, term.param)
+  assertNotOccur(len + 1, ix + 1, term.body)
 }
 
 function assertInLet(len: number, ix: number, term: TLet): void {
@@ -31,6 +29,5 @@ function assertInLet(len: number, ix: number, term: TLet): void {
 
 function assertInApp(len: number, ix: number, term: TApp): void {
   assertNotOccur(len, ix, term.func)
-  for (let i = 0; i < term.arg.length; i++)
-    assertNotOccur(len, ix, term.arg[i])
+  assertNotOccur(len, ix, term.arg)
 }

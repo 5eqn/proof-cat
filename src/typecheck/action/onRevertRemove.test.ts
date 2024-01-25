@@ -8,12 +8,11 @@ import { onRevertRemove } from './onRevertRemove'
 describe('onRevertRemove function', () => {
   const tPiAfter: Term = {
     term: 'pi',
-    param: [
-      {
-        term: 'uni',
-      },
-    ],
-    paramID: ['T'],
+    param:
+    {
+      term: 'uni',
+    },
+    paramID: 'T',
     body: {
       term: 'var',
       ix: 1,
@@ -22,12 +21,11 @@ describe('onRevertRemove function', () => {
 
   const tFuncAfter: Term = {
     term: 'func',
-    param: [
-      {
-        term: 'uni',
-      },
-    ],
-    paramID: ['T'],
+    param:
+    {
+      term: 'uni',
+    },
+    paramID: 'T',
     body: {
       term: 'var',
       ix: 1,
@@ -36,13 +34,11 @@ describe('onRevertRemove function', () => {
 
   const tAppAfter: Term = {
     term: 'app',
-    arg: [
-      {
-        term: 'type',
-        type: 'number',
-      },
-    ],
-    argID: ['T'],
+    arg:
+    {
+      term: 'type',
+      type: 'number',
+    },
     func: {
       term: 'var',
       ix: 0,

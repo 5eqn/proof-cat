@@ -13,12 +13,12 @@ describe('onWrapPi pition', () => {
   // After action
   const expected: Term = {
     term: 'pi',
-    param: [
-      {
-        term: 'any',
-      }
-    ],
-    paramID: ['1145'],
+    param:
+    {
+      term: 'any',
+    }
+    ,
+    paramID: '1145',
     body: before,
   }
 

@@ -5,12 +5,11 @@ import { onRemove } from './onRemove'
 describe('onRemove function', () => {
   const tPiBefore: Term = {
     term: 'pi',
-    param: [
-      {
-        term: 'uni',
-      },
-    ],
-    paramID: ['T'],
+    param:
+    {
+      term: 'uni',
+    },
+    paramID: 'T',
     body: {
       term: 'var',
       ix: 1,
@@ -24,13 +23,11 @@ describe('onRemove function', () => {
 
   const tAppBefore: Term = {
     term: 'app',
-    arg: [
-      {
-        term: 'type',
-        type: 'number',
-      },
-    ],
-    argID: ['T'],
+    arg:
+    {
+      term: 'type',
+      type: 'number',
+    },
     func: {
       term: 'var',
       ix: 0,

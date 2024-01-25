@@ -1,7 +1,5 @@
 import { ActionPack } from "../model/action"
 import { Term } from "../model/term";
-import { onParamAdd } from "./onParamAdd";
-import { onParamDelete } from "./onParamDelete";
 import { onRemove } from "./onRemove";
 import { onRevertRemove } from "./onRevertRemove";
 import { onWrapApp } from "./onWrapApp";
@@ -10,7 +8,6 @@ import { onWrapLet } from "./onWrapLet";
 import { onWrapPi } from "./onWrapPi";
 import { overrideFields } from "./helper/overrideFields";
 import { applyLens } from "../model/rec";
-import { onParamRename } from "./onParamRename";
 
 // All actions, if throw error, should not change state
 export function runAction(
@@ -32,10 +29,6 @@ function runUndo(
       return onRevertRemove(action.backup, term)
     case 'override':
       return overrideFields(term, action.backup)
-    case 'addParam':
-      return onParamDelete(action.ix, action.envLen, term)
-    case 'renameParam':
-      return onParamRename(action.ix, action.oldID, term)
     case 'wrapPi':
     case 'wrapFunc':
     case 'wrapApp':
@@ -54,10 +47,6 @@ function runDo(
       return onRemove(action.envLen, term)
     case 'override':
       return overrideFields(term, action.term)
-    case 'addParam':
-      return onParamAdd(action.ix, action.id, term)
-    case 'renameParam':
-      return onParamRename(action.ix, action.newID, term)
     case 'wrapPi':
       return onWrapPi(action.name, term)
     case 'wrapFunc':

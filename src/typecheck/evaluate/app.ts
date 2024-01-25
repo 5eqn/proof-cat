@@ -7,7 +7,7 @@ import { evaluate } from "./index";
 // Evaluate a term to a value
 export function evaluateApp(env: Env, term: TApp): Val {
   const func = evaluate(env, term.func)
-  const arg = term.arg.map((v) => evaluate(env, v))
+  const arg = evaluate(env, term.arg)
   if (func.val === 'func') {
     return apply(func.func, arg)
   }
@@ -15,6 +15,5 @@ export function evaluateApp(env: Env, term: TApp): Val {
     val: 'app',
     func: func,
     arg: arg,
-    argID: term.argID,
   }
 }
