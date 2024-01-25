@@ -14,7 +14,7 @@ export function TermFunc({ term, lens }: TermProps<TFunc>): JSX.Element {
   const params = term.param.map((t, i) => {
     const paramLens = [...lens, 'param', i.toString()]
     return <Row>
-      <Draggable id={joinLens(paramLens)}>
+      <Draggable id={'F' + joinLens(paramLens)}>
         <Block>
           <Input value={term.paramID[i]} onChange={v => onUpdate(mkAction({
             action: 'renameParam',
