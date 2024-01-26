@@ -1,5 +1,4 @@
 import { Term } from "./term"
-import { Val } from "./value"
 
 export type ActionWrapApp = {
   action: 'wrapApp',
