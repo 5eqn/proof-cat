@@ -10,7 +10,7 @@ import Input from "../component/Input";
 import { onUpdate } from "../state";
 import { mkAction } from "../typecheck/model/action";
 
-export function TermLet({ term, lens }: TermProps<TLet>): JSX.Element {
+export function TermLet({ term, lens, parent }: TermProps<TLet>): JSX.Element {
   const bodyLens = [...lens, 'body']
   return <Column>
     <Row>
@@ -23,9 +23,9 @@ export function TermLet({ term, lens }: TermProps<TLet>): JSX.Element {
           }, lens))} />
         </Block>
       </Draggable>
-      <TermGeneral term={term.body} lens={[...lens, 'body']} />
+      <TermGeneral term={term.body} lens={[...lens, 'body']} parent={parent} />
     </Row>
-    <TermGeneral term={term.next} lens={[...lens, 'next']} />
+    <TermGeneral term={term.next} lens={[...lens, 'next']} parent={parent} />
   </Column>
 }
 

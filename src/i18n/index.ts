@@ -24,6 +24,7 @@ const source = {
       nameDup: 'This name already exists in context, so you cannot redeclare it!',
       changeApply: 'This term is called as a function, so you cannot change it!',
       noVariable: 'There is no suitable variable in context!',
+      varNotExist: 'This variable does not exist in context!',
       fromLenMismatch: 'Source of Pi has different length',
       argLenMismatch: 'Arguments has different length',
       variableMismatch: 'Variable mismatch',
@@ -56,7 +57,7 @@ const source = {
   },
   zh_proofAssistant: {
     term: {
-      uni: '命题宇宙',
+      uni: '宇宙',
       pi: '蕴含',
       to: '后件',
       func: '假设引入',
@@ -78,6 +79,7 @@ const source = {
       nameDup: '该变量名在语境中已存在！',
       changeApply: '该蕴含式已被消除，故不可修改！',
       noVariable: '语境中没有合适的变量！',
+      varNotExist: '语境中没有该变量！',
       fromMismatch: '蕴含前件不同',
       argMismatch: '参数不同',
       variableMismatch: '变量不同',

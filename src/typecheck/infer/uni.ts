@@ -9,6 +9,7 @@ export function inferUni(req: InferRequest<TUni>): InferResult {
   }
   return {
     ...req,
+    proc: 'infer',
     type,
     term: 'uni',
   }

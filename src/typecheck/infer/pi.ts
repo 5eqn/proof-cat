@@ -2,30 +2,32 @@ import { InferRequest, InferResult } from "../model/infer";
 import { TPi } from "../model/term";
 import { Val } from "../model/value";
 import { evaluate } from "../evaluate";
-
-import { infer } from "./index";
-import { unify } from "../unify";
+import { check } from "../check";
 
 export function inferPi(req: InferRequest<TPi>): InferResult {
-  // Construct element for Pi body
+  // Get param placeholder variable and type
   const { env, ctx, ns, tm }: InferRequest<TPi> = req
   const paramVar: Val = { val: 'var', lvl: env.length }
   const paramVal: Val = evaluate(env, tm.param)
-  const paramInfer: InferResult = infer({
-    env, ctx, ns, tm: tm.param,
-  })
-  const bodyInfer: InferResult = infer({
+  // Make sure applied body has type U
+  const bodyInfer: InferResult = check({
     env: [paramVar, ...env],
     ctx: [paramVal, ...ctx],
     ns: [tm.paramID, ...ns],
     tm: tm.body,
+    type: { val: 'uni' }
   })
   // Make sure param has type U
-  unify(env.length, paramInfer.type, { val: 'uni' })
+  const paramInfer: InferResult = check({
+    ...req,
+    tm: tm.param,
+    type: { val: 'uni' }
+  })
   // Construct type for Pi, which is U
   const type: Val = { val: 'uni' }
   return {
     ...req,
+    proc: 'infer',
     type,
     term: 'pi',
     param: paramInfer,

@@ -7,6 +7,7 @@ export function inferVar(req: InferRequest<TVar>): InferResult {
   const type = ctx[tm.ix]
   return {
     ...req,
+    proc: 'infer',
     type,
     term: 'var',
   }

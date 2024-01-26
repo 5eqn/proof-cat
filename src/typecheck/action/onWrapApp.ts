@@ -1,16 +1,9 @@
 // Code action: wrap with app
-import { Val } from "../model/value";
 import { TApp, Term } from "../model/term";
 import { Draft } from "immer";
 import { deleteFields } from "./helper/deleteFields";
-import { ErrorCallNonFunc } from "../model/error";
 
-export function onWrapApp(ty: Val, draft: Draft<Term>): void {
-  // Make sure the applied term is a function
-  if (ty.val !== 'pi' && ty.val !== 'any') {
-    throw new ErrorCallNonFunc(ty)
-  }
-  // Update term
+export function onWrapApp(draft: Draft<Term>): void {
   const copy: Term = { ...draft }
   const tm = draft as TApp
   deleteFields(tm)

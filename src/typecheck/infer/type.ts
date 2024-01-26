@@ -9,6 +9,7 @@ export function inferType(req: InferRequest<TType>): InferResult {
   }
   return {
     ...req,
+    proc: 'infer',
     type: type,
     term: 'type',
   }

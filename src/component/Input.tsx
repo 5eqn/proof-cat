@@ -8,10 +8,14 @@ interface InputProps {
 export default function Input(props: InputProps) {
   return <input
     style={{
-      width: '48px',
+      fontSize: '18px',
+      width: '16px',
       fontFamily: 'monospace',
+      fontWeight: "normal",
+      color: "#444",
       border: 'none',
       backgroundColor: 'transparent',
+      margin: "0px 2px",
     }}
     onChange={e => props.onChange(e.target.value)}
     value={props.value}

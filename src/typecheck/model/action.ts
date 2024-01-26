@@ -3,7 +3,6 @@ import { Val } from "./value"
 
 export type ActionWrapApp = {
   action: 'wrapApp',
-  funcType: Val,
   envLen: number,
 }
 

@@ -5,10 +5,13 @@ import Text from "../component/Text";
 import { useSnapshot } from "valtio";
 import { state } from "../state";
 import { applyLens } from "../typecheck/model/rec";
+import { prettyStep } from "../typecheck/pretty";
+import { quote } from "../typecheck/quote";
 
-export function TermVar({ term, lens }: TermProps<TVar>): JSX.Element {
-  const inferRes = useSnapshot(applyLens(state.inferResult, lens))
-  return <Block>
-    <Text text={inferRes.ns[term.ix]} />
+export function TermVar({ term, lens, parent }: TermProps<TVar>): JSX.Element {
+  const inferRes = useSnapshot(applyLens(state.inferResult, lens)) as any
+  const ns: string[] = inferRes.ns
+  return <Block shape={prettyStep(ns, quote(ns.length, inferRes.type))} parent={parent} >
+    <Text text={ns[term.ix]} />
   </Block>
 }
