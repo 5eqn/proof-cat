@@ -7,12 +7,13 @@ import Column from "../component/Column";
 import { palette } from "./color";
 
 export function TermApp({ term, lens }: TermProps<TApp>): JSX.Element {
-  return <Block color={palette.app} >
+  const color = palette.app
+  return <Block color={color} >
     <Column>
-      <TermGeneral term={term.func} lens={[...lens, 'func']} />
+      <TermGeneral term={term.func} lens={[...lens, 'func']} parent={color} />
       <Column>
         <Row>
-          <TermGeneral term={term.arg} lens={[...lens, 'arg']} />
+          <TermGeneral term={term.arg} lens={[...lens, 'arg']} parent={color} />
         </Row>
       </Column>
     </Column>

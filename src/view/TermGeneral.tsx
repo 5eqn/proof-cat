@@ -10,25 +10,25 @@ import { TermType } from "./TermType";
 import { TermUni } from "./TermUni";
 import { TermVar } from "./TermVar";
 
-export function TermGeneral({ term, lens }: TermProps<Term>) {
+export function TermGeneral({ term, lens, parent }: TermProps<Term>) {
   switch (term.term) {
     case 'any':
-      return <TermAny term={term} lens={lens} />
+      return <TermAny term={term} lens={lens} parent={parent} />
     case 'pi':
-      return <TermPi term={term} lens={lens} />
+      return <TermPi term={term} lens={lens} parent={parent} />
     case 'func':
-      return <TermFunc term={term} lens={lens} />
+      return <TermFunc term={term} lens={lens} parent={parent} />
     case 'app':
-      return <TermApp term={term} lens={lens} />
+      return <TermApp term={term} lens={lens} parent={parent} />
     case 'let':
-      return <TermLet term={term} lens={lens} />
+      return <TermLet term={term} lens={lens} parent={parent} />
     case 'type':
-      return <TermType term={term} lens={lens} />
+      return <TermType term={term} lens={lens} parent={parent} />
     case 'var':
-      return <TermVar term={term} lens={lens} />
+      return <TermVar term={term} lens={lens} parent={parent} />
     case 'num':
-      return <TermNum term={term} lens={lens} />
+      return <TermNum term={term} lens={lens} parent={parent} />
     case 'uni':
-      return <TermUni term={term} lens={lens} />
+      return <TermUni term={term} lens={lens} parent={parent} />
   }
 }

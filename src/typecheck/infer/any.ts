@@ -9,6 +9,7 @@ export function inferAny(req: InferRequest<TAny>): InferResult {
   }
   return {
     ...req,
+    proc: 'infer',
     type: val,
     term: 'any',
   }

@@ -62,7 +62,7 @@ function App() {
       </Column>
     </div>
     <div style={{
-      position: "fixed",
+      position: "relative",
       left: "20%",
       width: "20%",
       padding: '16px',
@@ -92,13 +92,13 @@ function handleDragEnd(e: DragEndEvent) {
   const overLens = splitLens(e.over.id.toString())
   const overInfer = applyLens(state.inferResult, overLens)
   const overEnvLen = overInfer.env.length
-  const overType = overInfer.type
   const overTerm = applyLens(state.term, overLens)
   // Handle variable assignment (function)
   if (activeID[0] === 'F') {
     const activeLens = splitLens(activeID.substring(1))
     const funcLens = activeLens.slice(0, -1)
-    if (!isPrefix(funcLens, overLens)) return message.error(i18n.err.noVariable)
+    const bodyLens = [...funcLens, 'body']
+    if (!isPrefix(bodyLens, overLens)) return message.error(i18n.err.varNotExist)
     const funcEnvLen = applyLens(state.inferResult, funcLens).env.length
     const varIX = overEnvLen - funcEnvLen - 1
     onUpdate(mkAction({
@@ -111,7 +111,8 @@ function handleDragEnd(e: DragEndEvent) {
   if (activeID[0] === 'L') {
     const activeLens = splitLens(activeID.substring(1))
     const letLens = activeLens.slice(0, -1)
-    if (!isPrefix(letLens, overLens)) return message.error(i18n.err.noVariable)
+    const nextLens = [...letLens, 'next']
+    if (!isPrefix(nextLens, overLens)) return message.error(i18n.err.varNotExist)
     const letEnvLen = applyLens(state.inferResult, letLens).env.length
     const varIX = overEnvLen - letEnvLen - 1
     onUpdate(mkAction({
@@ -136,7 +137,6 @@ function handleDragEnd(e: DragEndEvent) {
       case 'AWrapApp': return onUpdate(mkAction({
         action: 'wrapApp',
         envLen: overEnvLen,
-        funcType: overType,
       }, overLens))
       case 'AWrapLet': return onUpdate(mkAction({
         action: 'wrapLet',

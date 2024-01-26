@@ -19,6 +19,7 @@ export function inferLet(req: InferRequest<TLet>): InferResult {
   })
   return {
     ...req,
+    proc: 'infer',
     type: nextInfer.type,
     term: 'let',
     body: bodyInfer,

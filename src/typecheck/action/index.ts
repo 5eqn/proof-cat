@@ -52,7 +52,7 @@ function runDo(
     case 'wrapFunc':
       return onWrapFunc(action.name, term)
     case 'wrapApp':
-      return onWrapApp(action.funcType, term)
+      return onWrapApp(term)
     case 'wrapLet':
       return onWrapLet(action.name, term)
   }

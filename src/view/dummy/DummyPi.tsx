@@ -8,7 +8,7 @@ import { palette } from "../color";
 
 export function DummyPi(): JSX.Element {
   return <Draggable id="AWrapPi">
-    <Block color={palette.pi} >
+    <Block color={palette.pi} shape='U' >
       <Column>
         <Row>
           <Block>

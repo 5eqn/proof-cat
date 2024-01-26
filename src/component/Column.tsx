@@ -4,11 +4,11 @@ export default function Column(props: {
   gap?: string,
 }) {
   const children = Array.isArray(props.children) ? props.children : [props.children]
-  const gap = <div style={{ height: props.gap ? props.gap : '8px' }} />
-  const content = [children[0]]
-  for (let i = 1; i < children.length; i++) {
-    content.push(gap)
-    content.push(children[i])
+  const gapStyle = { height: props.gap ? props.gap : '8px' }
+  const content = []
+  for (let i = 0; i < children.length; i++) {
+    if (i > 0) content.push(<div style={gapStyle} key={i * 2} />)
+    content.push(<div children={children[i]} key={i * 2 + 1} />)
   }
   return <div style={{
     display: "flex",

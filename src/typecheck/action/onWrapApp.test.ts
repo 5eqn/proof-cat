@@ -36,22 +36,15 @@ describe('onWrapApp function', () => {
     const term = cloneDeep(before)
     runAction(mkAction({
       action: 'wrapApp',
-      funcType: { val: 'any' },
       envLen: 0,
     }), term)
     expect(term).toStrictEqual(expected)
-  })
-
-  test('should not apply to non-function', () => {
-    const term = cloneDeep(before)
-    expect(() => onWrapApp({ val: 'num', num: 114 }, term)).toThrow()
   })
 
   test('revert should work', () => {
     const term = cloneDeep(before)
     const action = mkAction({
       action: 'wrapApp',
-      funcType: { val: 'any' },
       envLen: 0,
     })
     runAction(action, term)

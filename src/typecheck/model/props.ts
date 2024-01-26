@@ -3,5 +3,6 @@ import { Term } from "./term";
 
 export interface TermProps<T extends Term> {
   term: T,
-  lens: Lens
+  lens: Lens,
+  parent?: string,
 }

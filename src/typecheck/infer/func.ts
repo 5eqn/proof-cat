@@ -5,16 +5,13 @@ import { evaluate } from "../evaluate";
 
 import { infer } from "./index";
 import { quote } from "../quote";
-import { unify } from "../unify";
+import { check } from "../check";
 
 export function inferFunc(req: InferRequest<TFunc>): InferResult {
   // Construct element for function body
   const { env, ctx, ns, tm }: InferRequest<TFunc> = req
   const paramVar: Val = { val: 'var', lvl: env.length }
   const paramVal: Val = evaluate(env, tm.param)
-  const paramInfer: InferResult = infer({
-    env, ctx, ns, tm: tm.param,
-  })
   const bodyInfer: InferResult = infer({
     env: [paramVar, ...env],
     ctx: [paramVal, ...ctx],
@@ -22,7 +19,11 @@ export function inferFunc(req: InferRequest<TFunc>): InferResult {
     tm: tm.body,
   })
   // Make sure param has type U
-  unify(env.length, paramInfer.type, { val: 'uni' })
+  const paramInfer: InferResult = check({
+    ...req,
+    tm: tm.param,
+    type: { val: 'uni' }
+  })
   // Construct type for func, which is Pi
   const type: Val = {
     val: 'pi',
@@ -35,6 +36,7 @@ export function inferFunc(req: InferRequest<TFunc>): InferResult {
   }
   return {
     ...req,
+    proc: 'infer',
     type,
     term: 'func',
     param: paramInfer,

@@ -1,4 +1,6 @@
 import { i18n } from "../../i18n";
+import { pretty } from "../pretty";
+import { quote } from "../quote";
 import { Val } from "./value";
 
 export abstract class CodeActionError {
@@ -6,15 +8,17 @@ export abstract class CodeActionError {
 }
 
 export class ErrorCallNonFunc extends CodeActionError {
+  ns: string[]
   funcType: Val
 
-  constructor(funcType: Val) {
+  constructor(ns: string[], funcType: Val) {
     super()
+    this.ns = ns
     this.funcType = funcType
   }
 
   toString(): string {
-    return i18n.err.callNonFunc
+    return `${i18n.err.callNonFunc}: ${pretty(this.ns, quote(this.ns.length, this.funcType))}`
   }
 }
 
