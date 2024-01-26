@@ -32,9 +32,9 @@ export function prettyStep(ns: string[], term: Term): string {
     case 'pi':
       return '->'
     case 'app':
-      return prettyApp(ns, term)
+      return prettyAppStep(ns, term)
     case 'let':
-      return '-'
+      return ''
     case 'var':
       return `${ns[term.ix]}`
     case 'num':
@@ -66,4 +66,8 @@ function prettyApp(ns: string[], term: TApp): string {
 
 function prettyLet(ns: string[], term: TLet): string {
   return `let ${term.id} = ${pretty([term.id, ...ns], term.body)} in ${pretty([term.id, ...ns], term.next)}`
+}
+
+function prettyAppStep(ns: string[], term: TApp): string {
+  return `${prettyStep(ns, term.func)}(${prettyStep(ns, term.arg)})`
 }

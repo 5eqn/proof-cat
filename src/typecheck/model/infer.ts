@@ -27,13 +27,11 @@ export type CheckRequest<T extends Term> = {
   // Term to be checked
   tm: T,
   // Expected type
-  type: Val,
+  expected: Val,
 }
 
 // Result after inferring the type of a term
 export type InferResult = {
-  // Type of process
-  proc: 'infer' | 'check'
   // Inferred type value
   type: Val,
   // Current mapping from de-Bruijn index to value
@@ -42,6 +40,8 @@ export type InferResult = {
   ctx: Ctx,
   // Current names
   ns: string[],
+  // Expected type value
+  expected?: Val,
 } & Rec
 
 // Get values from result

@@ -13,11 +13,11 @@ import { palette } from "./color";
 import { useSnapshot } from "valtio";
 import { prettyStep } from "../typecheck/pretty";
 
-export function TermPi({ term, lens }: TermProps<TPi>): JSX.Element {
+export function TermPi({ term, lens, parent }: TermProps<TPi>): JSX.Element {
   const inferRes = useSnapshot(applyLens(state.inferResult, lens)) as any
   const paramLens = [...lens, 'param']
   const color = palette.pi
-  return <Block color={color} shape='U'>
+  return <Block color={color} shape='U' parent={parent}>
     <Column>
       <Row>
         <Draggable id={'F' + joinLens(paramLens)}>

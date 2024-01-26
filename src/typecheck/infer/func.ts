@@ -22,7 +22,7 @@ export function inferFunc(req: InferRequest<TFunc>): InferResult {
   const paramInfer: InferResult = check({
     ...req,
     tm: tm.param,
-    type: { val: 'uni' }
+    expected: { val: 'uni' }
   })
   // Construct type for func, which is Pi
   const type: Val = {
@@ -36,7 +36,6 @@ export function inferFunc(req: InferRequest<TFunc>): InferResult {
   }
   return {
     ...req,
-    proc: 'infer',
     type,
     term: 'func',
     param: paramInfer,

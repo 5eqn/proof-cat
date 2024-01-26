@@ -30,15 +30,11 @@ function App() {
   return <DndContext onDragEnd={handleDragEnd}>
     <div style={{
       position: "fixed",
-      left: "40%",
-      width: "60%",
+      left: "70%",
+      width: "30%",
       top: "32px",
     }}>
       <Center>
-        <Text text="1. (A -> B) -> ((B -> 0) -> (A -> 0))" />
-        <div style={{ height: '16px' }} />
-        <Text text="2. (forall x. A(x) -> B(x)) -> (forall x. A(x)) -> (forall x. B(x))" />
-        <div style={{ height: '16px' }} />
         <Text text="You have proven: " />
         <div style={{ height: '16px' }} />
         <Text text={pretty([], tytm)} />
@@ -64,7 +60,7 @@ function App() {
     <div style={{
       position: "relative",
       left: "20%",
-      width: "20%",
+      width: "50%",
       padding: '16px',
     }}>
       <Column>

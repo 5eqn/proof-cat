@@ -86,8 +86,8 @@ describe('unifyPi function', () => {
     expect(() => unify(1, f, g)).toThrow()
   })
 
-  test('should not unify if param ID differs', () => {
-    expect(() => unify(1, f, h)).toThrow()
+  test('should unify if param ID differs', () => {
+    expect(() => unify(1, f, h)).not.toThrow()
   })
 
   test('should not unify if body differs', () => {
