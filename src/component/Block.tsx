@@ -8,7 +8,7 @@ export function Block(props: {
   inset?: boolean
   shape?: string,
 }) {
-  const baseShadow = '0.6px 0.6px 1.8px #cccccc'
+  const baseShadow = '0.6px 0.6px 1.8px #999999'
   const mainShadow = props.inset ? 'inset ' + baseShadow : baseShadow
   const mainColor = props.color ?? palette.neutral
   const parentColor = props.parent ?? palette.background
@@ -20,7 +20,7 @@ export function Block(props: {
     fontStyle: 'italic',
     fontFamily: 'monospace',
     color: 'transparent',
-    backgroundColor: '#cccccc',
+    backgroundColor: '#999999',
     textShadow: '0.6px 0.6px 1.8px ' + parentColor,
     backgroundClip: 'text',
     transform: 'translateY(10px)'
@@ -32,7 +32,7 @@ export function Block(props: {
     fontStyle: 'italic',
     fontFamily: 'monospace',
     color: parentColor,
-    textShadow: '0.6px 0.6px 1.8px #cccccc',
+    textShadow: '0.6px 0.6px 1.8px #999999',
     transform: 'translateY(10px)'
   }
   const textStyle = props.inset ? shadowTextStyle : insetTextStyle
