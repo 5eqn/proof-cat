@@ -20,12 +20,10 @@ export function TermApp({ term, lens, parent }: TermProps<TApp>): JSX.Element {
     parent={parent}
   >
     <Column>
-      <TermGeneral term={term.func} lens={[...lens, 'func']} parent={color} />
-      <Column>
-        <Row>
-          <TermGeneral term={term.arg} lens={[...lens, 'arg']} parent={color} />
-        </Row>
-      </Column>
+      <Row>
+        <TermGeneral term={term.func} lens={[...lens, 'func']} parent={color} />
+        <TermGeneral term={term.arg} lens={[...lens, 'arg']} parent={color} />
+      </Row>
     </Column>
   </Block>
 }

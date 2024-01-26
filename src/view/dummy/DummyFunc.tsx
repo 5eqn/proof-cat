@@ -8,12 +8,13 @@ import { palette } from "../color";
 
 export function DummyFunc(): JSX.Element {
   return <Draggable id="AWrapFunc">
-    <Block color={palette.func} >
+    <Block color={palette.func} shape='->' >
       <Column>
         <Row>
           <Block>
             <Text text={i18n.prompt.wrapFunc} />
           </Block>
+          <Text text=":" />
           <Block inset />
         </Row>
         <Block inset />
