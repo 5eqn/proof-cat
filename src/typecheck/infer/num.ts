@@ -10,7 +10,6 @@ export function inferNum(req: InferRequest<TNum>): InferResult {
   }
   return {
     ...req,
-    proc: 'infer',
     type,
     term: 'num',
   }

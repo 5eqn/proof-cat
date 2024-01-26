@@ -25,7 +25,7 @@ export function Block(props: {
     backgroundClip: 'text',
     transform: 'translateY(10px)'
   }
-  const normalTextStyle: React.CSSProperties = {
+  const shadowTextStyle: React.CSSProperties = {
     paddingRight: '8px',
     fontWeight: '900',
     fontSize: '32px',
@@ -35,7 +35,7 @@ export function Block(props: {
     textShadow: '0.6px 0.6px 1.8px #cccccc',
     transform: 'translateY(10px)'
   }
-  const textStyle = props.inset ? normalTextStyle : insetTextStyle
+  const textStyle = props.inset ? shadowTextStyle : insetTextStyle
   const blockStyle: React.CSSProperties = {
     minWidth: '42px',
     minHeight: '42px',

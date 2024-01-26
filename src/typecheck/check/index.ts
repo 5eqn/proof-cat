@@ -5,10 +5,10 @@ import { unify } from "../unify";
 
 export function check(req: CheckRequest<Term>): InferResult {
   const inferRes: InferResult = infer(req)
-  unify(req.env.length, inferRes.type, req.type)
+  unify(req.env.length, inferRes.type, req.expected)
   return {
     ...inferRes,
-    type: req.type,
-    proc: 'check',
+    type: inferRes.type,
+    expected: req.expected,
   }
 }

@@ -5,46 +5,48 @@ import { Val } from "../model/value";
 import { apply } from "../model/closure";
 
 import { infer } from "./index";
-import { ErrorCallNonFunc } from "../model/error";
 import { check } from "../check";
 
 export function inferApp(req: InferRequest<TApp>): InferResult {
-  // Get function type
+  // Make sure function can unify with function
   const { env, ctx, ns, tm }: InferRequest<TApp> = req
-  const funcInfer: InferResult = infer({
+  const funcInfer: InferResult = check({
     env, ctx, ns, tm: tm.func,
+    expected: {
+      val: 'pi',
+      param: { val: 'any' },
+      paramID: '_',
+      func: {
+        env: [],
+        body: { term: 'any' },
+      }
+    }
   })
   const funcType = funcInfer.type
-  // If function is any, return any
-  if (funcType.val === 'any') {
+  // If function is not pi, return any
+  if (funcType.val !== 'pi') {
     const argInfer: InferResult = infer({
       env, ctx, ns, tm: tm.arg,
     })
     return {
       ...req,
-      proc: 'infer',
       type: { val: 'any' },
       term: 'app',
       arg: argInfer,
       func: funcInfer,
     }
   }
-  // Make sure function's type is Pi
-  if (funcType.val !== 'pi') {
-    throw new ErrorCallNonFunc(ns, funcType)
-  }
   // Make sure argument's type match
   const argInfer: InferResult = check({
     ...req,
     tm: tm.arg,
-    type: funcType.param
+    expected: funcType.param
   })
   // Apply arguments to function type to get applied type
   const argVal: Val = evaluate(env, tm.arg)
   const type: Val = apply(funcType.func, argVal)
   return {
     ...req,
-    proc: 'infer',
     type,
     term: 'app',
     arg: argInfer,

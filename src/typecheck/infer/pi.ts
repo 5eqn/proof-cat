@@ -15,19 +15,18 @@ export function inferPi(req: InferRequest<TPi>): InferResult {
     ctx: [paramVal, ...ctx],
     ns: [tm.paramID, ...ns],
     tm: tm.body,
-    type: { val: 'uni' }
+    expected: { val: 'uni' }
   })
   // Make sure param has type U
   const paramInfer: InferResult = check({
     ...req,
     tm: tm.param,
-    type: { val: 'uni' }
+    expected: { val: 'uni' }
   })
   // Construct type for Pi, which is U
   const type: Val = { val: 'uni' }
   return {
     ...req,
-    proc: 'infer',
     type,
     term: 'pi',
     param: paramInfer,

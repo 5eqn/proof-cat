@@ -23,7 +23,6 @@ export const state = proxy({
   curr: tempActions,
   term: { term: 'any' } as Term,
   inferResult: {
-    proc: 'infer',
     type: { val: 'any' },
     env: [],
     ctx: [],
