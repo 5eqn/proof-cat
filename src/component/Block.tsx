@@ -23,7 +23,8 @@ export function Block(props: {
     backgroundColor: '#999999',
     textShadow: '0.6px 0.6px 1.8px ' + parentColor,
     backgroundClip: 'text',
-    transform: 'translateY(10px)'
+    transform: 'translateY(10px)',
+    userSelect: 'none',
   }
   const shadowTextStyle: React.CSSProperties = {
     paddingRight: '8px',
@@ -33,13 +34,14 @@ export function Block(props: {
     fontFamily: 'monospace',
     color: parentColor,
     textShadow: '0.6px 0.6px 1.8px #999999',
-    transform: 'translateY(10px)'
+    transform: 'translateY(10px)',
+    userSelect: 'none',
   }
   const textStyle = props.inset ? shadowTextStyle : insetTextStyle
   const blockStyle: React.CSSProperties = {
     minWidth: '42px',
     minHeight: '42px',
-    borderRadius: '8px',
+    borderRadius: '24px',
     backgroundColor: color,
     boxShadow: mainShadow,
   }

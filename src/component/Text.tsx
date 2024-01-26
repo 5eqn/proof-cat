@@ -7,5 +7,6 @@ export default function Text(props: {
     fontWeight: "normal",
     color: "#444",
     margin: "0px 4px",
+    userSelect: 'none',
   }}> {props.text} </div>
 }

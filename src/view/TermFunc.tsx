@@ -12,6 +12,7 @@ import { mkAction } from "../typecheck/model/action";
 import { palette } from "./color";
 import { useSnapshot } from "valtio";
 import { prettyStep } from "../typecheck/pretty";
+import Text from "../component/Text";
 
 export function TermFunc({ term, lens, parent }: TermProps<TFunc>): JSX.Element {
   const inferRes = useSnapshot(applyLens(state.inferResult, lens)) as any
@@ -29,6 +30,7 @@ export function TermFunc({ term, lens, parent }: TermProps<TFunc>): JSX.Element 
             }, lens))} />
           </Block>
         </Draggable>
+        <Text text=":" />
         <TermGeneral term={term.param} lens={paramLens} parent={color} />
       </Row>
       <TermGeneral term={term.body} lens={[...lens, 'body']} parent={color} />
