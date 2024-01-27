@@ -2,14 +2,14 @@ import Center from "./component/Center";
 import Text from "./component/Text";
 import { pretty } from "./typecheck/pretty";
 import { quote } from "./typecheck/quote";
-import { onRedo, onUndo, onUpdate, state } from "./state";
+import { state } from "./state";
 import { KeyListener } from "./component/KeyListener";
 import { useSnapshot } from "valtio";
 import { Term } from "./typecheck/model/term";
 import { InferResult } from "./typecheck/model/infer";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import { TermGeneral } from "./view/TermGeneral";
-import { applyLens, splitLens } from "./typecheck/model/rec";
+import { TermGeneral } from "./view/term/TermGeneral";
+import { applyLens, splitLens } from "./typecheck/model/lens";
 import { isPrefix } from "./util";
 import { message } from "antd";
 import { i18n } from "./i18n";
@@ -22,6 +22,9 @@ import { DummyLet } from "./view/dummy/DummyLet";
 import { DummyNum } from "./view/dummy/DummyNum";
 import { DummyType } from "./view/dummy/DummyType";
 import { DummyUni } from "./view/dummy/DummyUni";
+import {onUpdate} from "./state/onUpdate";
+import {onRedo} from "./state/onRedo";
+import {onUndo} from "./state/onUndo";
 
 function App() {
   const termSnap: Term = useSnapshot(state.term) as Term

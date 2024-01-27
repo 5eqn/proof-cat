@@ -1,5 +1,5 @@
-import { TermProps } from "../typecheck/model/props";
-import { Term } from "../typecheck/model/term";
+import { TermProps } from "../../typecheck/model/props";
+import { Term } from "../../typecheck/model/term";
 import { TermAny } from "./TermAny";
 import { TermApp } from "./TermApp";
 import { TermFunc } from "./TermFunc";

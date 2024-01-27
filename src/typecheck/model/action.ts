@@ -1,4 +1,5 @@
-import { Term } from "./term"
+import {Term} from "./term"
+import {Lens} from "./lens";
 
 export type ActionWrapApp = {
   action: 'wrapApp',
@@ -45,9 +46,6 @@ export type Action =
   | ActionWrapPi
   | ActionWrapLet
 
-// TODO move to rec folder
-export type Lens = string[]
-
 export type ActionPack = {
   action: Action,
   lens: Lens,
@@ -70,4 +68,11 @@ export function mkAction(
     lens,
     undo,
   }
+}
+
+// Action tree
+export type ActionTree = {
+  action?: ActionPack
+  next: ActionTree[]
+  parent?: ActionTree
 }

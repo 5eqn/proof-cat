@@ -7,7 +7,7 @@ import { onWrapFunc } from "./onWrapFunc";
 import { onWrapLet } from "./onWrapLet";
 import { onWrapPi } from "./onWrapPi";
 import { overrideFields } from "./helper/overrideFields";
-import { applyLens } from "../model/rec";
+import { applyLens } from "../model/lens";
 
 // All actions, if throw error, should not change state
 export function runAction(
