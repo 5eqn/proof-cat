@@ -12,13 +12,17 @@ export function DummyFunc(): JSX.Element {
     <Block color={palette.func} shape='->' >
       <Column>
         <Row>
+          <Text text={t('assume')} />
           <Block>
-            <Text text={t('func')} />
+            <Text text='x' />
           </Block>
-          <Text text=":" />
+          <Text text={t('proves')} />
+          <Block shape="U" inset parent={palette.func} />
+        </Row>
+        <Row>
+          <Text text={t('apply')} />
           <Block inset />
         </Row>
-        <Block inset />
       </Column>
     </Block>
   </Draggable>

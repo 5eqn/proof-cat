@@ -13,14 +13,17 @@ import { useSnapshot } from "valtio";
 import { prettyStep } from "../../typecheck/pretty";
 import { quote } from "../../typecheck/quote";
 import Text from "../../component/Text";
-import {onUpdate} from "../../state/onUpdate";
+import { onUpdate } from "../../state/onUpdate";
+import { useTranslation } from "react-i18next";
 
 export function TermLet({ term, lens, parent }: TermProps<TLet>): JSX.Element {
+  const { t } = useTranslation()
   const bodyLens = [...lens, 'body']
   const bodyInfer = useSnapshot(applyLens(state.inferResult, bodyLens)) as any
   const ns = bodyInfer.ns
   return <Column>
     <Row>
+      <Text text={t('let')} />
       <Draggable id={'L' + joinLens(bodyLens)}>
         <Block shape={prettyStep(ns, quote(ns, bodyInfer.type))} parent={parent}>
           <Input value={term.id} onChange={v => onUpdate(mkAction({
