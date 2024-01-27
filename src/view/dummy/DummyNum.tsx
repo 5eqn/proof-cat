@@ -7,7 +7,7 @@ import { palette } from "../color";
 export function DummyNum(): JSX.Element {
   return <Draggable id="ABecomeNum">
     <Block color={palette.num} >
-      <Text text={i18n.prompt.becomeNum} />
+      <Text text={i18n.term.num} />
     </Block>
   </Draggable>
 }
