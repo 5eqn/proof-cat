@@ -1,18 +1,19 @@
-import { TLet } from "../typecheck/model/term";
-import { TermProps } from "../typecheck/model/props";
+import { TLet } from "../../typecheck/model/term";
+import { TermProps } from "../../typecheck/model/props";
 import { TermGeneral } from "./TermGeneral";
-import Row from "../component/Row";
-import Column from "../component/Column";
-import { Draggable } from "../component/Draggable";
-import { applyLens, joinLens } from "../typecheck/model/rec";
-import { Block } from "../component/Block";
-import Input from "../component/Input";
-import { onUpdate, state } from "../state";
-import { mkAction } from "../typecheck/model/action";
+import Row from "../../component/Row";
+import Column from "../../component/Column";
+import { Draggable } from "../../component/Draggable";
+import { applyLens, joinLens } from "../../typecheck/model/lens";
+import { Block } from "../../component/Block";
+import Input from "../../component/Input";
+import { state } from "../../state";
+import { mkAction } from "../../typecheck/model/action";
 import { useSnapshot } from "valtio";
-import { prettyStep } from "../typecheck/pretty";
-import { quote } from "../typecheck/quote";
-import Text from "../component/Text";
+import { prettyStep } from "../../typecheck/pretty";
+import { quote } from "../../typecheck/quote";
+import Text from "../../component/Text";
+import {onUpdate} from "../../state/onUpdate";
 
 export function TermLet({ term, lens, parent }: TermProps<TLet>): JSX.Element {
   const bodyLens = [...lens, 'body']

@@ -4,7 +4,7 @@ import { Ctx } from "./ctx";
 import { Val } from "./value";
 
 import { Term } from "./term";
-import { Rec } from "./rec";
+import { Rec } from "./lens";
 
 export type InferRequest<T extends Term> = {
   // Current mapping from de-Bruijn index to value

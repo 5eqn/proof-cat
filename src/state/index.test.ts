@@ -1,9 +1,12 @@
 import { message } from 'antd'
-import { initState, onRedo, onUndo, onUpdate } from './index'
 import { runAction } from '../typecheck/action'
 import { infer } from '../typecheck/infer'
 import { revertAction } from '../typecheck/model/action'
 import { ErrorASTMismatch } from '../typecheck/model/error'
+import {onUpdate} from "./onUpdate";
+import {onRedo} from "./onRedo";
+import {onUndo} from "./onUndo";
+import {initState} from "./initState";
 
 jest.mock('antd')
 jest.mock('../typecheck/action')
