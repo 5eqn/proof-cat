@@ -33,10 +33,10 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 21
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build
         run: npm run build
       - name: Setup Pages
