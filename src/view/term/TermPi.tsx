@@ -1,18 +1,19 @@
-import { TPi } from "../typecheck/model/term";
-import { TermProps } from "../typecheck/model/props";
-import { Block } from "../component/Block";
+import { TPi } from "../../typecheck/model/term";
+import { TermProps } from "../../typecheck/model/props";
+import { Block } from "../../component/Block";
 import { TermGeneral } from "./TermGeneral";
-import { Draggable } from "../component/Draggable";
-import { applyLens, joinLens } from "../typecheck/model/rec";
-import Row from "../component/Row";
-import Column from "../component/Column";
-import Input from "../component/Input";
-import { onUpdate, state } from "../state";
-import { mkAction } from "../typecheck/model/action";
-import { palette } from "./color";
+import { Draggable } from "../../component/Draggable";
+import { applyLens, joinLens } from "../../typecheck/model/lens";
+import Row from "../../component/Row";
+import Column from "../../component/Column";
+import Input from "../../component/Input";
+import { state } from "../../state";
+import { mkAction } from "../../typecheck/model/action";
+import { palette } from "../color";
 import { useSnapshot } from "valtio";
-import { prettyStep } from "../typecheck/pretty";
-import Text from "../component/Text";
+import { prettyStep } from "../../typecheck/pretty";
+import Text from "../../component/Text";
+import {onUpdate} from "../../state/onUpdate";
 
 export function TermPi({ term, lens, parent }: TermProps<TPi>): JSX.Element {
   const inferRes = useSnapshot(applyLens(state.inferResult, lens)) as any
