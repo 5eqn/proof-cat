@@ -1,6 +1,5 @@
 // Recursion structure of term
-import { Lens } from "./action"
-import { ErrorInvalidLens } from "./error"
+import {ErrorInvalidLens} from "./error"
 
 export type RPi = {
   term: 'pi',
@@ -31,6 +30,8 @@ export type ROther = {
 }
 
 export type Rec = RFunc | RPi | RApp | RLet | ROther
+
+export type Lens = string[]
 
 export function applyLens<T extends Rec>(rec: T, lens: Lens, ptr: number = 0): T {
   if (lens.length === ptr) return rec
