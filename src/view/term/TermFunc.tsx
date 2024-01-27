@@ -13,15 +13,18 @@ import { palette } from "../color";
 import { useSnapshot } from "valtio";
 import { prettyStep } from "../../typecheck/pretty";
 import Text from "../../component/Text";
-import {onUpdate} from "../../state/onUpdate";
+import { onUpdate } from "../../state/onUpdate";
+import { useTranslation } from "react-i18next";
 
 export function TermFunc({ term, lens, parent }: TermProps<TFunc>): JSX.Element {
+  const { t } = useTranslation()
   const inferRes = useSnapshot(applyLens(state.inferResult, lens)) as any
   const paramLens = [...lens, 'param']
   const color = palette.func
   return <Block color={color} parent={parent} shape='->' >
     <Column>
       <Row>
+        <Text text={t('assume')} />
         <Draggable id={'F' + joinLens(paramLens)}>
           <Block shape={prettyStep(inferRes.ns, inferRes.tm.param)} parent={color} >
             <Input value={term.paramID} onChange={v => onUpdate(mkAction({
@@ -31,10 +34,13 @@ export function TermFunc({ term, lens, parent }: TermProps<TFunc>): JSX.Element 
             }, lens))} />
           </Block>
         </Draggable>
-        <Text text=":" />
+        <Text text={t('proves')} />
         <TermGeneral term={term.param} lens={paramLens} parent={color} />
       </Row>
-      <TermGeneral term={term.body} lens={[...lens, 'body']} parent={color} />
+      <Row>
+        <Text text={t('apply')} />
+        <TermGeneral term={term.body} lens={[...lens, 'body']} parent={color} />
+      </Row>
     </Column>
   </Block>
 }
