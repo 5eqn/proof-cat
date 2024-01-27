@@ -14,7 +14,7 @@ export function DummyApp(): JSX.Element {
           <Block inset shape={'->'} parent={palette.app} />
           <Block inset />
         </Row>
-        <Text text={i18n.prompt.wrapApp} />
+        <Text text={i18n.term.apply} />
       </Column>
     </Block>
   </Draggable>

@@ -7,7 +7,7 @@ import { palette } from "../color";
 export function DummyUni(): JSX.Element {
   return <Draggable id="ABecomeUni">
     <Block color={palette.type} shape="U">
-      <Text text={i18n.prompt.becomeUni} />
+      <Text text={i18n.term.uni} />
     </Block>
   </Draggable>
 }

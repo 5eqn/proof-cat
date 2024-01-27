@@ -12,7 +12,7 @@ export function DummyFunc(): JSX.Element {
       <Column>
         <Row>
           <Block>
-            <Text text={i18n.prompt.wrapFunc} />
+            <Text text={i18n.term.func} />
           </Block>
           <Text text=":" />
           <Block inset />
