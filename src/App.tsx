@@ -12,7 +12,6 @@ import { TermGeneral } from "./view/term/TermGeneral";
 import { applyLens, splitLens } from "./typecheck/model/lens";
 import { isPrefix } from "./util";
 import { message } from "antd";
-import { i18n } from "./i18n";
 import { mkAction } from "./typecheck/model/action";
 import Column from "./component/Column";
 import { DummyFunc } from "./view/dummy/DummyFunc";
@@ -22,9 +21,10 @@ import { DummyLet } from "./view/dummy/DummyLet";
 import { DummyNum } from "./view/dummy/DummyNum";
 import { DummyType } from "./view/dummy/DummyType";
 import { DummyUni } from "./view/dummy/DummyUni";
-import {onUpdate} from "./state/onUpdate";
-import {onRedo} from "./state/onRedo";
-import {onUndo} from "./state/onUndo";
+import { onUpdate } from "./state/onUpdate";
+import { onRedo } from "./state/onRedo";
+import { onUndo } from "./state/onUndo";
+import i18n from "./i18n";
 
 function App() {
   const termSnap: Term = useSnapshot(state.term) as Term
@@ -97,7 +97,7 @@ function handleDragEnd(e: DragEndEvent) {
     const activeLens = splitLens(activeID.substring(1))
     const funcLens = activeLens.slice(0, -1)
     const bodyLens = [...funcLens, 'body']
-    if (!isPrefix(bodyLens, overLens)) return message.error(i18n.err.varNotExist)
+    if (!isPrefix(bodyLens, overLens)) return message.error(i18n.t('varNotExist'))
     const funcEnvLen = applyLens(state.inferResult, funcLens).env.length
     const varIX = overEnvLen - funcEnvLen - 1
     onUpdate(mkAction({
@@ -111,7 +111,7 @@ function handleDragEnd(e: DragEndEvent) {
     const activeLens = splitLens(activeID.substring(1))
     const letLens = activeLens.slice(0, -1)
     const nextLens = [...letLens, 'next']
-    if (!isPrefix(nextLens, overLens)) return message.error(i18n.err.varNotExist)
+    if (!isPrefix(nextLens, overLens)) return message.error(i18n.t('varNotExist'))
     const letEnvLen = applyLens(state.inferResult, letLens).env.length
     const varIX = overEnvLen - letEnvLen - 1
     onUpdate(mkAction({
