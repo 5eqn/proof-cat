@@ -9,6 +9,7 @@ i18n
     resources: {
       en: {
         translation: {
+          youHaveProven: 'You have proven:',
           uni: 'Universe',
           pi: 'Pi',
           func: 'Func',
@@ -29,6 +30,7 @@ i18n
       },
       zh: {
         translation: {
+          youHaveProven: '你证明了：',
           uni: '宇宙',
           pi: '蕴含',
           func: '假设引入',
