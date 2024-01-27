@@ -12,10 +12,13 @@ export function DummyApp(): JSX.Element {
     <Block color={palette.app} >
       <Column>
         <Row>
+          <Text text={t('for')} />
           <Block inset shape={'->'} parent={palette.app} />
+        </Row>
+        <Row>
+          <Text text={t('useAssumption')} />
           <Block inset />
         </Row>
-        <Text text={t('apply')} />
       </Column>
     </Block>
   </Draggable>
