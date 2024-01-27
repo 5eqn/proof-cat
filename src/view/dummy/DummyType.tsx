@@ -7,7 +7,7 @@ import { palette } from "../color";
 export function DummyType(): JSX.Element {
   return <Draggable id="ABecomeType">
     <Block color={palette.type} shape="U">
-      <Text text={i18n.prompt.becomeType} />
+      <Text text={i18n.term.type} />
     </Block>
   </Draggable>
 }
