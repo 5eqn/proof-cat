@@ -12,7 +12,7 @@ export function DummyPi(): JSX.Element {
       <Column>
         <Row>
           <Block>
-            <Text text={i18n.prompt.wrapPi} />
+            <Text text={i18n.term.pi} />
           </Block>
           <Text text=":" />
           <Block inset />

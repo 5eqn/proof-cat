@@ -10,7 +10,7 @@ export function DummyLet(): JSX.Element {
     <Column>
       <Row>
         <Block>
-          <Text text={i18n.prompt.wrapLet} />
+          <Text text={i18n.term.let} />
         </Block>
         <Text text="=" />
         <Block inset />
