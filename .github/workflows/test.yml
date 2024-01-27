@@ -1,7 +1,8 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Run tests
+name: Run test coverage
 
 on:
+  push:
   pull_request:
 
   # Allows you to run this workflow manually from the Actions tab
@@ -22,6 +23,11 @@ jobs:
     # Install dependencies using clean install to avoid package lock updates
     - name: Install dependencies
       run: npm ci
-    # Run the tests
+    # Run the tests with coverage
     - name: Build
-      run: npm test
+      run: npm test -- --coverage
+    # Save coverage report in Coveralls
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
