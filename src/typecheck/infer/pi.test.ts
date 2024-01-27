@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash.clonedeep'
 import { InferRequest } from "../model/infer"
-import { TPi, TNum, TType, TVar } from "../model/term"
+import { TPi, TNum, TVar, TUni } from "../model/term"
 import { VUni } from "../model/value"
 import { inferPi } from "./pi"
 
@@ -12,9 +12,8 @@ describe('inferPi function', () => {
   }
 
   // Type A term
-  const mockTType: TType = {
-    term: 'type',
-    type: 'A',
+  const mockTUni: TUni = {
+    term: 'uni',
   }
 
   // Number
@@ -31,10 +30,10 @@ describe('inferPi function', () => {
     body: mockTVar,
   }
 
-  // Pition term
+  // Pi term
   const mockTPi: TPi = {
     term: 'pi',
-    param: mockTType,
+    param: mockTUni,
     paramID: 'a',
     body: mockTVar,
   }
