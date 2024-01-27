@@ -24,7 +24,7 @@ export function TermPi({ term, lens, parent }: TermProps<TPi>): JSX.Element {
   return <Block color={color} shape='U' parent={parent}>
     <Column>
       <Row>
-        <Text text={t('assume')} />
+        <Text text={t('if')} />
         <Draggable id={'F' + joinLens(paramLens)}>
           <Block shape={prettyStep(inferRes.ns, inferRes.tm.param)} parent={color}>
             <Input value={term.paramID} onChange={v => onUpdate(mkAction({
