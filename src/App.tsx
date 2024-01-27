@@ -25,12 +25,25 @@ import { onUpdate } from "./state/onUpdate";
 import { onRedo } from "./state/onRedo";
 import { onUndo } from "./state/onUndo";
 import i18n from "./i18n";
+import { LangSwitch } from "./component/LangSwitch";
+import { useTranslation } from "react-i18next";
 
 function App() {
+  const { t } = useTranslation()
   const termSnap: Term = useSnapshot(state.term) as Term
   const inferSnap: InferResult = useSnapshot(state.inferResult) as InferResult
   const tytm = quote(0, inferSnap.type)
   return <DndContext onDragEnd={handleDragEnd}>
+    <div style={{
+      position: 'absolute',
+      right: '16px',
+      bottom: '16px',
+    }}>
+      <a href="https://www.github.com/5eqn/proof-cat" style={{ marginRight: '8px' }}>
+        GitHub
+      </a>
+      <LangSwitch />
+    </div>
     <div style={{
       position: "fixed",
       left: "70%",
@@ -38,7 +51,7 @@ function App() {
       top: "32px",
     }}>
       <Center>
-        <Text text="You have proven: " />
+        <Text text={t('youHaveProven')} />
         <div style={{ height: '16px' }} />
         <Text text={pretty([], tytm)} />
       </Center>
