@@ -10,14 +10,14 @@ i18n
       en: {
         translation: {
           assume: 'Assume',
+          if: 'If',
           proves: 'Proves',
           apply: 'Apply',
           then: 'Then',
           for: 'For',
           useAssumption: 'Use Assumption',
           youHaveProven: 'You have proven:',
-          uni: 'Universe',
-          pi: 'Pi',
+          uni: 'Prop Exists',
           type: 'Prop',
           num: 'Number',
           let: 'Let',
@@ -35,14 +35,14 @@ i18n
       zh: {
         translation: {
           assume: '假设',
+          if: '如果',
           proves: '能证明',
           apply: '使用',
           then: '那么',
           for: '为',
           useAssumption: '应用假设',
           youHaveProven: '你证明了：',
-          uni: '宇宙',
-          pi: '蕴含',
+          uni: '命题存在',
           type: '命题',
           num: '数字',
           let: '令',

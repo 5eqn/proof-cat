@@ -12,7 +12,7 @@ export function DummyPi(): JSX.Element {
     <Block color={palette.pi} shape='U' >
       <Column>
         <Row>
-          <Text text={t('assume')} />
+          <Text text={t('if')} />
           <Block>
             <Text text='x' />
           </Block>
