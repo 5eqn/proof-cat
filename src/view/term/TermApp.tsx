@@ -10,8 +10,11 @@ import { applyLens } from "../../typecheck/model/lens";
 import { state } from "../../state";
 import { prettyStep } from "../../typecheck/pretty";
 import { quote } from "../../typecheck/quote";
+import { useTranslation } from "react-i18next";
+import Text from "../../component/Text";
 
 export function TermApp({ term, lens, parent }: TermProps<TApp>): JSX.Element {
+  const { t } = useTranslation()
   const inferRes = useSnapshot(applyLens(state.inferResult, lens)) as any
   const color = palette.app
   return <Block
@@ -21,7 +24,11 @@ export function TermApp({ term, lens, parent }: TermProps<TApp>): JSX.Element {
   >
     <Column>
       <Row>
+        <Text text={t('for')} />
         <TermGeneral term={term.func} lens={[...lens, 'func']} parent={color} />
+      </Row>
+      <Row>
+        <Text text={t('useAssumption')} />
         <TermGeneral term={term.arg} lens={[...lens, 'arg']} parent={color} />
       </Row>
     </Column>

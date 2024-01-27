@@ -10,8 +10,9 @@ export function DummyLet(): JSX.Element {
   return <Draggable id="AWrapLet">
     <Column>
       <Row>
+        <Text text={t('let')} />
         <Block>
-          <Text text={t('let')} />
+          <Text text='x' />
         </Block>
         <Text text="=" />
         <Block inset />

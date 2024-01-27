@@ -12,13 +12,17 @@ export function DummyPi(): JSX.Element {
     <Block color={palette.pi} shape='U' >
       <Column>
         <Row>
+          <Text text={t('assume')} />
           <Block>
-            <Text text={t('pi')} />
+            <Text text='x' />
           </Block>
-          <Text text=":" />
-          <Block inset />
+          <Text text={t('proves')} />
+          <Block shape="U" inset parent={palette.pi} />
         </Row>
-        <Block inset />
+        <Row>
+          <Text text={t('then')} />
+          <Block shape="U" inset parent={palette.pi} />
+        </Row>
       </Column>
     </Block>
   </Draggable>
