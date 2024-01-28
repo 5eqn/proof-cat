@@ -15,10 +15,12 @@ import { prettyStep } from "../../typecheck/pretty";
 import Text from "../../component/Text";
 import { onUpdate } from "../../state/onUpdate";
 import { useTranslation } from "react-i18next";
+import { InferResult } from "../../typecheck/model/infer";
 
 export function TermFunc({ term, lens, parent }: TermProps<TFunc>): JSX.Element {
   const { t } = useTranslation()
-  const inferRes = useSnapshot(applyLens(state.inferResult, lens)) as any
+  const tm = useSnapshot(applyLens(state.term, lens)) as TFunc
+  const inferRes = useSnapshot(applyLens(state.inferResult, lens)) as InferResult
   const paramLens = [...lens, 'param']
   const color = palette.func
   return <Block color={color} parent={parent} shape='->' >
@@ -26,7 +28,7 @@ export function TermFunc({ term, lens, parent }: TermProps<TFunc>): JSX.Element 
       <Row>
         <Text text={t('assume')} />
         <Draggable id={'F' + joinLens(paramLens)}>
-          <Block shape={prettyStep(inferRes.ns, inferRes.tm.param)} parent={color} >
+          <Block shape={prettyStep(inferRes.ns, tm.param)} parent={color} >
             <Input value={term.paramID} onChange={v => onUpdate(mkAction({
               action: 'override',
               backup: { ...term },

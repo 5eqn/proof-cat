@@ -23,7 +23,7 @@ function runUndo(
   { action, lens }: ActionPack,
   draft: Term
 ): void {
-  const term = applyLens(draft, lens) as any
+  const term = applyLens(draft, lens)
   switch (action.action) {
     case 'remove':
       return onRevertRemove(action.backup, term)
@@ -41,7 +41,7 @@ function runDo(
   { action, lens }: ActionPack,
   draft: Term
 ): void {
-  const term = applyLens(draft, lens) as any
+  const term = applyLens(draft, lens)
   switch (action.action) {
     case 'remove':
       return onRemove(action.envLen, term)

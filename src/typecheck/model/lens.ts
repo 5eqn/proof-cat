@@ -1,5 +1,5 @@
 // Recursion structure of term
-import {ErrorInvalidLens} from "./error"
+import { ErrorInvalidLens } from "./error"
 
 export type RPi = {
   term: 'pi',
@@ -39,6 +39,7 @@ export function applyLens<T extends Rec>(rec: T, lens: Lens, ptr: number = 0): T
   switch (rec.term) {
     case 'func':
     case 'pi':
+      // Reason for casting: there's no recursion schemes in Typescript
       if (fst === 'param') return applyLens(rec.param, lens, ptr + 1) as T
       if (fst === 'body') return applyLens(rec.body, lens, ptr + 1) as T
       throw new ErrorInvalidLens()
