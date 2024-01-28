@@ -1,5 +1,5 @@
 import { InferRequest, InferResult } from "../model/infer";
-import { Term } from "../model/term";
+import { TAny, TApp, Term, TFunc, TLet, TNum, TPi, TType, TUni, TVar } from "../model/term";
 import { inferUni } from "./uni";
 import { inferVar } from "./var";
 import { inferNum } from "./num";
@@ -11,24 +11,27 @@ import { inferPi } from "./pi";
 import { inferFunc } from "./func";
 
 export function infer<T extends Term>(req: InferRequest<T>): InferResult {
-  switch (req.tm.term) {
+  const tm = req.tm
+  switch (tm.term) {
     case 'uni':
-      return inferUni(req as any)
+      // Reason for casting: generics cannot be narrowed in Typescript
+      // https://github.com/microsoft/TypeScript/issues/13995#issuecomment-439430612
+      return inferUni(req as InferRequest<TUni>)
     case 'var':
-      return inferVar(req as any)
+      return inferVar(req as InferRequest<TVar>)
     case 'num':
-      return inferNum(req as any)
+      return inferNum(req as InferRequest<TNum>)
     case 'let':
-      return inferLet(req as any)
+      return inferLet(req as InferRequest<TLet>)
     case 'app':
-      return inferApp(req as any)
+      return inferApp(req as InferRequest<TApp>)
     case 'any':
-      return inferAny(req as any)
+      return inferAny(req as InferRequest<TAny>)
     case 'type':
-      return inferType(req as any)
+      return inferType(req as InferRequest<TType>)
     case 'pi':
-      return inferPi(req as any)
+      return inferPi(req as InferRequest<TPi>)
     case 'func':
-      return inferFunc(req as any)
+      return inferFunc(req as InferRequest<TFunc>)
   }
 }

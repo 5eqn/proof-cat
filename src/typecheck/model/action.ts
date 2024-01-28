@@ -1,5 +1,5 @@
-import {Term} from "./term"
-import {Lens} from "./lens";
+import { Term } from "./term"
+import { Lens } from "./lens";
 
 export type ActionWrapApp = {
   action: 'wrapApp',
@@ -70,9 +70,16 @@ export function mkAction(
   }
 }
 
-// Action tree
-export type ActionTree = {
-  action?: ActionPack
-  next: ActionTree[]
-  parent?: ActionTree
+// Action root
+export type ActionRoot = {
+  type: 'root',
+  next: ActionBranch[]
+}
+
+// Action branch
+export type ActionBranch = {
+  type: 'branch',
+  action: ActionPack
+  next: ActionBranch[]
+  parent: ActionBranch | ActionRoot
 }
