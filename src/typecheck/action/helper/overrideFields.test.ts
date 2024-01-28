@@ -14,7 +14,7 @@ describe('onOverride function', () => {
     const obj2 = {
       c: 333,
     }
-    overrideFields(obj, obj2)
+    overrideFields(obj, obj2 as any)
     expect(obj).toStrictEqual(obj2)
   })
 
@@ -26,7 +26,7 @@ describe('onOverride function', () => {
     const term2: TAny = {
       term: 'any',
     }
-    overrideFields(term, term2)
+    overrideFields(term, term2 as any)
     expect(term).toStrictEqual(term2)
   })
 
@@ -35,7 +35,7 @@ describe('onOverride function', () => {
       term: 'num',
       num: 114,
     }
-    overrideFields(term, {})
+    overrideFields(term, {} as any)
     expect(term).toStrictEqual({})
   })
 })
