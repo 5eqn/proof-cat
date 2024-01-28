@@ -12,14 +12,16 @@ import { prettyStep } from "../../typecheck/pretty";
 import { quote } from "../../typecheck/quote";
 import { useTranslation } from "react-i18next";
 import Text from "../../component/Text";
+import { InferResult } from "../../typecheck/model/infer";
 
 export function TermApp({ term, lens, parent }: TermProps<TApp>): JSX.Element {
   const { t } = useTranslation()
-  const inferRes = useSnapshot(applyLens(state.inferResult, lens)) as any
+  const inferRes = useSnapshot(applyLens(state.inferResult, lens)) as InferResult
+  const ns = inferRes.ns
   const color = palette.app
   return <Block
     color={color}
-    shape={prettyStep(inferRes.ns, quote(inferRes.ns, inferRes.type))}
+    shape={prettyStep(ns, quote(ns.length, inferRes.type))}
     parent={parent}
   >
     <Column>
