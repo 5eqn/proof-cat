@@ -1,3 +1,5 @@
+import { AutowidthInput } from "react-autowidth-input"
+
 interface InputProps {
   placeholder?: string
   'data-testid'?: string
@@ -6,10 +8,9 @@ interface InputProps {
 }
 
 export default function Input(props: InputProps) {
-  return <input
+  return <AutowidthInput
     style={{
       fontSize: '18px',
-      width: '16px',
       fontFamily: 'monospace',
       fontWeight: "normal",
       color: "#444",
@@ -19,6 +20,7 @@ export default function Input(props: InputProps) {
     }}
     onChange={e => props.onChange(e.target.value)}
     value={props.value}
+    extraWidth='0'
     data-testid={props["data-testid"]}
     placeholder={props.placeholder}
   />
