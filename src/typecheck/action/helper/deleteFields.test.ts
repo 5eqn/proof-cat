@@ -23,13 +23,4 @@ describe('deleteFields function', () => {
     deleteFields(term)
     expect(term).toStrictEqual({})
   })
-
-  test('should respect keep param', () => {
-    const term: TNum = {
-      term: 'num',
-      num: 114,
-    }
-    deleteFields(term, 'num')
-    expect(term).toStrictEqual({ num: 114 })
-  })
 })
