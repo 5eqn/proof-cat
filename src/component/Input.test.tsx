@@ -1,6 +1,20 @@
 import { render, fireEvent } from '@testing-library/react';
 import Input from './Input';
 
+jest.mock('react-autowidth-input', () => {
+  return {
+    __esModule: true,
+    AutowidthInput: (props: any) => {
+      // Delete extraWidth field to suppress warning
+      const copied = { ...props }
+      delete copied['extraWidth']
+
+      // Mock autowidth input in test with regular input
+      return <input {...copied} />
+    }
+  };
+})
+
 describe('Input component', () => {
   test('renders input element with given value', () => {
     // Arrange
